@@ -1,5 +1,8 @@
 <template>
-  <HelloWorld />
+  <v-container>
+    <h1>我是Home Page</h1>
+    <HelloWorld />
+  </v-container>
 </template>
 
 <script>

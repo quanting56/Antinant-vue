@@ -18,9 +18,27 @@ const routes = [
     component: () => import("../views/WebNoteView.vue"),
     children: [
       {
-        path: "users/:userId", // 這裡開頭不能加'/'，否則會被帶回根目錄
-        name: "users",
-        component: () => import("../components/DynamicRouteMatching.vue"),
+        path: "route_practice", // 這裡開頭不能加'/'，否則會被帶回根目錄
+        name: "route_practice",
+        component: () => import("../components/RoutePractice.vue"),
+        children: [
+          {
+            path: "users/:userId",
+            name: "users",
+            component: () =>
+              import("../components/RoutePracticeDynamicRouteMatching.vue"),
+            children: [
+              {
+                path: "posts",
+                name: "posts",
+                component: () =>
+                  import(
+                    "../components/RoutePracticeDynamicRouteMatchingPost.vue"
+                  ),
+              },
+            ],
+          },
+        ],
       },
     ],
   },

@@ -5,9 +5,14 @@
     email: {{ userInfo.email }}<br />
     phone: {{ userInfo.phone }}
   </p>
-  <br />
-  <p>原始資料如下：</p>
+  <hr />
+  <h4>原始資料如下：</h4>
   <pre>{{ userInfo }}</pre>
+  <br />
+  <router-link :to="{ name: 'posts', params: { userId } }"
+    >查看post</router-link
+  >
+  <router-view></router-view>
 </template>
 
 <script>

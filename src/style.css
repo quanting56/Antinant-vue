@@ -2,6 +2,7 @@ body {
   background-color: #fffafa;
   padding: 0;
   margin: 0;
+  font-family: Arial, Helvetica, sans-serif;
 }
 
 /* Vite + Vue 原始 style.css */

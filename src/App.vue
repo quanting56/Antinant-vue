@@ -6,9 +6,9 @@
 </template>
 
 <script setup>
-import NavBar from './components/common/NavBar.vue';
-import Footer from './components/common/Footer.vue';
-import BackToTopButton from './components/common/BackToTopButton.vue';
+import NavBar from './components/Common/NavBar.vue';
+import Footer from './components/Common/Footer.vue';
+import BackToTopButton from './components/Common/BackToTopButton.vue';
 </script>
 
 <style scoped></style>

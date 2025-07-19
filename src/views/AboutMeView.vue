@@ -4,7 +4,7 @@
     <section class="profile-section">
       <img :src="profile.img" :title="profile.name" alt="我的照片" class="profile-img" />
       <div class="profile-info">
-        <h1>{{ profile.name }}</h1>
+        <h1>{{ profile.name }} {{ profile.nameEnglish }}</h1>
         <hr />
         <div class="info-list">
           <div
@@ -13,7 +13,7 @@
             class="info-item"
           >
             <a :href="edu.link" target="_blank">
-              <img :src="edu.logo" alt="系徽" class="info-logo" />
+              <img :src="edu.logo" alt="系徽" :title="edu.logoName" class="info-logo" />
             </a>
             <dl>
               <dt>{{ edu.degree }}</dt>
@@ -54,11 +54,13 @@
               <img
                 :src="club.logo"
                 :alt="club.club"
+                :title="club.logoName"
                 class="club-logo"
               />
             </a>
-            <dl class="info">
-              <dt>{{ club.club }} {{ pos.title }}
+            <dl class="club-position-info">
+              <dt>
+                {{ club.club }} {{ pos.title }}
                 <span class="club-position-period">{{ pos.period }}</span>
               </dt>
               <dd>{{ pos.description }}</dd>
@@ -80,19 +82,34 @@
       <h2 id="jobExperience">其他工作經驗</h2>
       <hr />
       <!-- 工作經驗內容 -->
-      <div class="job-list">
+      <div class="jobs">
         <div
-          v-for="(jobE, idx) in jobExperiences"
-          :key="idx"
-          class="job-item"
+          v-for="(jobE, i) in jobExperiences"
+          :key="i"
+          class="job-block"
         >
-          <a :href="jobE.link" target="_blank">
-            <img :src="jobE.logo" :alt="jobE.conpany" class="job-logo" />
-          </a>
-          <dl>
-            <dt>{{ jobE.conpany }} {{ jobE.title }}</dt>
-            <dd>{{ jobE.content }}</dd>
-          </dl>
+          <div
+            v-for="(pos, j) in jobE.positions"
+            :key="j"
+            class="job-position"
+            :class="{ 'first': j === 0 }"
+          >
+            <a :href="jobE.link" target="_blank">
+              <img
+                :src="jobE.logo"
+                :alt="jobE.conpany"
+                :title="jobE.company"
+                class="job-logo"
+              />
+            </a>
+            <dl class="job-position-info">
+              <dt>
+                {{ jobE.company }} {{ pos.title }}
+                <span class="job-position-period">{{ pos.period }}</span>
+              </dt>
+              <dd>{{ pos.description }}</dd>
+            </dl>
+          </div>
         </div>
       </div>
     </section>
@@ -119,7 +136,8 @@ const images = import.meta.glob("../assets/about-me/*", { eager: true, as: "url"
 
 // 個人資料定義
 const profile = {
-  name: "董冠霆 Kuan-Ting Tung",
+  name: "董冠霆",
+  nameEnglish: "Kuan-Ting Tung",
   img: images["../assets/about-me/IMG_9028.jpg"]
 };
 
@@ -129,13 +147,15 @@ const education = [
     degree: "國立臺灣大學 藥學系 (2016 - 2020)",
     description: "學習基礎醫藥課程、醫病人際互動。",
     link: "https://rx.mc.ntu.edu.tw",
-    logo: images["../assets/about-me/nturx_mark.jpg"]
+    logo: images["../assets/about-me/nturx_mark.jpg"],
+    logoName: "臺大藥學系"
   },
   {
     degree: "國立臺灣大學 生物產業傳播暨發展學系 (2020 - 2024)",
     description: "學習行銷與傳播，並理解臺灣農業的發展。",
     link: "http://www.bicd.ntu.edu.tw",
-    logo: images["../assets/about-me/ntubicd_trademark.png"]
+    logo: images["../assets/about-me/ntubicd_trademark.png"],
+    logoName: "臺大生傳系",
   }
 ];
 
@@ -161,11 +181,12 @@ const clubPositions = [
     club: "臺大藥學系學會",
     link: "https://rx.mc.ntu.edu.tw/nturxsa/",
     logo: images["../assets/about-me/nturx_mark.jpg"],
+    logoName: "臺大藥學系",
     positions: [
       {
         title: "活動部部員",
         period: "2016.10 - 2017.05",
-        description: "製作劇情短片、劇組分工完成影片拍攝"
+        description: "籌辦系上活動，增進系上同學感情"
       }
     ]
   },
@@ -173,6 +194,7 @@ const clubPositions = [
     club: "臺大攝影社",
     link: "https://www.facebook.com/ntuphoto/",
     logo: images["../assets/about-me/ntuphoto_trademark.JPG"],
+    logoName: "臺大攝影研究社",
     positions: [
       {
         title: "活動部長",
@@ -191,16 +213,68 @@ const clubPositions = [
       }
     ]
   },
+  {
+    club: "臺大生傳系學會",
+    link: "https://www.facebook.com/NTUBICDSA/",
+    logo: images["../assets/about-me/ntubicdsab_trademark.JPG"],
+    logoName: "臺大生傳系學會",
+    positions: [
+      {
+        title: "影視部部員",
+        period: "2021.10 - 2022.02",
+        description: "製作劇情短片、劇組分工完成影片拍攝"
+      }
+    ]
+  },
+  {
+    club: "臺大數位廣播社",
+    link: "https://www.facebook.com/voiceofntu.2022/",
+    logo: images["../assets/about-me/voiceOfNtu_tardemark.JPG"],
+    logoName: "臺大數位廣播社/台大之聲",
+    positions: [
+      {
+        title: "社長",
+        period: "2022.08 - 2023.07",
+        description: "統領社團、規劃社團活動、協調幹部工作、掌控社團氛圍"
+      },
+      {
+        title: "節目負責人",
+        period: "2022.09 - 2023.07",
+        description: "節目策劃與安排、協調主持人、技術協助"
+      },
+    ]
+  },
 ];
 
 // 作品集預留
 const portfolios = [];
 
 // 工作經驗預留
-const jobExperiences = [];
+const jobExperiences = [
+  {
+    company: "Taipei Camera Club",
+    link: "https://quanting56.github.io/taipeicameraclub/",
+    logo: images["../assets/about-me/TCC_logo.png"],
+    positions: [
+      {
+        title: "網宣組長",
+        period: "2020.?? - 202?.07",
+        description: "行銷、宣傳 Taipei Camera Club，並管理官方 Instagram 帳號與 Facebook 粉絲帳號。"
+      }
+    ]
+  },
+];
 </script>
 
 <style scoped>
+dt {
+  font-weight: bold;
+}
+
+dd {
+  margin-left: 0;
+}
+
 .about-me-view {
   font-family: serif;
   padding: 80px 16px;
@@ -229,31 +303,34 @@ const jobExperiences = [];
   margin-right: 1rem;
 }
 .section { margin-top: 2rem; }
-.clubs {
+.clubs,
+.jobs {
   display: flex;
   flex-direction: column;
   gap: 2rem;
 }
-.club-block {
+.club-block,
+.job-block {
   display: flex;
   flex-direction: column;
   gap: 1rem;
 }
-.club-position {
+.club-position,
+.job-position {
   display: flex;
   align-items: center;
   gap: 1rem;
   padding-top: 0.5rem;
 }
-.club-position.first {
+.club-position.first,
+.job-position.first {
   padding-top: 1rem;
 }
-.club-logo {
+.club-logo,
+.job-logo {
   width: 50px;
   border-radius: 50%;
-}
-.info dt {
-  font-weight: bold;
+  border: 0.1px solid lightgray; /* 修CSS時決定要不要加這一行 */
 }
 .club-position-period {
   font-style: italic;

@@ -46,7 +46,7 @@
                     class="timeline-record-image"
                   >
                     <img
-                      :src="unit.image.src"
+                      :src="resolveImages(unit.image.src)"
                       :alt="unit.image.caption"
                       :title="unit.image.description"
                     />
@@ -66,10 +66,19 @@
 </template>
 
 <script setup>
-import { defineProps } from 'vue'
+import { defineProps } from 'vue';
+
+// Vite 的批次導入工具（batch import），適合用來載入靜態資源
+const images = import.meta.glob("../../assets/about-me/timeline/*", { eager: true, as: "url"});
+
+// JSON 檔裡面只有 fileName，透過函式把它轉成路徑
+function resolveImages(fileName) {
+  return images[`../../assets/about-me/timeline/${fileName}`]
+};
+
 const props = defineProps({
   items: Array
-})
+});
 </script>
 
 <style scoped>

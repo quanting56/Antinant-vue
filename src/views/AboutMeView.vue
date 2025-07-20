@@ -2,8 +2,10 @@
   <div class="about-me-view">
     <!-- 關於我 主區塊 -->
     <section class="profile-section">
-      <img :src="profile.img" :title="profile.name" alt="我的照片" class="profile-img" />
-      <div class="profile-info">
+      <div class="profile-info-image">
+        <img :src="profile.img" :title="profile.name" alt="我的照片" class="profile-img" />
+      </div>
+      <div class="profile-info-text">
         <h1>{{ profile.name }} {{ profile.nameEnglish }}</h1>
         <hr />
         <div class="info-list">
@@ -34,7 +36,7 @@
       </dl>
     </section>
 
-    <!-- 社團幹部經歷 (預留示範) -->
+    <!-- 社團幹部經歷 -->
     <section v-if="clubPositions.length" class="club-positions-section section">
       <h2>社團幹部經歷</h2>
       <hr />
@@ -48,7 +50,6 @@
             v-for="(pos, j) in club.positions"
             :key="j"
             class="club-position"
-            :class="{ 'first': j === 0 }"
           >
             <a :href="club.link" target="_blank">
               <img
@@ -267,74 +268,142 @@ const jobExperiences = [
 </script>
 
 <style scoped>
-dt {
-  font-weight: bold;
-}
-
-dd {
-  margin-left: 0;
-}
+dt { font-weight: bold; }
+dd { margin-left: 0; }
+hr { opacity: 0.5; }
 
 .about-me-view {
   font-family: serif;
-  padding: 80px 16px;
+  padding: 100px 40px;
 }
+
+/* profile */
 .profile-section {
   display: flex;
   flex-wrap: wrap;
-  gap: 1rem;
-  align-items: flex-start;
 }
+
+.profile-info-image {
+  display: flex;
+  flex: 0 0 33%;
+  justify-content: center;
+  margin-bottom: 16px;
+}
+
 .profile-img {
-  width: 100%;
-  max-width: 200px;
+  width: 70%;
+  max-width: 300px;
+  object-fit: contain;
 }
-.profile-info { flex: 1; min-width: 200px; }
-.info-list { list-style: none; padding: 0; margin: 0; }
+
+.profile-info-text {
+  flex: 0 0 66%;
+}
+
+.profile-info-text h1 {
+  font-size: 40px;
+  margin-top: 0;
+  margin-bottom: 16px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* 響應式設計 - 平板 */
+@media (max-width: 992px) and (min-width: 769px) {
+  .profile-info-image {
+    flex: 0 0 50%;
+  }
+
+  .profile-info-text {
+    flex: 0 0 50%;
+    /* margin-left: 16px; */
+  }
+}
+
+/* 響應式設計 - 手機 */
+@media (max-width: 768px) {
+  .profile-info-image {
+    flex: 0 0 100%;
+    justify-content: left;
+    margin-bottom: 48px;
+  }
+
+  .profile-info-text {
+    flex: 0 0 100%;
+  }
+}
+
+/* 教育程度 */
+.info-list {
+  margin-top: 24px;
+}
+
 .info-item {
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
 }
+
 .info-logo {
   width: 50px;
   height: auto;
   border-radius: 50%;
-  margin-right: 1rem;
+  margin-right: 20px;
 }
-.section { margin-top: 2rem; }
+
+.info-item dt,
+.info-item dd {
+  padding: 1px;
+}
+
+/* 通用區塊 */
+.section {
+  margin-top: 72px;
+}
+
+.section h2 {
+  font-size: 32px;
+  margin-bottom: 12px;
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+/* 社團幹部經歷 / 工作經歷 */
 .clubs,
 .jobs {
   display: flex;
   flex-direction: column;
-  gap: 2rem;
+  gap: 24px;
+  margin-top: 16px;
 }
+
 .club-block,
 .job-block {
   display: flex;
   flex-direction: column;
-  gap: 1rem;
+  gap: 12px;
 }
+
 .club-position,
 .job-position {
   display: flex;
   align-items: center;
-  gap: 1rem;
-  padding-top: 0.5rem;
 }
-.club-position.first,
-.job-position.first {
-  padding-top: 1rem;
-}
+
 .club-logo,
 .job-logo {
   width: 50px;
   border-radius: 50%;
-  border: 0.1px solid lightgray; /* 修CSS時決定要不要加這一行 */
+  border: 0.1px solid lightgray;
+  margin-right: 18px;
 }
+
+.club-position-info dt {
+  align-items: baseline;
+}
+
 .club-position-period {
   font-style: italic;
-  margin-left: 0.5rem;
-  font-size: 0.9rem;
+  margin-left: 4px;
+  font-size: 12px;
 }
 </style>

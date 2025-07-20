@@ -14,7 +14,7 @@
         "title": "加入臺大藥學系羽隊",
         "text": "喜歡打羽球的我，加入系上羽球隊，每週三晚上七點準時在醫學院體育館與同學和學長姐一起在球場上揮灑汗水。這段時間是我截至目前，羽球能力精進最多的時候，每週練體力、練腳步、練球技，在最後半小時再與球友來幾場play，測試自己的球力！",
         "image": {
-          "src": "@/assets/about_me/timeline/nturx_badminton.jpg",
+          "src": "nturx_badminton.jpg",
           "caption": "大藥盃休息區合影",
           "description": "在大藥盃休息區時的合照"
         }
@@ -36,7 +36,7 @@
         "title": "加入臺大攝影社",
         "text": "久聞臺大攝影社的名聲，跟同樣對攝影有興趣的朋友一同加入，開始了攝影的不歸路，所謂「攝影窮三代，單反毀一生」由此開始。起初我是先從暗房入門，加入暗房工作坊，學習從黑白沖片、黑白放相、彩色沖片等流程，體驗<s>浪費錢</s>拍攝底片的快樂。",
         "image": {
-          "src": "@/assets/about_me/timeline/takephoto.jpg",
+          "src": "takephoto.jpg",
           "caption": "拍照的我",
           "description": "拿著相機拍照的我"
         }
@@ -64,7 +64,7 @@
         "title": "加入臺大單車社",
         "text": "「騎著彎把公路車馳騁在臺灣的公路上」一直是我的夢想，在這學期我除了繼續待在攝影社外，也參加了單車社各種大大小小的活動，與自行車同好們一起交流，學習許多關於單車的知識與共識。",
         "image": {
-          "src": "@/assets/about_me/timeline/takephoto.jpg",
+          "src": "IMG_2028.jpg",
           "caption": "我的第一臺公路車（Giant Contend 1）",
           "description": "我的公路車（Giant Contend 1）"
         }
@@ -86,7 +86,7 @@
         "title": "@攝影社 擔任數暗部長",
         "text": "上學期擔任暗房部長期間，我也在每週二晚上到數暗工作坊上課，並且是該學期唯一的全勤數暗學員XD。擔任數暗部長期間，安排課程、找講師等基本任務外，亦要帶領學員們輸出實習，讓學員們學會使用社團的Epson藝術微噴輸出機，輸出色彩精準的相片。在這裡結交了一些對天文攝影、人像攝影、拍片痴迷的朋友，也因此大幅提升了我的攝影功力，除了單純地按快門外，也開始思考攝影的意義與確認自己攝影的目的。",
         "image": {
-          "src": "@/assets/about_me/timeline/takephoto.jpg",
+          "src": "IMG_8373.jpg",
           "caption": "與社團好友出團合照",
           "description": "退房前在西螺川田府邸與朋友們的合照"
         }
@@ -120,7 +120,7 @@
         "title": "@臺大生傳系學會 擔任影視部部員",
         "text": "大二這年，我加入了系學會的影視部，與一般大眾對於系學會的印象不同，影視部並不是遊玩的部門。在這邊，我們學習如何拍片，了解一支影片從尋找團隊到最後殺青中可能會遇到的困難，除此之外，也在此學習了Photoshop、Illustrator、Premiere等Adobe軟體的操作，最後透過所學產出一支小短片。",
         "image": {
-          "src": "@/assets/about_me/timeline/takephoto.jpg",
+          "src": "DSC_7532.jpg",
           "caption": "期末成發短片殺青合照",
           "description": "期末成果發表會劇情短片殺青合照"
         }
@@ -148,7 +148,7 @@
         "title": "@數位廣播社 擔任社長",
         "text": "接任數位廣播社社長，除了統領社團、協調幹部工作外，也要規劃社團活動，像是安排社課、參加社團博覽會、舉辦社遊，更重要的是維護良好的社團氛圍，讓來上社課的社員們都能夠有良好的討論空間，良性討論在錄製節目同時也是非常重要的環節。",
         "image": {
-          "src": "@/assets/about_me/timeline/takephoto.jpg",
+          "src": "DSC_8634.jpg",
           "caption": "數位廣播社社課合照",
           "description": "講師為敏迪老師的數位廣播社社課合照！"
         }
@@ -170,7 +170,7 @@
         "title": "加入臺大壁球社",
         "text": "大學最後一學期，加入了大學生涯最後一個社團——臺大壁球社，每週三五到壁球室活動筋骨，練習球技、消耗卡路里、結交新朋友！",
         "image": {
-          "src": "@/assets/about_me/timeline/takephoto.jpg",
+          "src": "IMG_2696.jpg",
           "caption": "最後一次社課時與朋友的合照",
           "description": "最後一次壁球社社課時與朋友的合照"
         }
@@ -180,7 +180,7 @@
         "title": "大學畢業",
         "text": "歷經多年，終於從大學畢業啦～",
         "image": {
-          "src": "@/assets/about_me/timeline/takephoto.jpg",
+          "src": "IMG_4373.jpg",
           "caption": "生傳系上好友的合照",
           "description": "畢業團拍當天與系上朋友的合照"
         }

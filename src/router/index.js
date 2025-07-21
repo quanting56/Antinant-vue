@@ -16,6 +16,11 @@ const routes = [
     component: () => import("../views/AboutMeView.vue"),
   },
   {
+    path: "/photo",
+    name: "photo",
+    component: () => import("../views/PhotoView.vue"),
+  },
+  {
     path: "/web-note",
     name: "web-note",
     component: () => import("../views/WebNoteView.vue"),

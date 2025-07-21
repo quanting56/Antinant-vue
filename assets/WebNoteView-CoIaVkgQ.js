@@ -1,0 +1,1 @@
+import{_ as t,c as n,a as o,F as r,o as s}from"./index-Dqm816ym.js";const a={};function l(c,e){return s(),n(r,null,[e[0]||(e[0]=o("p",null,"Holo wored!",-1)),e[1]||(e[1]=o("p",null,"web-note",-1))],64)}const f=t(a,[["render",l],["__scopeId","data-v-75e1fe2c"]]);export{f as default};

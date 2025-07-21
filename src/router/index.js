@@ -15,6 +15,19 @@ const routes = [
     name: "about-me",
     component: () => import("../views/AboutMeView.vue"),
   },
+  {
+    path: "/web-note",
+    name: "web-note",
+    component: () => import("../views/WebNoteView.vue"),
+  },
+  {
+    path: "/web-note/test-test-test",
+    name: "test-test-test",
+    component: () =>
+      import(
+        "../views/WebNote/TestTestTestView.vue"
+      ),
+  },
 //   {
 //     path: "/activity",
 //     name: "activity",
@@ -46,7 +59,7 @@ const routes = [
 ];
 
 const router = createRouter({
-  history: createWebHistory(),
+  history: createWebHistory("/Antinant-vue/"),
   routes,
 //   scrollBehavior(to, from, savePosition) {
 //     // 判斷是否為/activity與/activity/:id之間的跳轉

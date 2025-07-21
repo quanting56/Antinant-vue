@@ -82,6 +82,10 @@ const props = defineProps({
 </script>
 
 <style scoped>
+.timeline {
+  padding: 2px 6px;
+}
+
 .timeline-box {
   position: relative;
 }

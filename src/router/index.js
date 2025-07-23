@@ -21,6 +21,16 @@ const routes = [
     component: () => import("../views/PhotoView.vue"),
   },
   {
+    path: "/photo/ntuphoto-life",
+    name: "ntuphoto-life",
+    component: () => import("../views/Photo/NtuphotoLifeView.vue")
+  },
+  {
+    path: "/photo/photographic_equipment",
+    name: "photographic_equipment",
+    component: () => import("../views/Photo/PhotographicEquipment.vue")
+  },
+  {
     path: "/web-note",
     name: "web-note",
     component: () => import("../views/WebNoteView.vue"),

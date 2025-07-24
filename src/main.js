@@ -3,7 +3,7 @@ import './style.css';
 import App from './App.vue';
 
 // Vue-router
-import router from '../src/router/index';
+import router from './router/index.js';
 
 // Pinia
 import { createPinia } from 'pinia';

@@ -34,6 +34,18 @@ const routes = [
     path: "/web-note",
     name: "web-note",
     component: () => import("../views/WebNoteView.vue"),
+    children: [
+      {
+        path: "web-note-simple",
+        name: "web-note-simple",
+        component: () => import("../views/WebNote/WebNoteSimpleView.vue")
+      },
+      {
+        path: "useful-bootstrap-component",
+        name: "useful-bootstrap-component",
+        component: () => import("../views/WebNote/UsefulBootstrapComponentView.vue")
+      }
+    ]
   },
   {
     path: "/web-note/test-test-test",
@@ -43,38 +55,10 @@ const routes = [
         "../views/WebNote/TestTestTestView.vue"
       ),
   },
-//   {
-//     path: "/activity",
-//     name: "activity",
-//     component: () => import("../views/ActivityView.vue"),
-//     children: [
-//       {
-//         path: ":id",
-//         name: "activity_post",
-//         component: () =>
-//           import("../views/ActivityPostView.vue"),
-//         children: [
-//           {
-//             path: "posts",
-//             name: "posts",
-//             component: () =>
-//               import(
-//                 "../components/RoutePracticeDynamicRouteMatchingPost.vue"
-//               ),
-//           },
-//         ],
-//       },
-//     ],
-//   },
-//   {
-//     path: "/management_team",
-//     name: "management_team",
-//     component: () => import("../views/ManagementTeamView.vue"),
-//   },
 ];
 
 const router = createRouter({
-  history: createWebHistory("/Antinant-vue/"),
+  history: createWebHistory(import.meta.env.BASE_URL),
   routes,
 //   scrollBehavior(to, from, savePosition) {
 //     // 判斷是否為/activity與/activity/:id之間的跳轉

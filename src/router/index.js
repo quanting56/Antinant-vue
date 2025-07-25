@@ -16,9 +16,9 @@ const routes = [
     component: () => import("../views/AboutMeView.vue"),
   },
   {
-    path: "/photo",
-    name: "photo",
-    component: () => import("../views/PhotoView.vue"),
+    path: "/photo-portfolio",
+    name: "photo-portfolio",
+    component: () => import("../views/PhotoPortfolioView.vue"),
   },
   {
     path: "/photo/ntuphoto-life",

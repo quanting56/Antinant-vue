@@ -15,13 +15,13 @@
         :key="item.title"
         class="button-item"
       >
-        <a :href="item.href" class="semi-nav-button">
+        <router-link :to="{ name: item.href }" class="semi-nav-button">
           <img :src="item.img" :alt="item.subtitle" />
           <div class="button-text">
             <strong>{{ item.title }}</strong>
             <span>{{ item.subtitle }}</span>
           </div>
-        </a>
+        </router-link>
       </div>
     </section>
   </div>
@@ -34,12 +34,12 @@ import bannerImgUrl from "../assets/home-view/Kodak_UltraMax_053.jpg";
 const images = import.meta.glob("../assets/home-view/*", { eager: true, as: "url"});
 
 const buttons = [
-  { title: '旅遊', subtitle: '旅遊記憶', href: 'trip.html', img: images['../assets/home-view/IMG_1217.jpg'] },
-  { title: '攝影', subtitle: '攝影相關', href: 'photo.html', img: images['../assets/home-view/Kodak_UltraMax_002.jpg'] },
-  { title: '公路', subtitle: '公路紀錄', href: 'road.html', img: images['../assets/home-view/Ilford_HP5_Plus_036.jpg'] },
-  { title: '網頁', subtitle: '網頁練習', href: 'web_note.html', img: images['../assets/home-view/網頁截圖.png'] },
-  { title: '學習', subtitle: '學習筆記', href: 'learn.html', img: images['../assets/home-view/學習按鈕圖.png'] },
-  { title: '其他', subtitle: '其他東東', href: '#', img: images['../assets/home-view/facebook_img_2024.jpg'] }
+  // { title: '旅遊', subtitle: '旅遊記憶', href: 'trip.html', img: images['../assets/home-view/IMG_1217.jpg'] },
+  { title: '攝影', subtitle: '攝影相關', href: 'photo-portfolio', img: images['../assets/home-view/Kodak_UltraMax_002.jpg'] },
+  // { title: '公路', subtitle: '公路紀錄', href: 'road.html', img: images['../assets/home-view/Ilford_HP5_Plus_036.jpg'] },
+  { title: '網頁', subtitle: '網頁練習', href: 'web-note', img: images['../assets/home-view/網頁截圖.png'] },
+  // { title: '學習', subtitle: '學習筆記', href: 'learn.html', img: images['../assets/home-view/學習按鈕圖.png'] },
+  // { title: '其他', subtitle: '其他東東', href: '#', img: images['../assets/home-view/facebook_img_2024.jpg'] }
 ]
 </script>
 

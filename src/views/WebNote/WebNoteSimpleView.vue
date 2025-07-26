@@ -66,7 +66,7 @@ const tabs = [
   {
     id: "noteSpacing",
     title: "字的間距",
-    description: null,
+    description: "字間距測試",
     demoStyle: null,
     component: null,
     demo: `
@@ -80,7 +80,7 @@ const tabs = [
   {
     id: "noteTextShadow",
     title: "文字陰影",
-    description: null,
+    description: "文字陰影測試（text-shadow）",
     demoStyle: "font-size: 24px;",
     component: null,
     demo: `
@@ -144,10 +144,10 @@ const tabs = [
   {
     id: "noteDropDownHref",
     title: "下拉式超連結",
-    description: null,
+    description: "透過超連結下拉式清單到新網頁",
     demoStyle: null,
     component: defineAsyncComponent(() =>
-      import("../../components/WebNoteView/WebNoteSimpleView/SearchEngine.vue")
+      import("../../components/WebNoteView/WebNoteSimpleView/DemoNoteDropDownHref.vue")
     ),
     demo: `
 <select id="searchEngine">
@@ -155,8 +155,7 @@ const tabs = [
   <option value="Yahoo">Yahoo!奇摩</option>
   <option value="Bing">Bing</option>
 </select>
-<button onclick="toSearchEngine();">Go!</button>
-`,
+<button onclick="toSearchEngine();">Go!</button>`,
     demoJS: `
 // 下拉式超連結
 function toSearchEngine() {
@@ -175,14 +174,45 @@ function toSearchEngine() {
   {
     id: "noteMoveToChangeImg",
     title: "移動游標換照片",
-    description: null,
-    demoStyle: "font-size: 24px;",
-    component: null,
+    description: "移動游標改變顯示圖標（JavaScript／jQuery）",
+    demoStyle: null,
+    component: defineAsyncComponent(() =>
+      import("../../components/WebNoteView/WebNoteSimpleView/DemoNoteImageHoverSwitch.vue")
+    ),
     demo: `
-<p style="text-shadow: 3px 3px 3px gray">文字測試一</p>
-<p style="text-shadow: 3px 3px 3px black">文字測試二</p>
-<p style="text-shadow: 12px 5px gray">文字測試九</p>`,
-    demoJS: null
+<!-- 純 JavaScript 的 html code 用這個 -->
+<div onmouseover="ntubicdImage()" onmouseout="ntubicdSabImage()" style="height: 250px; width: 250px;">
+  <img id="changeImage1" src="assets/about_me/ntubicdsab_trademark.JPG" alt="拿來測試用的生傳mark" style="height: 250px;">
+</div>
+
+
+
+<!-- jQuery 的 html code 用這個 -->
+<div style="height: 250px; width: 250px;">
+  <img id="changeImage2" src="assets/ntubicdsab_trademark.JPG" alt="拿來測試用的生傳mark" style="height: 250px;">
+</div>`,
+    demoJS: `
+// 純 JavaScript 的 js code
+function ntubicdImage() {
+  var changeImage = document.getElementById("changeImage1");
+  changeImage.src = "assets/about_me/ntubicd_trademark.png";
+};
+
+function ntubicdSabImage() {
+  var changeBackImage = document.getElementById("changeImage1");
+  changeBackImage.src = "assets/about_me/ntubicdsab_trademark.JPG";
+};
+
+
+
+// jQuery 的 js code
+$("#changeImage2").on("mouseover", function(){
+  $(this).attr("src", "assets/ntubicd_trademark.png");
+});
+
+$("#changeImage2").on("mouseout", function(){
+  $(this).attr("src", "assets/ntubicdsab_trademark.JPG");
+});`
   },
   {
     id: "notePictureChange",
@@ -211,7 +241,7 @@ function toSearchEngine() {
   // ...把其他 tab 照此格式一一加入 tabs 陣列
 ];
 
-const activeTab = ref(tabs[4].id);
+const activeTab = ref(tabs[5].id);
 
 // 處理到這邊，後面待處理
 const currentTab = computed(() => {

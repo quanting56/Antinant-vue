@@ -80,7 +80,7 @@ const navItems = ref([
     title: '一些文章',
     open: false,
     children: [
-      { label: '攝影', href: '/photo' },
+      { label: '攝影', href: '/photo-portfolio' },
       { label: '公路', href: 'road.html' },
       { label: '學習', href: 'study.html' },
       { label: '投資', href: 'investment.html' }

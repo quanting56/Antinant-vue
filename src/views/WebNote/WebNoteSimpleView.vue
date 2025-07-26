@@ -218,30 +218,70 @@ $("#changeImage2").on("mouseout", function(){
     id: "notePictureChange",
     title: "疊圖照片接替出現",
     description: null,
-    demoStyle: "font-size: 24px;",
-    component: null,
+    demoStyle: null,
+    component: defineAsyncComponent(() =>
+      import("../../components/WebNoteView/WebNoteSimpleView/DemoNoteImageOverlayTransition.vue")
+    ),
     demo: `
-<p style="text-shadow: 3px 3px 3px gray">文字測試一</p>
-<p style="text-shadow: 3px 3px 3px black">文字測試二</p>
-<p style="text-shadow: 12px 5px gray">文字測試九</p>`,
+<!-- 本段以 Vue SFC 寫成，並未使用純 HTML -->
+<!-- 請至以下 SFC 檔查看 code -->
+<!-- 路徑：/components/WebNoteView/WebNoteSimpleView/DemoNoteImageOverlayTransition.vue -->
+
+
+<!-- 亦可至 https://quanting56.github.io/Antinant/web_note/two_picture_change.html 查看完整效果 -->`,
     demoJS: null
   },
   {
     id: "noteChineseFonts",
     title: "各式中文字體",
     description: null,
-    demoStyle: "font-size: 24px;",
+    demoStyle: "font-size: 20px; line-height: 1.8;",
     component: null,
     demo: `
-<p style="text-shadow: 3px 3px 3px gray">文字測試一</p>
-<p style="text-shadow: 3px 3px 3px black">文字測試二</p>
-<p style="text-shadow: 12px 5px gray">文字測試九</p>`,
+<ol>
+  <li>
+    <span style="font-family: serif;">滾滾長江東逝水 Lorem Ipsum 1234567890</span>
+    /<small><i>serif（襯線字體）</i></small>
+  </li>
+  <li>
+    <span style="font-family: sans-serif;">滾滾長江東逝水 Lorem Ipsum 1234567890</span>
+    /<small><i>sans-serif（無襯線字體）</i></small>
+  </li>
+  <li>
+    <span style="font-family: monospace;">滾滾長江東逝水 Lorem Ipsum 1234567890</span>
+    /<small><i>monospace（等寬字體）</i></small>
+  </li>
+  <li>
+    <span style="font-family: 'SimSun';">滾滾長江東逝水 Lorem Ipsum 1234567890</span>
+    /<small><i>SimSun（宋體）</i></small>
+  </li>
+  <li>
+    <span style="font-family: 'SimHei';">滾滾長江東逝水 Lorem Ipsum 1234567890</span>
+    /<small><i>SimHei（黑體）</i></small>
+  </li>
+  <li>
+    <span style="font-family: 'Microsoft YaHei';">滾滾長江東逝水 Lorem Ipsum 1234567890</span>
+    /<small><i>Microsoft YaHei（微軟雅黑）</i></small>
+  </li>
+  <li>
+    <span style="font-family: 'Microsoft JhengHei';">滾滾長江東逝水 Lorem Ipsum 1234567890</span>
+    /<small><i>Microsoft JhengHei（微軟正黑體）</i></small>
+  </li>
+  <li>
+    <span style="font-family: 'PingFang TC';">滾滾長江東逝水 Lorem Ipsum 1234567890</span>
+    /<small><i>PingFang TC（蘋方繁體）</i></small>
+  </li>
+  <li>
+    <span style="font-family: 'Heiti TC';">滾滾長江東逝水 Lorem Ipsum 1234567890</span>
+    /<small><i>Heiti TC（黑體繁體）</i></small>
+  </li>
+</ol>`,
     demoJS: null
   },
   // ...把其他 tab 照此格式一一加入 tabs 陣列
 ];
 
-const activeTab = ref(tabs[5].id);
+const activeTab = ref(tabs[0].id);
 
 // 處理到這邊，後面待處理
 const currentTab = computed(() => {

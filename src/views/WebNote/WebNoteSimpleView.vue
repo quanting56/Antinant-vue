@@ -283,15 +283,14 @@ $("#changeImage2").on("mouseout", function(){
 
 const activeTab = ref(tabs[0].id);
 
-// 處理到這邊，後面待處理
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];
 });
 
 // 每次切換後重新 highlight
 onMounted(() => {
-  nextTick(() => hljs.highlightAll())
-})
+  nextTick(() => hljs.highlightAll());
+});
 
 watch(activeTab, () => {
   nextTick(() => {
@@ -301,7 +300,7 @@ watch(activeTab, () => {
     });
 
     // 重新高亮
-    hljs.highlightAll()
+    hljs.highlightAll();
   });
 });
 </script>

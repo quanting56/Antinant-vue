@@ -2,7 +2,7 @@
   <div class="home-view">
     <!-- Banner Section -->
     <header class="banner" :style="{ backgroundImage: `url(${bannerImgUrl})` }">
-      <div class="banner-content">
+      <div class="banner-content" :style="{ opacity: textOpacity }">
         <h1>阿蛤ㄉ窩</h1>
         <p>一場奇幻之旅</p>
       </div>
@@ -28,6 +28,7 @@
 </template>
 
 <script setup>
+import { ref, onMounted, onBeforeMount } from "vue";
 import bannerImgUrl from "../assets/home-view/Kodak_UltraMax_053.jpg";
 
 // Vite 的批次導入工具（batch import），適合用來載入靜態資源
@@ -40,7 +41,27 @@ const buttons = [
   { title: '網頁', subtitle: '網頁練習', href: 'web-note', img: images['../assets/home-view/網頁截圖.png'] },
   // { title: '學習', subtitle: '學習筆記', href: 'learn.html', img: images['../assets/home-view/學習按鈕圖.png'] },
   // { title: '其他', subtitle: '其他東東', href: '#', img: images['../assets/home-view/facebook_img_2024.jpg'] }
-]
+];
+
+// Banner Section 文字捲動效果
+const textOpacity = ref(1);
+
+const handleScroll = () => {
+  const scrollY = window.scrollY;
+  const fadeStart = window.innerHeight * 0.12;
+  const fadeEnd = window.innerHeight * 0.2;
+  // 用Math.min()和Math.max()確保 0 <= progress <= 1
+  const progress = Math.min(1, Math.max(0, ( scrollY - fadeStart ) / ( fadeEnd - fadeStart )));
+  textOpacity.value = 1 - progress;
+};
+
+onMounted(() => {
+  window.addEventListener("scroll", handleScroll);
+});
+
+onBeforeMount(() => {
+  window.removeEventListener("scroll", handleScroll);
+});
 </script>
 
 <style scoped>
@@ -55,6 +76,24 @@ const buttons = [
   text-align: center;
   font-weight: bold;
   font-family: serif;
+}
+
+.banner-content { 
+  position: fixed;
+  top: 32%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  animation: fadeIn 1s ease; /* 一開始進網頁的時候 */
+  transition: opacity 0.5s ease; /* 讓 opacity 更平滑 */
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
 }
 
 .banner-content h1 {

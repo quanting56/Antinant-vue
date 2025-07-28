@@ -47,6 +47,8 @@ const currentTitle = computed(() => {
 .webnote-view {
   padding: 20px;
   font-family: serif;
+  max-width: 1440px;
+  margin: 0 auto;
 }
 
 .webnote-chapter-link-item {

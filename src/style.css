@@ -5,6 +5,27 @@ body {
   font-family: Arial, Helvetica, sans-serif;
 }
 
+pre {
+  background: #1e1e1e;
+  color: #f8f8f2;
+  margin-top: 0;
+  font-size: 14px;
+  line-height: 1.5;
+  box-sizing: border-box;
+  max-width: 100%;
+}
+
+pre code {
+  padding: 24px; /* 這行無效，要在子元件裡的<style>再寫一次 */
+  display: block;
+  overflow-x: scroll;
+
+  /* 捲動軸出不來，先讓<code>換行做替代 */
+  /* white-space: pre; */
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 /* Vite + Vue 原始 style.css */
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

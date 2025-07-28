@@ -69,8 +69,8 @@ const tabs = [
     description: "字間距測試",
     demoStyle: null,
     component: null,
-    demo: `
-<ul class="spacing-test">
+    demo: 
+`<ul class="spacing-test">
   <li>I love bird. 我愛鳥</li>
   <li><span style="letter-spacing: 8px;">I love bird. 我愛鳥</span></li>
   <li><span style="word-spacing: 8px;">I love bird. 我愛鳥</span></li>
@@ -83,8 +83,8 @@ const tabs = [
     description: "文字陰影測試（text-shadow）",
     demoStyle: "font-size: 24px;",
     component: null,
-    demo: `
-<p style="text-shadow: 3px 3px 3px gray;">文字測試一</p>
+    demo: 
+`<p style="text-shadow: 3px 3px 3px gray;">文字測試一</p>
 <p style="text-shadow: 3px 3px 3px black;">文字測試二</p>
 <p style="text-shadow: -5px 12px 5px gray;">文字測試三</p>
 <p style="text-shadow: 5px 12px 5px gray;">文字測試四</p>
@@ -101,8 +101,8 @@ const tabs = [
     description: null,
     demoStyle: "display: flex; flex-wrap: wrap; gap: 12px;",
     component: null,
-    demo: `
-<div style="border: solid;">border: solid</div>
+    demo: 
+`<div style="border: solid;">border: solid</div>
 <div style="border: double;">border: double</div>
 <div style="border: dotted;">border: dotted</div>
 <div style="border: dashed;">border: dashed</div>
@@ -119,8 +119,8 @@ const tabs = [
     description: null,
     demoStyle: "display: flex; flex-wrap: wrap;",
     component: null,
-    demo: `
-<div style="background-color: #eeeeee; border: 0.5px solid gray; width: 400px; height: auto;">
+    demo: 
+`<div style="background-color: #eeeeee; border: 0.5px solid gray; width: 400px; height: auto;">
   <div style="width: 50%; aspect-ratio: 3/2; background-color: #ccc; border: 1px solid black; float: left;"></div>
   <p>測試文繞圖<br>（圖片style="float: left;"）</p>
 </div>
@@ -149,15 +149,15 @@ const tabs = [
     component: defineAsyncComponent(() =>
       import("../../components/WebNoteView/WebNoteSimpleView/DemoNoteDropDownHref.vue")
     ),
-    demo: `
-<select id="searchEngine">
+    demo: 
+`<select id="searchEngine">
   <option value="Google">Google</option>
   <option value="Yahoo">Yahoo!奇摩</option>
   <option value="Bing">Bing</option>
 </select>
 <button onclick="toSearchEngine();">Go!</button>`,
-    demoJS: `
-// 下拉式超連結
+    demoJS: 
+`// 下拉式超連結
 function toSearchEngine() {
   var searchEngine = document.getElementById("searchEngine");
   var selectedValue = searchEngine.value;
@@ -179,8 +179,8 @@ function toSearchEngine() {
     component: defineAsyncComponent(() =>
       import("../../components/WebNoteView/WebNoteSimpleView/DemoNoteImageHoverSwitch.vue")
     ),
-    demo: `
-<!-- 純 JavaScript 的 html code 用這個 -->
+    demo: 
+`<!-- 純 JavaScript 的 html code 用這個 -->
 <div onmouseover="ntubicdImage()" onmouseout="ntubicdSabImage()" style="height: 250px; width: 250px;">
   <img id="changeImage1" src="assets/about_me/ntubicdsab_trademark.JPG" alt="拿來測試用的生傳mark" style="height: 250px;">
 </div>
@@ -191,8 +191,8 @@ function toSearchEngine() {
 <div style="height: 250px; width: 250px;">
   <img id="changeImage2" src="assets/ntubicdsab_trademark.JPG" alt="拿來測試用的生傳mark" style="height: 250px;">
 </div>`,
-    demoJS: `
-// 純 JavaScript 的 js code
+    demoJS: 
+`// 純 JavaScript 的 js code
 function ntubicdImage() {
   var changeImage = document.getElementById("changeImage1");
   changeImage.src = "assets/about_me/ntubicd_trademark.png";
@@ -222,8 +222,8 @@ $("#changeImage2").on("mouseout", function(){
     component: defineAsyncComponent(() =>
       import("../../components/WebNoteView/WebNoteSimpleView/DemoNoteImageOverlayTransition.vue")
     ),
-    demo: `
-<!-- 本段以 Vue SFC 寫成，並未使用純 HTML -->
+    demo: 
+`<!-- 本段以 Vue SFC 寫成，並未使用純 HTML -->
 <!-- 請至以下 SFC 檔查看 code -->
 <!-- 路徑：/components/WebNoteView/WebNoteSimpleView/DemoNoteImageOverlayTransition.vue -->
 
@@ -237,8 +237,8 @@ $("#changeImage2").on("mouseout", function(){
     description: null,
     demoStyle: "font-size: 20px; line-height: 1.8;",
     component: null,
-    demo: `
-<ol>
+    demo: 
+`<ol>
   <li>
     <span style="font-family: serif;">滾滾長江東逝水 Lorem Ipsum 1234567890</span>
     /<small><i>serif（襯線字體）</i></small>
@@ -303,62 +303,85 @@ watch(activeTab, () => {
     hljs.highlightAll();
   });
 });
+
+// 以下為測試用code
+onMounted(() => {
+  nextTick(() => {
+    const contentContainer = document.querySelector(".content");
+    const codeContainer = document.querySelector(".code");
+    const pre = document.querySelector(".code pre");
+    const code = document.querySelector(".code pre code");
+
+    if (codeContainer && pre && code) {
+      console.log("✅ .content 寬度：", contentContainer.getBoundingClientRect().width + "px");
+      console.log("✅ .code 寬度：", codeContainer.getBoundingClientRect().width + "px");
+      console.log("✅ pre 寬度：", pre.getBoundingClientRect().width + "px");
+      console.log("✅ code 寬度：", code.getBoundingClientRect().width + "px");
+    } else {
+      console.warn("⚠️ 無法正確抓到 code 區塊元素");
+    }
+  });
+});
 </script>
 
 <style scoped>
+.webnote-simple-view {
+  max-width: 100%;
+}
+
 /* 分欄布局 */
 .layout {
   display: flex;
   gap: 20px;
+  margin-bottom: 32px;
 }
 
 /* 左側 Sidebar */
 .sidebar {
   flex: 0 0 200px;
 }
+
 .sidebar ul {
   list-style: none;
   padding: 0;
   margin: 0;
 }
+
 .sidebar li {
   padding: 10px;
   cursor: pointer;
   border-radius: 4px;
   margin-bottom: 4px;
 }
+
 .sidebar li.active {
   background-color: #ffc107; /* bootstrap warning color */
-  color: #333;
+  color: #333333;
 }
+
 .sidebar li:hover:not(.active) {
-  background-color: #eee;
+  background-color: #eeeeee;
 }
 
 /* 右側 Content */
-.content { flex: 1; }
+.content {
+  flex: 1;
+}
+
 .content-title {
-  font-size: 1.5rem;
+  font-size: 24px;
   margin-top: 0;
-  margin-bottom: 0.5rem;
+  margin-bottom: 8px;
 }
 
 /* Demo 區塊樣式 */
 .demo {
-  background: #f8f9fa;
   padding: 16px;
   margin-bottom: 16px;
-  border-radius: 4px;
 }
 
-/* Code block */
-pre {
-  background: #2d2d2d;
-  color: #f8f8f2;
-  padding-bottom: 16px;
-  margin-top: 0;
-  font-size: 14px;
-  overflow: auto;
-  border-radius: 4px;
+/* 其他樣式寫在style.css裡 */
+pre code {
+  padding: 24px;
 }
 </style>

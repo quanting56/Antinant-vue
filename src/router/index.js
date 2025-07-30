@@ -26,8 +26,8 @@ const routes = [
     component: () => import("../views/Photo/NtuphotoLifeView.vue")
   },
   {
-    path: "/photo/photographic_equipment",
-    name: "photographic_equipment",
+    path: "/photo/photographic-equipment",
+    name: "photographic-equipment",
     component: () => import("../views/Photo/PhotographicEquipment.vue")
   },
   {

@@ -45,7 +45,7 @@ const cardDatas = [
   {
     title: "器材",
     text: "這些年噴了多少錢在這些酷東西上啊",
-    href: "/photo/photographic_equipment",
+    href: "/photo/photographic-equipment",
     image: {
       src: images["../assets/photo/vue.svg"],
       alt: "要放攝影器材合照",

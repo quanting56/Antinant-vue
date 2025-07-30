@@ -30,6 +30,10 @@ const webNoteWebsites = [
     websiteTitle: "一些好用的Bootstrap元件"
   },
   {
+    websiteName: "bootstrap-note",
+    websiteTitle: "Bootstrap網格與內容樣式筆記"
+  },
+  {
     websiteName: "test-test-test",
     websiteTitle: "測試場"
   }

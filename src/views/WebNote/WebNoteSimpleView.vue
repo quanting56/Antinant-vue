@@ -17,36 +17,38 @@
       </nav>
 
       <!-- 右側內容區 -->
-      <section class="content">
-        <h3 class="content-title">{{ currentTab.title }}</h3>
-        <hr />
-
-        <!-- 先顯示說明，再示範效果，再顯示程式碼 -->
-        <div class="description" v-if="currentTab.description">
-          <p>{{ currentTab.description }}</p>
-        </div>
-
-        <div class="demo">
-          <!-- 若有component，就顯示component -->
-          <component v-if="currentTab.component" :is="currentTab.component"></component>
-          <!-- 否則用v-html顯示demo -->
-          <div
-            v-else
-            v-html="currentTab.demo"
-            :style="currentTab.demoStyle">
+      <transition name="fade" mode="out-in">
+        <section class="content" v-if="currentTab" :key="currentTab.id">
+          <h3 class="content-title">{{ currentTab.title }}</h3>
+          <hr />
+  
+          <!-- 先顯示說明，再示範效果，再顯示程式碼 -->
+          <div class="description" v-if="currentTab.description">
+            <p>{{ currentTab.description }}</p>
           </div>
-        </div>
-
-        <div class="code">
-          html code:
-          <pre><code class="html">{{ currentTab.demo }}</code></pre>
-          
-          <template v-if="currentTab.demoJS">
-            javascript code:
-            <pre><code class="javascript">{{ currentTab.demoJS }}</code></pre>
-          </template>
-        </div>
-      </section>
+  
+          <div class="demo">
+            <!-- 若有component，就顯示component -->
+            <component v-if="currentTab.component" :is="currentTab.component"></component>
+            <!-- 否則用v-html顯示demo -->
+            <div
+              v-else
+              v-html="currentTab.demo"
+              :style="currentTab.demoStyle">
+            </div>
+          </div>
+  
+          <div class="code">
+            html code:
+            <pre><code class="html">{{ currentTab.demo }}</code></pre>
+            
+            <template v-if="currentTab.demoJS">
+              javascript code:
+              <pre><code class="javascript">{{ currentTab.demoJS }}</code></pre>
+            </template>
+          </div>
+        </section>
+      </transition>
     </div>
   </div>
 </template>
@@ -303,25 +305,6 @@ watch(activeTab, () => {
     hljs.highlightAll();
   });
 });
-
-// 以下為測試用code
-onMounted(() => {
-  nextTick(() => {
-    const contentContainer = document.querySelector(".content");
-    const codeContainer = document.querySelector(".code");
-    const pre = document.querySelector(".code pre");
-    const code = document.querySelector(".code pre code");
-
-    if (codeContainer && pre && code) {
-      console.log("✅ .content 寬度：", contentContainer.getBoundingClientRect().width + "px");
-      console.log("✅ .code 寬度：", codeContainer.getBoundingClientRect().width + "px");
-      console.log("✅ pre 寬度：", pre.getBoundingClientRect().width + "px");
-      console.log("✅ code 寬度：", code.getBoundingClientRect().width + "px");
-    } else {
-      console.warn("⚠️ 無法正確抓到 code 區塊元素");
-    }
-  });
-});
 </script>
 
 <style scoped>
@@ -364,6 +347,14 @@ onMounted(() => {
 }
 
 /* 右側 Content */
+/* 淡入淡出動畫：fade */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.12s ease;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
 .content {
   flex: 1;
 }

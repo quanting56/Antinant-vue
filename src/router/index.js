@@ -44,6 +44,11 @@ const routes = [
         path: "useful-bootstrap-component",
         name: "useful-bootstrap-component",
         component: () => import("../views/WebNote/UsefulBootstrapComponentView.vue")
+      },
+      {
+        path: "bootstrap-note",
+        name: "bootstrap-note",
+        component: () => import("../views/WebNote/BootstrapNoteView.vue")
       }
     ]
   },

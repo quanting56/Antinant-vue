@@ -17,7 +17,11 @@
       </nav>
 
       <!-- 右側內容區 -->
-      <transition name="fade" mode="out-in">
+      <transition
+        name="fade"
+        mode="out-in"
+        @after-enter="handleHighlight"
+      >
         <section class="content" v-if="currentTab" :key="currentTab.id">
           <h3 class="content-title">{{ currentTab.title }}</h3>
           <hr />
@@ -294,7 +298,7 @@ onMounted(() => {
   nextTick(() => hljs.highlightAll());
 });
 
-watch(activeTab, () => {
+function handleHighlight() {
   nextTick(() => {
     // 清除所有<code>上的data-highlighted屬性標記
     document.querySelectorAll("pre code").forEach(el => {
@@ -304,7 +308,7 @@ watch(activeTab, () => {
     // 重新高亮
     hljs.highlightAll();
   });
-});
+};
 </script>
 
 <style scoped>

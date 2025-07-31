@@ -1,5 +1,5 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DemoNoteDropDownHref-BBl5Vj9q.js","assets/index-CUQmFFOe.js","assets/index-Bg8smPi4.css","assets/DemoNoteImageHoverSwitch-DXFkwjmG.js","assets/DemoNoteImageOverlayTransition-BFtbxbuj.js","assets/DemoNoteImageOverlayTransition-WpCSgCNJ.css"])))=>i.map(i=>d[i]);
-import{_ as b,r as f,m,k as x,o as _,p as g,c as l,b as t,g as w,F as h,d as S,w as k,T as I,q as u,f as o,j as T,t as s,h as r,s as J,v as E,n as L,i as y}from"./index-CUQmFFOe.js";import{H as c,x as C,j as V}from"./vs2015-CMXDCM_s.js";const H={class:"webnote-simple-view"},B={class:"layout"},j={class:"sidebar"},P=["onClick"],A={class:"content-title"},F={class:"content-body"},M={key:0,class:"description"},N={class:"demo"},D=["innerHTML"],G={key:1,class:"code"},Y={class:"html"},$={class:"javascript"},z={__name:"WebNoteSimpleView",setup(O){c.registerLanguage("html",C),c.registerLanguage("javascript",V);const a=[{id:"noteSpacing",title:"字的間距",description:"字間距測試",demoStyle:null,component:null,demo:`<ul class="spacing-test">
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DemoNoteDropDownHref-By5eWkF1.js","assets/index-ByB5nNjd.js","assets/index-Bg8smPi4.css","assets/DemoNoteImageHoverSwitch-DaypBtbO.js","assets/DemoNoteImageOverlayTransition-B_kRlrrt.js","assets/DemoNoteImageOverlayTransition-WpCSgCNJ.css"])))=>i.map(i=>d[i]);
+import{_ as b,r as f,m,k as x,o as _,p as g,c as l,b as t,g as w,F as h,d as S,w as k,T as I,q as u,f as o,j as T,t as s,h as r,s as J,v as E,n as L,i as y}from"./index-ByB5nNjd.js";import{H as c,x as C,j as V}from"./vs2015-CMXDCM_s.js";const H={class:"webnote-simple-view"},B={class:"layout"},j={class:"sidebar"},P=["onClick"],A={class:"content-title"},F={class:"content-body"},M={key:0,class:"description"},N={class:"demo"},D=["innerHTML"],G={key:1,class:"code"},Y={class:"html"},$={class:"javascript"},z={__name:"WebNoteSimpleView",setup(O){c.registerLanguage("html",C),c.registerLanguage("javascript",V);const a=[{id:"noteSpacing",title:"字的間距",description:"字間距測試",demoStyle:null,component:null,demo:`<ul class="spacing-test">
   <li>I love bird. 我愛鳥</li>
   <li><span style="letter-spacing: 8px;">I love bird. 我愛鳥</span></li>
   <li><span style="word-spacing: 8px;">I love bird. 我愛鳥</span></li>
@@ -37,7 +37,7 @@ import{_ as b,r as f,m,k as x,o as _,p as g,c as l,b as t,g as w,F as h,d as S,w
 <div style="background-color: #eeeeee; border: 0.5px solid gray; width: 400px; height: auto;">
   <div style="width: 50%; aspect-ratio: 3/2; background-color: #ccc; border: 1px solid black; float: left;"></div>
   <p style="float: right;">測試文繞圖<br>（文字style="float: right;"）<br>（圖片亦需增加float: left）</p>
-</div>`,demoJS:null},{id:"noteDropDownHref",title:"下拉式超連結",description:"透過超連結下拉式清單到新網頁",demoStyle:null,component:m(()=>u(()=>import("./DemoNoteDropDownHref-BBl5Vj9q.js"),__vite__mapDeps([0,1,2]))),demo:`<select id="searchEngine">
+</div>`,demoJS:null},{id:"noteDropDownHref",title:"下拉式超連結",description:"透過超連結下拉式清單到新網頁",demoStyle:null,component:m(()=>u(()=>import("./DemoNoteDropDownHref-By5eWkF1.js"),__vite__mapDeps([0,1,2]))),demo:`<select id="searchEngine">
   <option value="Google">Google</option>
   <option value="Yahoo">Yahoo!奇摩</option>
   <option value="Bing">Bing</option>
@@ -54,7 +54,7 @@ function toSearchEngine() {
   } else if (selectedValue === "Bing") {
     window.open("https://www.bing.com", "");
   };  
-};`},{id:"noteMoveToChangeImg",title:"移動游標換照片",description:"移動游標改變顯示圖標（JavaScript／jQuery）",demoStyle:null,component:m(()=>u(()=>import("./DemoNoteImageHoverSwitch-DXFkwjmG.js"),__vite__mapDeps([3,1,2]))),demo:`<!-- 純 JavaScript 的 html code 用這個 -->
+};`},{id:"noteMoveToChangeImg",title:"移動游標換照片",description:"移動游標改變顯示圖標（JavaScript／jQuery）",demoStyle:null,component:m(()=>u(()=>import("./DemoNoteImageHoverSwitch-DaypBtbO.js"),__vite__mapDeps([3,1,2]))),demo:`<!-- 純 JavaScript 的 html code 用這個 -->
 <div onmouseover="ntubicdImage()" onmouseout="ntubicdSabImage()" style="height: 250px; width: 250px;">
   <img id="changeImage1" src="assets/about_me/ntubicdsab_trademark.JPG" alt="拿來測試用的生傳mark" style="height: 250px;">
 </div>
@@ -84,7 +84,7 @@ $("#changeImage2").on("mouseover", function(){
 
 $("#changeImage2").on("mouseout", function(){
   $(this).attr("src", "assets/ntubicdsab_trademark.JPG");
-});`},{id:"notePictureChange",title:"疊圖照片接替出現",description:null,demoStyle:null,component:m(()=>u(()=>import("./DemoNoteImageOverlayTransition-BFtbxbuj.js"),__vite__mapDeps([4,1,2,5]))),demo:`<!-- 本段以 Vue SFC 寫成，並未使用純 HTML -->
+});`},{id:"notePictureChange",title:"疊圖照片接替出現",description:null,demoStyle:null,component:m(()=>u(()=>import("./DemoNoteImageOverlayTransition-B_kRlrrt.js"),__vite__mapDeps([4,1,2,5]))),demo:`<!-- 本段以 Vue SFC 寫成，並未使用純 HTML -->
 <!-- 請至以下 SFC 檔查看 code -->
 <!-- 路徑：/components/WebNoteView/WebNoteSimpleView/DemoNoteImageOverlayTransition.vue -->
 

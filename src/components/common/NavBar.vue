@@ -159,6 +159,7 @@ const navItems = ref([
   z-index: 999;
   opacity: 0.9;
   padding: 8px 0px;
+  height: 38px;
 }
 
 .navbar-brand {
@@ -281,7 +282,7 @@ const navItems = ref([
 }
 
 /* Responsive */
-@media (max-width: 768px) {
+@media (max-width: 992px) {
   .navbar {
     justify-content: space-between;
   }

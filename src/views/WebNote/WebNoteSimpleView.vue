@@ -25,31 +25,33 @@
         <section class="content" v-if="currentTab" :key="currentTab.id">
           <h3 class="content-title">{{ currentTab.title }}</h3>
           <hr />
-  
-          <!-- 先顯示說明，再示範效果，再顯示程式碼 -->
-          <div class="description" v-if="currentTab.description">
-            <p>{{ currentTab.description }}</p>
-          </div>
-  
-          <div class="demo">
-            <!-- 若有component，就顯示component -->
-            <component v-if="currentTab.component" :is="currentTab.component"></component>
-            <!-- 否則用v-html顯示demo -->
-            <div
-              v-else
-              v-html="currentTab.demo"
-              :style="currentTab.demoStyle">
+
+          <div class="content-body">
+            <!-- 先顯示說明，再示範效果，再顯示程式碼 -->
+            <div class="description" v-if="currentTab.description">
+              <p>{{ currentTab.description }}</p>
             </div>
-          </div>
-  
-          <div class="code">
-            html code:
-            <pre><code class="html">{{ currentTab.demo }}</code></pre>
-            
-            <template v-if="currentTab.demoJS">
-              javascript code:
-              <pre><code class="javascript">{{ currentTab.demoJS }}</code></pre>
-            </template>
+    
+            <div class="demo">
+              <!-- 若有component，就顯示component -->
+              <component v-if="currentTab.component" :is="currentTab.component"></component>
+              <!-- 否則用v-html顯示demo -->
+              <div
+                v-else
+                v-html="currentTab.demo"
+                :style="currentTab.demoStyle">
+              </div>
+            </div>
+    
+            <div class="code" v-if="currentTab.demo">
+              html code:
+              <pre><code class="html">{{ currentTab.demo }}</code></pre>
+              
+              <template v-if="currentTab.demoJS">
+                javascript code:
+                <pre><code class="javascript">{{ currentTab.demoJS }}</code></pre>
+              </template>
+            </div>
           </div>
         </section>
       </transition>
@@ -66,7 +68,7 @@ import "highlight.js/styles/vs2015.css";
 hljs.registerLanguage("html", html);
 hljs.registerLanguage("javascript", javascript);
 
-import { onMounted, watch, defineAsyncComponent, ref, computed, nextTick } from "vue";
+import { onMounted, defineAsyncComponent, ref, computed, nextTick } from "vue";
 
 const tabs = [
   {

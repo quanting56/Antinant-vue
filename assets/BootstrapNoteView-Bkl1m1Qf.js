@@ -1,0 +1,1 @@
+import{_ as e,c as t,f as o}from"./index-CUQmFFOe.js";const c={};function a(n,r){return o(),t("p",null,"bootestap note")}const _=e(c,[["render",a],["__scopeId","data-v-14b2c36c"]]);export{_ as default};

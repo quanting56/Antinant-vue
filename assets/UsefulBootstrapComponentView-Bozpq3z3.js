@@ -1,1 +1,0 @@
-import{_ as e,c as o,f as t}from"./index-DhIlpD7x.js";const c={};function n(s,a){return t(),o("p",null,"useful bootestap component")}const _=e(c,[["render",n],["__scopeId","data-v-4fe63585"]]);export{_ as default};

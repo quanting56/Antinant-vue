@@ -49,7 +49,27 @@ const routes = [
         path: "bootstrap-note",
         name: "bootstrap-note",
         component: () => import("../views/WebNote/BootstrapNoteView.vue")
-      }
+      },
+      {
+        path: "css-function-note",
+        name: "css-function-note",
+        component: () => import("../views/WebNote/CssFunctionNoteView.vue")
+      },
+      {
+        path: "javascript-note",
+        name: "javascript-note",
+        component: () => import("../views/WebNote/JavascriptNoteView.vue")
+      },
+      {
+        path: "d3js-note",
+        name: "d3js-note",
+        component: () => import("../views/WebNote/D3jsNoteView.vue")
+      },
+      {
+        path: "vuejs-note",
+        name: "vuejs-note",
+        component: () => import("../views/WebNote/VuejsNoteView.vue")
+      },
     ]
   },
   {

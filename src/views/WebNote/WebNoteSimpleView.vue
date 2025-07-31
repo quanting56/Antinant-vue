@@ -379,4 +379,28 @@ function handleHighlight() {
 pre code {
   padding: 24px;
 }
+
+/* 響應式結構，斷點為 992px */
+@media (max-width: 992px) {
+  .layout {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    margin-bottom: 16px;
+    flex: 0;
+  }
+
+  .sidebar ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+
+  .sidebar li {
+    margin-bottom: 0; /* 移除原本的垂直 margin */
+    padding: 8px 12px;
+    border: 1px solid #cccccc;
+  }
+}
 </style>

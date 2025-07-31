@@ -1,9 +1,7 @@
 <template>
-  <p>useful bootestap component</p>
+  <bootstrap-widget></bootstrap-widget>
 </template>
 
 <script setup></script>
 
-<style scoped>
-p {font-size: 144px;}
-</style>
+<style scoped></style>

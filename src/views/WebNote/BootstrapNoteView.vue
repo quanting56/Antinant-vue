@@ -33,9 +33,11 @@
 
           <div class="content-body">
             <!-- 先顯示說明，再示範效果，再顯示程式碼 -->
-            <div class="description" v-if="currentTab.description">
-              <p>{{ currentTab.description }}</p>
-            </div>
+            <div
+              class="description"
+              v-if="currentTab.description"
+              v-html="currentTab.description"
+            ></div>
     
             <div class="demo">
               <!-- 若有component，就顯示component -->

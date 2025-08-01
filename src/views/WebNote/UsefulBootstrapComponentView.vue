@@ -33,9 +33,11 @@
 
           <div class="content-body">
             <!-- 先顯示說明，再示範效果，再顯示程式碼 -->
-            <div class="description" v-if="currentTab.description">
-              <p>{{ currentTab.description }}</p>
-            </div>
+            <div
+              class="description"
+              v-if="currentTab.description"
+              v-html="currentTab.description"
+            ></div>
     
             <div class="demo">
               <!-- 若有component，就顯示component -->
@@ -690,19 +692,19 @@ const tabs = [
   {
     id: "noteScrollspy",
     title: "滾動監控（Scrollspy）",
-    description: null,
+    description: `<p>可至 <a href="https://bootstrap5.hexschool.com/docs/5.1/components/scrollspy/" target="_blank">官方文件</a> 查看效果</p>`,
     demoStyle: null,
     component: null,
-    demo: `<!-- 可至 https://bootstrap5.hexschool.com/docs/5.1/components/scrollspy/ 查看效果 -->`,
+    demo: null,
     demoJS: null
   },
   {
     id: "noteToasts",
     title: "吐司（Toasts）",
-    description: null,
+    description: `<p>可至 <a href="https://bootstrap5.hexschool.com/docs/5.1/components/toasts/" target="_blank">官方文件</a> 查看效果</p>`,
     demoStyle: null,
     component: null,
-    demo: `<!-- 可至 https://bootstrap5.hexschool.com/docs/5.1/components/toasts/ 查看效果 -->`,
+    demo: null,
     demoJS: null
   }
   // ...把其他 tab 照此格式一一加入 tabs 陣列

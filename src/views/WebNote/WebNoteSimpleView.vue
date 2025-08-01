@@ -28,9 +28,11 @@
 
           <div class="content-body">
             <!-- 先顯示說明，再示範效果，再顯示程式碼 -->
-            <div class="description" v-if="currentTab.description">
-              <p>{{ currentTab.description }}</p>
-            </div>
+            <div
+              class="description"
+              v-if="currentTab.description"
+              v-html="currentTab.description"
+            ></div>
     
             <div class="demo">
               <!-- 若有component，就顯示component -->
@@ -74,7 +76,7 @@ const tabs = [
   {
     id: "noteSpacing",
     title: "字的間距",
-    description: "字間距測試",
+    description: "<p>字間距測試</p>",
     demoStyle: null,
     component: null,
     demo: 
@@ -88,7 +90,7 @@ const tabs = [
   {
     id: "noteTextShadow",
     title: "文字陰影",
-    description: "文字陰影測試（text-shadow）",
+    description: "<p>文字陰影測試（text-shadow）</p>",
     demoStyle: "font-size: 24px;",
     component: null,
     demo: 
@@ -152,7 +154,7 @@ const tabs = [
   {
     id: "noteDropDownHref",
     title: "下拉式超連結",
-    description: "透過超連結下拉式清單到新網頁",
+    description: "<p>透過超連結下拉式清單到新網頁</p>",
     demoStyle: null,
     component: defineAsyncComponent(() =>
       import("../../components/WebNoteView/WebNoteSimpleView/DemoNoteDropDownHref.vue")
@@ -182,7 +184,7 @@ function toSearchEngine() {
   {
     id: "noteMoveToChangeImg",
     title: "移動游標換照片",
-    description: "移動游標改變顯示圖標（JavaScript／jQuery）",
+    description: "<p>移動游標改變顯示圖標（JavaScript／jQuery）</p>",
     demoStyle: null,
     component: defineAsyncComponent(() =>
       import("../../components/WebNoteView/WebNoteSimpleView/DemoNoteImageHoverSwitch.vue")

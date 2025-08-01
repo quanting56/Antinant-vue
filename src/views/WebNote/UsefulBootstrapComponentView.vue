@@ -1,5 +1,10 @@
 <template>
   <div class="useful-bootstrap-component-view">
+    <!-- ↓↓↓未完工備注，完工後可刪除↓↓↓ -->
+    <h3>
+      此頁面尚未完全完工，目前僅將程式碼放進，還未完全套入 Bootstrap 效果。需使用此區程式碼請至舊網頁 <a href="https://quanting56.github.io/Antinant/web_note.html#usefulBootstrapComponent" target="_blank" style="background-color: #f2ea9d; text-wrap: nowrap;">舊・阿蛤的窩 - 網頁練習｜一些好用的Bootstrap元件</a> 查詢 UI/UX 與 code。
+    </h3>
+    <!-- ↑↑↑未完工備注，完工後可刪除↑↑↑ -->
     <!-- 整體分欄：左側 Nav, 右側 Content -->
     <div class="layout">
       <!-- 左側分頁列 -->
@@ -306,7 +311,7 @@ const tabs = [
   {
     id: "noteNavsTabs",
     title: "導覽（Navs）與標籤頁（Tabs）",
-    description: "移動游標改變顯示圖標（JavaScript／jQuery）",
+    description: null,
     demoStyle: null,
     component: null,
     demo: 

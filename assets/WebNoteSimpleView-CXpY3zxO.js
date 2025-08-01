@@ -1,9 +1,9 @@
-const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DemoNoteDropDownHref-By5eWkF1.js","assets/index-ByB5nNjd.js","assets/index-Bg8smPi4.css","assets/DemoNoteImageHoverSwitch-DaypBtbO.js","assets/DemoNoteImageOverlayTransition-B_kRlrrt.js","assets/DemoNoteImageOverlayTransition-WpCSgCNJ.css"])))=>i.map(i=>d[i]);
-import{_ as b,r as f,m,k as x,o as _,p as g,c as l,b as t,g as w,F as h,d as S,w as k,T as I,q as u,f as o,j as T,t as s,h as r,s as J,v as E,n as L,i as y}from"./index-ByB5nNjd.js";import{H as c,x as C,j as V}from"./vs2015-CMXDCM_s.js";const H={class:"webnote-simple-view"},B={class:"layout"},j={class:"sidebar"},P=["onClick"],A={class:"content-title"},F={class:"content-body"},M={key:0,class:"description"},N={class:"demo"},D=["innerHTML"],G={key:1,class:"code"},Y={class:"html"},$={class:"javascript"},z={__name:"WebNoteSimpleView",setup(O){c.registerLanguage("html",C),c.registerLanguage("javascript",V);const a=[{id:"noteSpacing",title:"字的間距",description:"字間距測試",demoStyle:null,component:null,demo:`<ul class="spacing-test">
+const __vite__mapDeps=(i,m=__vite__mapDeps,d=(m.f||(m.f=["assets/DemoNoteDropDownHref-CL6Hthnw.js","assets/index-CRU9xyTZ.js","assets/index-CwL6h7At.css","assets/DemoNoteImageHoverSwitch-BDVzUViA.js","assets/DemoNoteImageOverlayTransition-D_xPJktd.js","assets/DemoNoteImageOverlayTransition-WpCSgCNJ.css"])))=>i.map(i=>d[i]);
+import{_ as b,r as f,m,k as x,o as _,p as g,c as i,b as t,g as w,F as h,d as S,w as k,T as I,q as u,f as o,j as T,t as d,h as r,s as J,v as L,n as E,i as y}from"./index-CRU9xyTZ.js";import{H as p,x as H,j as C}from"./vs2015-CMXDCM_s.js";const V={class:"webnote-simple-view"},B={class:"layout"},j={class:"sidebar"},M=["onClick"],P={class:"content-title"},A={class:"content-body"},F=["innerHTML"],N={class:"demo"},D=["innerHTML"],G={key:1,class:"code"},Y={class:"html"},$={class:"javascript"},z={__name:"WebNoteSimpleView",setup(O){p.registerLanguage("html",H),p.registerLanguage("javascript",C);const s=[{id:"noteSpacing",title:"字的間距",description:"<p>字間距測試</p>",demoStyle:null,component:null,demo:`<ul class="spacing-test">
   <li>I love bird. 我愛鳥</li>
   <li><span style="letter-spacing: 8px;">I love bird. 我愛鳥</span></li>
   <li><span style="word-spacing: 8px;">I love bird. 我愛鳥</span></li>
-</ul>`,demoJS:null},{id:"noteTextShadow",title:"文字陰影",description:"文字陰影測試（text-shadow）",demoStyle:"font-size: 24px;",component:null,demo:`<p style="text-shadow: 3px 3px 3px gray;">文字測試一</p>
+</ul>`,demoJS:null},{id:"noteTextShadow",title:"文字陰影",description:"<p>文字陰影測試（text-shadow）</p>",demoStyle:"font-size: 24px;",component:null,demo:`<p style="text-shadow: 3px 3px 3px gray;">文字測試一</p>
 <p style="text-shadow: 3px 3px 3px black;">文字測試二</p>
 <p style="text-shadow: -5px 12px 5px gray;">文字測試三</p>
 <p style="text-shadow: 5px 12px 5px gray;">文字測試四</p>
@@ -37,7 +37,7 @@ import{_ as b,r as f,m,k as x,o as _,p as g,c as l,b as t,g as w,F as h,d as S,w
 <div style="background-color: #eeeeee; border: 0.5px solid gray; width: 400px; height: auto;">
   <div style="width: 50%; aspect-ratio: 3/2; background-color: #ccc; border: 1px solid black; float: left;"></div>
   <p style="float: right;">測試文繞圖<br>（文字style="float: right;"）<br>（圖片亦需增加float: left）</p>
-</div>`,demoJS:null},{id:"noteDropDownHref",title:"下拉式超連結",description:"透過超連結下拉式清單到新網頁",demoStyle:null,component:m(()=>u(()=>import("./DemoNoteDropDownHref-By5eWkF1.js"),__vite__mapDeps([0,1,2]))),demo:`<select id="searchEngine">
+</div>`,demoJS:null},{id:"noteDropDownHref",title:"下拉式超連結",description:"<p>透過超連結下拉式清單到新網頁</p>",demoStyle:null,component:m(()=>u(()=>import("./DemoNoteDropDownHref-CL6Hthnw.js"),__vite__mapDeps([0,1,2]))),demo:`<select id="searchEngine">
   <option value="Google">Google</option>
   <option value="Yahoo">Yahoo!奇摩</option>
   <option value="Bing">Bing</option>
@@ -54,7 +54,7 @@ function toSearchEngine() {
   } else if (selectedValue === "Bing") {
     window.open("https://www.bing.com", "");
   };  
-};`},{id:"noteMoveToChangeImg",title:"移動游標換照片",description:"移動游標改變顯示圖標（JavaScript／jQuery）",demoStyle:null,component:m(()=>u(()=>import("./DemoNoteImageHoverSwitch-DaypBtbO.js"),__vite__mapDeps([3,1,2]))),demo:`<!-- 純 JavaScript 的 html code 用這個 -->
+};`},{id:"noteMoveToChangeImg",title:"移動游標換照片",description:"<p>移動游標改變顯示圖標（JavaScript／jQuery）</p>",demoStyle:null,component:m(()=>u(()=>import("./DemoNoteImageHoverSwitch-BDVzUViA.js"),__vite__mapDeps([3,1,2]))),demo:`<!-- 純 JavaScript 的 html code 用這個 -->
 <div onmouseover="ntubicdImage()" onmouseout="ntubicdSabImage()" style="height: 250px; width: 250px;">
   <img id="changeImage1" src="assets/about_me/ntubicdsab_trademark.JPG" alt="拿來測試用的生傳mark" style="height: 250px;">
 </div>
@@ -84,7 +84,7 @@ $("#changeImage2").on("mouseover", function(){
 
 $("#changeImage2").on("mouseout", function(){
   $(this).attr("src", "assets/ntubicdsab_trademark.JPG");
-});`},{id:"notePictureChange",title:"疊圖照片接替出現",description:null,demoStyle:null,component:m(()=>u(()=>import("./DemoNoteImageOverlayTransition-B_kRlrrt.js"),__vite__mapDeps([4,1,2,5]))),demo:`<!-- 本段以 Vue SFC 寫成，並未使用純 HTML -->
+});`},{id:"notePictureChange",title:"疊圖照片接替出現",description:null,demoStyle:null,component:m(()=>u(()=>import("./DemoNoteImageOverlayTransition-D_xPJktd.js"),__vite__mapDeps([4,1,2,5]))),demo:`<!-- 本段以 Vue SFC 寫成，並未使用純 HTML -->
 <!-- 請至以下 SFC 檔查看 code -->
 <!-- 路徑：/components/WebNoteView/WebNoteSimpleView/DemoNoteImageOverlayTransition.vue -->
 
@@ -126,4 +126,4 @@ $("#changeImage2").on("mouseout", function(){
     <span style="font-family: 'Heiti TC';">滾滾長江東逝水 Lorem Ipsum 1234567890</span>
     /<small><i>Heiti TC（黑體繁體）</i></small>
   </li>
-</ol>`,demoJS:null}],p=f(a[0].id),e=x(()=>a.find(n=>n.id===p.value)||a[0]);_(()=>{g(()=>c.highlightAll())});function v(){g(()=>{document.querySelectorAll("pre code").forEach(n=>{delete n.dataset.highlighted}),c.highlightAll()})}return(n,i)=>(o(),l("div",H,[t("div",B,[t("nav",j,[t("ul",null,[(o(),l(h,null,S(a,d=>t("li",{key:d.id,class:T({active:d.id===p.value}),onClick:W=>p.value=d.id},s(d.title),11,P)),64))])]),w(I,{name:"fade",mode:"out-in",onAfterEnter:v},{default:k(()=>[e.value?(o(),l("section",{class:"content",key:e.value.id},[t("h3",A,s(e.value.title),1),i[2]||(i[2]=t("hr",null,null,-1)),t("div",F,[e.value.description?(o(),l("div",M,[t("p",null,s(e.value.description),1)])):r("",!0),t("div",N,[e.value.component?(o(),J(E(e.value.component),{key:0})):(o(),l("div",{key:1,innerHTML:e.value.demo,style:L(e.value.demoStyle)},null,12,D))]),e.value.demo?(o(),l("div",G,[i[1]||(i[1]=y(" html code: ")),t("pre",null,[t("code",Y,s(e.value.demo),1)]),e.value.demoJS?(o(),l(h,{key:0},[i[0]||(i[0]=y(" javascript code: ")),t("pre",null,[t("code",$,s(e.value.demoJS),1)])],64)):r("",!0)])):r("",!0)])])):r("",!0)]),_:1})])]))}},R=b(z,[["__scopeId","data-v-d0f8899f"]]);export{R as default};
+</ol>`,demoJS:null}],c=f(s[0].id),e=x(()=>s.find(a=>a.id===c.value)||s[0]);_(()=>{g(()=>p.highlightAll())});function v(){g(()=>{document.querySelectorAll("pre code").forEach(a=>{delete a.dataset.highlighted}),p.highlightAll()})}return(a,l)=>(o(),i("div",V,[t("div",B,[t("nav",j,[t("ul",null,[(o(),i(h,null,S(s,n=>t("li",{key:n.id,class:T({active:n.id===c.value}),onClick:W=>c.value=n.id},d(n.title),11,M)),64))])]),w(I,{name:"fade",mode:"out-in",onAfterEnter:v},{default:k(()=>[e.value?(o(),i("section",{class:"content",key:e.value.id},[t("h3",P,d(e.value.title),1),l[2]||(l[2]=t("hr",null,null,-1)),t("div",A,[e.value.description?(o(),i("div",{key:0,class:"description",innerHTML:e.value.description},null,8,F)):r("",!0),t("div",N,[e.value.component?(o(),J(L(e.value.component),{key:0})):(o(),i("div",{key:1,innerHTML:e.value.demo,style:E(e.value.demoStyle)},null,12,D))]),e.value.demo?(o(),i("div",G,[l[1]||(l[1]=y(" html code: ")),t("pre",null,[t("code",Y,d(e.value.demo),1)]),e.value.demoJS?(o(),i(h,{key:0},[l[0]||(l[0]=y(" javascript code: ")),t("pre",null,[t("code",$,d(e.value.demoJS),1)])],64)):r("",!0)])):r("",!0)])])):r("",!0)]),_:1})])]))}},R=b(z,[["__scopeId","data-v-9a4cd7b6"]]);export{R as default};

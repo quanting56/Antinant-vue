@@ -1,4 +1,4 @@
-import{_ as g,r as h,k as y,o as f,p,c as s,b as a,g as w,F as u,d as x,w as k,T as S,f as l,j as _,t as n,h as c,s as C,v as T,n as A,i as v}from"./index-ByB5nNjd.js";import{H as r,x as B,j as J}from"./vs2015-CMXDCM_s.js";const j="/Antinant-vue/assets/2019_Cimei_thetiger-Cbl0xoVw.jpg",N="/Antinant-vue/assets/2023_Tai'an_bedroom-j8z1_QkR.jpg",P="/Antinant-vue/assets/2023_Tai'an_thetiger-BwBnPV1G.jpg",D="/Antinant-vue/assets/DSC4378-w3ITu-D7.jpg",F="/Antinant-vue/assets/DSC_5360-CMm59o5a.jpg",$="/Antinant-vue/assets/DSC_5434-jyoKKk-I.jpg",M="/Antinant-vue/assets/2021_Erlin_%E6%9A%AB01-Rz1toDdm.jpg",V={class:"useful-bootstrap-component-view"},E={class:"layout"},H={class:"sidebar"},G=["onClick"],L={class:"content-title"},z={class:"content-body"},q={key:0,class:"description"},I={class:"demo"},K=["innerHTML"],Q={key:1,class:"code"},R={class:"html"},U={class:"javascript"},W={__name:"UsefulBootstrapComponentView",setup(O){r.registerLanguage("html",B),r.registerLanguage("javascript",J);const i=[{id:"noteButton",title:"按鈕（Button）",description:null,demoStyle:null,component:null,demo:`<ul>
+import{_ as g,r as h,k as y,o as f,p as u,c as e,b as t,i as d,g as w,F as v,d as x,w as k,T as _,f as s,j as S,t as c,h as r,s as C,v as T,n as A}from"./index-CRU9xyTZ.js";import{H as b,x as B,j as J}from"./vs2015-CMXDCM_s.js";const j="/Antinant-vue/assets/2019_Cimei_thetiger-Cbl0xoVw.jpg",N="/Antinant-vue/assets/2023_Tai'an_bedroom-j8z1_QkR.jpg",P="/Antinant-vue/assets/2023_Tai'an_thetiger-BwBnPV1G.jpg",D="/Antinant-vue/assets/DSC4378-w3ITu-D7.jpg",F="/Antinant-vue/assets/DSC_5360-CMm59o5a.jpg",M="/Antinant-vue/assets/DSC_5434-jyoKKk-I.jpg",$="/Antinant-vue/assets/2021_Erlin_%E6%9A%AB01-Rz1toDdm.jpg",H={class:"useful-bootstrap-component-view"},V={class:"layout"},E={class:"sidebar"},L=["onClick"],G={class:"content-title"},q={class:"content-body"},z=["innerHTML"],I={class:"demo"},U=["innerHTML"],K={key:1,class:"code"},R={class:"html"},W={class:"javascript"},Q={__name:"UsefulBootstrapComponentView",setup(X){b.registerLanguage("html",B),b.registerLanguage("javascript",J);const n=[{id:"noteButton",title:"按鈕（Button）",description:null,demoStyle:null,component:null,demo:`<ul>
   <li class="mb-3">按鈕有三種寫法：
     <ol>
       <li><code>&lt;a class="btn" href="#" role="botton"&gt;</code>按鈕名稱<code>&lt;/a&gt;</code></li>
@@ -171,7 +171,7 @@ import{_ as g,r as h,k as y,o as f,p,c as s,b as a,g as w,F as u,d as x,w as k,T
       </div>
     </div>
   </div>
-</div>`,demoJS:null},{id:"noteNavsTabs",title:"導覽（Navs）與標籤頁（Tabs）",description:"移動游標改變顯示圖標（JavaScript／jQuery）",demoStyle:null,component:null,demo:`<!-- 導覽元件 -->
+</div>`,demoJS:null},{id:"noteNavsTabs",title:"導覽（Navs）與標籤頁（Tabs）",description:null,demoStyle:null,component:null,demo:`<!-- 導覽元件 -->
 <ul class="nav nav-tabs mb-3">
   <li class="nav-item"><a class="nav-link active" data-bs-toggle="tab" href="#noteNavsTabs1">標籤式的導覽元件</a></li>
   <li class="nav-item"><a class="nav-link" data-bs-toggle="tab" href="#noteNavsTabs2">按鈕式的導覽元件</a></li>
@@ -378,7 +378,7 @@ import{_ as g,r as h,k as y,o as f,p,c as s,b as a,g as w,F as u,d as x,w as k,T
   <!-- 輪播內容 -->
   <div class="carousel-inner">
     <div class="carousel-item active">
-      <img src="${M}" class="d-block w-100" alt="二林臺灣酒窖" style="width: 100%;">
+      <img src="${$}" class="d-block w-100" alt="二林臺灣酒窖" style="width: 100%;">
       <div class="carousel-caption d-none d-md-block">
         <h5>臺灣酒窖</h5>
       </div>
@@ -390,7 +390,7 @@ import{_ as g,r as h,k as y,o as f,p,c as s,b as a,g as w,F as u,d as x,w as k,T
       </div>
     </div>
     <div class="carousel-item">
-      <img src="${$}" class="d-block w-100" alt="芳苑夕景剪影" style="width: 100%;">
+      <img src="${M}" class="d-block w-100" alt="芳苑夕景剪影" style="width: 100%;">
       <div class="carousel-caption d-none d-md-block">
         <h5>芳苑夕景</h5>
       </div>
@@ -462,4 +462,4 @@ import{_ as g,r as h,k as y,o as f,p,c as s,b as a,g as w,F as u,d as x,w as k,T
       </div>
     </div>
   </div>
-</div>`,demoJS:null},{id:"noteScrollspy",title:"滾動監控（Scrollspy）",description:null,demoStyle:null,component:null,demo:"<!-- 可至 https://bootstrap5.hexschool.com/docs/5.1/components/scrollspy/ 查看效果 -->",demoJS:null},{id:"noteToasts",title:"吐司（Toasts）",description:null,demoStyle:null,component:null,demo:"<!-- 可至 https://bootstrap5.hexschool.com/docs/5.1/components/toasts/ 查看效果 -->",demoJS:null}],b=h(i[0].id),t=y(()=>i.find(o=>o.id===b.value)||i[0]);f(()=>{p(()=>r.highlightAll())});function m(){p(()=>{document.querySelectorAll("pre code").forEach(o=>{delete o.dataset.highlighted}),r.highlightAll()})}return(o,e)=>(l(),s("div",V,[a("div",E,[a("nav",H,[a("ul",null,[(l(),s(u,null,x(i,d=>a("li",{key:d.id,class:_({active:d.id===b.value}),onClick:X=>b.value=d.id},n(d.title),11,G)),64))])]),w(S,{name:"fade",mode:"out-in",onAfterEnter:m},{default:k(()=>[t.value?(l(),s("section",{class:"content",key:t.value.id},[a("h3",L,n(t.value.title),1),e[2]||(e[2]=a("hr",null,null,-1)),a("div",z,[t.value.description?(l(),s("div",q,[a("p",null,n(t.value.description),1)])):c("",!0),a("div",I,[t.value.component?(l(),C(T(t.value.component),{key:0})):(l(),s("div",{key:1,innerHTML:t.value.demo,style:A(t.value.demoStyle)},null,12,K))]),t.value.demo?(l(),s("div",Q,[e[1]||(e[1]=v(" html code: ")),a("pre",null,[a("code",R,n(t.value.demo),1)]),t.value.demoJS?(l(),s(u,{key:0},[e[0]||(e[0]=v(" javascript code: ")),a("pre",null,[a("code",U,n(t.value.demoJS),1)])],64)):c("",!0)])):c("",!0)])])):c("",!0)]),_:1})])]))}},tt=g(W,[["__scopeId","data-v-0b9bd012"]]);export{tt as default};
+</div>`,demoJS:null},{id:"noteScrollspy",title:"滾動監控（Scrollspy）",description:'<p>可至 <a href="https://bootstrap5.hexschool.com/docs/5.1/components/scrollspy/" target="_blank">官方文件</a> 查看效果</p>',demoStyle:null,component:null,demo:null,demoJS:null},{id:"noteToasts",title:"吐司（Toasts）",description:'<p>可至 <a href="https://bootstrap5.hexschool.com/docs/5.1/components/toasts/" target="_blank">官方文件</a> 查看效果</p>',demoStyle:null,component:null,demo:null,demoJS:null}],p=h(n[0].id),a=y(()=>n.find(i=>i.id===p.value)||n[0]);f(()=>{u(()=>b.highlightAll())});function m(){u(()=>{document.querySelectorAll("pre code").forEach(i=>{delete i.dataset.highlighted}),b.highlightAll()})}return(i,l)=>(s(),e("div",H,[l[3]||(l[3]=t("h3",null,[d(" 此頁面尚未完全完工，目前僅將程式碼放進，還未完全套入 Bootstrap 效果。需使用此區程式碼請至舊網頁 "),t("a",{href:"https://quanting56.github.io/Antinant/web_note.html#usefulBootstrapComponent",target:"_blank",style:{"background-color":"#f2ea9d","text-wrap":"nowrap"}},"舊・阿蛤的窩 - 網頁練習｜一些好用的Bootstrap元件"),d(" 查詢 UI/UX 與 code。 ")],-1)),t("div",V,[t("nav",E,[t("ul",null,[(s(),e(v,null,x(n,o=>t("li",{key:o.id,class:S({active:o.id===p.value}),onClick:O=>p.value=o.id},c(o.title),11,L)),64))])]),w(_,{name:"fade",mode:"out-in",onAfterEnter:m},{default:k(()=>[a.value?(s(),e("section",{class:"content",key:a.value.id},[t("h3",G,c(a.value.title),1),l[2]||(l[2]=t("hr",null,null,-1)),t("div",q,[a.value.description?(s(),e("div",{key:0,class:"description",innerHTML:a.value.description},null,8,z)):r("",!0),t("div",I,[a.value.component?(s(),C(T(a.value.component),{key:0})):(s(),e("div",{key:1,innerHTML:a.value.demo,style:A(a.value.demoStyle)},null,12,U))]),a.value.demo?(s(),e("div",K,[l[1]||(l[1]=d(" html code: ")),t("pre",null,[t("code",R,c(a.value.demo),1)]),a.value.demoJS?(s(),e(v,{key:0},[l[0]||(l[0]=d(" javascript code: ")),t("pre",null,[t("code",W,c(a.value.demoJS),1)])],64)):r("",!0)])):r("",!0)])])):r("",!0)]),_:1})])]))}},tt=g(Q,[["__scopeId","data-v-1ecd4b49"]]);export{tt as default};

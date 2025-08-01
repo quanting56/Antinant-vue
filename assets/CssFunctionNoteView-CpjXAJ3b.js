@@ -1,1 +1,0 @@
-import{_ as e,c,f as n}from"./index-ByB5nNjd.js";const t={};function o(s,a){return n(),c("p",null,"css funaiton note")}const _=e(t,[["render",o],["__scopeId","data-v-bf6eba24"]]);export{_ as default};

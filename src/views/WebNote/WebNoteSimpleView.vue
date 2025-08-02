@@ -157,7 +157,7 @@ const tabs = [
     description: "<p>透過超連結下拉式清單到新網頁</p>",
     demoStyle: null,
     component: defineAsyncComponent(() =>
-      import("../../components/WebNoteView/WebNoteSimpleView/DemoNoteDropDownHref.vue")
+      import("../../components/WebNoteView/WebNoteSimpleView/DropDownHrefNoteDemo.vue")
     ),
     demo: 
 `<select id="searchEngine">
@@ -187,7 +187,7 @@ function toSearchEngine() {
     description: "<p>移動游標改變顯示圖標（JavaScript／jQuery）</p>",
     demoStyle: null,
     component: defineAsyncComponent(() =>
-      import("../../components/WebNoteView/WebNoteSimpleView/DemoNoteImageHoverSwitch.vue")
+      import("../../components/WebNoteView/WebNoteSimpleView/ImageHoverSwitchNoteDemo.vue")
     ),
     demo: 
 `<!-- 純 JavaScript 的 html code 用這個 -->
@@ -230,12 +230,12 @@ $("#changeImage2").on("mouseout", function(){
     description: null,
     demoStyle: null,
     component: defineAsyncComponent(() =>
-      import("../../components/WebNoteView/WebNoteSimpleView/DemoNoteImageOverlayTransition.vue")
+      import("../../components/WebNoteView/WebNoteSimpleView/ImageOverlayTransitionNoteDemo.vue")
     ),
     demo: 
 `<!-- 本段以 Vue SFC 寫成，並未使用純 HTML -->
 <!-- 請至以下 SFC 檔查看 code -->
-<!-- 路徑：/components/WebNoteView/WebNoteSimpleView/DemoNoteImageOverlayTransition.vue -->
+<!-- 路徑：/components/WebNoteView/WebNoteSimpleView/ImageOverlayTransitionNoteDemo.vue -->
 
 
 <!-- 亦可至 https://quanting56.github.io/Antinant/web_note/two_picture_change.html 查看完整效果 -->`,

@@ -1,5 +1,5 @@
 <template>
-  <div class="useful-bootstrap-component-view">
+  <div class="bootstrap-note-view">
     <!-- ↓↓↓未完工備注，完工後可刪除↓↓↓ -->
     <h3>
       此頁面尚未完全完工，目前僅將程式碼放進，還未完全套入 Bootstrap 效果。需使用此區程式碼請至舊網頁 <a href="https://quanting56.github.io/Antinant/web_note.html#bootstrapNote" target="_blank" style="background-color: #f2ea9d; text-wrap: nowrap;">舊・阿蛤的窩 - 網頁練習｜Bootstrap網格與內容樣式筆記</a> 查詢 UI/UX 與 code。
@@ -1011,7 +1011,7 @@ function handleHighlight() {
 </script>
 
 <style scoped>
-.useful-bootstrap-component-view {
+.bootstrap-note-view {
   max-width: 100%;
 }
 

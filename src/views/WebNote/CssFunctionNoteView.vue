@@ -1,5 +1,5 @@
 <template>
-  <div class="useful-bootstrap-component-view">
+  <div class="css-function-note-view">
     <!-- 整體分欄：左側 Nav, 右側 Content -->
     <div class="layout">
       <!-- 左側分頁列 -->
@@ -171,7 +171,7 @@ function handleHighlight() {
 </script>
 
 <style scoped>
-.useful-bootstrap-component-view {
+.css-function-note-view {
   max-width: 100%;
 }
 

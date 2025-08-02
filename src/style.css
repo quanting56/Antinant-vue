@@ -26,6 +26,13 @@ pre code {
   word-break: break-word;
 }
 
+h1 {font-size: 40px; font-weight: 500;}
+h2 {font-size: 32px; font-weight: 500;}
+h2 {font-size: 28px; font-weight: 500;}
+h4 {font-size: 24px; font-weight: 500;}
+h5 {font-size: 20px; font-weight: 500;}
+h6 {font-size: 16px; font-weight: 500;}
+
 /* Vite + Vue 原始 style.css */
 /* :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;

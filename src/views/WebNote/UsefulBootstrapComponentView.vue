@@ -39,20 +39,22 @@
               v-html="currentTab.description"
             ></div>
     
-            <div class="demo">
+            <div :class="{ 'demo': currentTab.demo }">
               <!-- 若有component，就顯示component -->
               <component v-if="currentTab.component" :is="currentTab.component"></component>
               <!-- 否則用v-html顯示demo -->
               <div
                 v-else
                 v-html="currentTab.demo"
-                :style="currentTab.demoStyle">
-              </div>
+                :style="currentTab.demoStyle"
+              ></div>
             </div>
     
-            <div class="code" v-if="currentTab.demo">
-              html code:
-              <pre><code class="html">{{ currentTab.demo }}</code></pre>
+            <div class="code">
+              <template v-if="currentTab.demo">
+                html code:
+                <pre><code class="html">{{ currentTab.demo }}</code></pre>
+              </template>
               
               <template v-if="currentTab.demoJS">
                 javascript code:

@@ -69,11 +69,11 @@
 import { defineProps } from 'vue';
 
 // Vite 的批次導入工具（batch import），適合用來載入靜態資源
-const images = import.meta.glob("../../assets/about-me/timeline/*", { eager: true, as: "url"});
+const images = import.meta.glob("../../assets/about-me-view/timeline/*", { eager: true, as: "url"});
 
 // JSON 檔裡面只有 fileName，透過函式把它轉成路徑
 function resolveImages(fileName) {
-  return images[`../../assets/about-me/timeline/${fileName}`]
+  return images[`../../assets/about-me-view/timeline/${fileName}`]
 };
 
 const props = defineProps({

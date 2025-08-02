@@ -130,16 +130,16 @@
 <script setup>
 // 時間軸的部分
 import Timeline from "../components/AboutMeView/Timeline.vue";
-import timelineData from "../data/about-me-timeline.json";
+import timelineData from "../data/about-me-view/about-me-view-timeline.json";
 
 // Vite 的批次導入工具（batch import），適合用來載入靜態資源
-const images = import.meta.glob("../assets/about-me/*", { eager: true, as: "url"});
+const images = import.meta.glob("../assets/about-me-view/*", { eager: true, as: "url"});
 
 // 個人資料定義
 const profile = {
   name: "董冠霆",
   nameEnglish: "Kuan-Ting Tung",
-  img: images["../assets/about-me/IMG_9028.jpg"]
+  img: images["../assets/about-me-view/IMG_9028.jpg"]
 };
 
 // 學歷
@@ -148,14 +148,14 @@ const education = [
     degree: "國立臺灣大學 藥學系 (2016 - 2020)",
     description: "學習基礎醫藥課程、醫病人際互動。",
     link: "https://rx.mc.ntu.edu.tw",
-    logo: images["../assets/about-me/nturx_mark.jpg"],
+    logo: images["../assets/about-me-view/nturx_mark.jpg"],
     logoName: "臺大藥學系"
   },
   {
     degree: "國立臺灣大學 生物產業傳播暨發展學系 (2020 - 2024)",
     description: "學習行銷與傳播，並理解臺灣農業的發展。",
     link: "http://www.bicd.ntu.edu.tw",
-    logo: images["../assets/about-me/ntubicd_trademark.png"],
+    logo: images["../assets/about-me-view/ntubicd_trademark.png"],
     logoName: "臺大生傳系",
   }
 ];
@@ -181,7 +181,7 @@ const clubPositions = [
   {
     club: "臺大藥學系學會",
     link: "https://rx.mc.ntu.edu.tw/nturxsa/",
-    logo: images["../assets/about-me/nturx_mark.jpg"],
+    logo: images["../assets/about-me-view/nturx_mark.jpg"],
     logoName: "臺大藥學系",
     positions: [
       {
@@ -194,7 +194,7 @@ const clubPositions = [
   {
     club: "臺大攝影社",
     link: "https://www.facebook.com/ntuphoto/",
-    logo: images["../assets/about-me/ntuphoto_trademark.JPG"],
+    logo: images["../assets/about-me-view/ntuphoto_trademark.JPG"],
     logoName: "臺大攝影研究社",
     positions: [
       {
@@ -217,7 +217,7 @@ const clubPositions = [
   {
     club: "臺大生傳系學會",
     link: "https://www.facebook.com/NTUBICDSA/",
-    logo: images["../assets/about-me/ntubicdsab_trademark.JPG"],
+    logo: images["../assets/about-me-view/ntubicdsab_trademark.JPG"],
     logoName: "臺大生傳系學會",
     positions: [
       {
@@ -230,7 +230,7 @@ const clubPositions = [
   {
     club: "臺大數位廣播社",
     link: "https://www.facebook.com/voiceofntu.2022/",
-    logo: images["../assets/about-me/voiceOfNtu_tardemark.JPG"],
+    logo: images["../assets/about-me-view/voiceOfNtu_tardemark.JPG"],
     logoName: "臺大數位廣播社/台大之聲",
     positions: [
       {
@@ -255,7 +255,7 @@ const jobExperiences = [
   {
     company: "Taipei Camera Club",
     link: "https://quanting56.github.io/taipeicameraclub/",
-    logo: images["../assets/about-me/TCC_logo.png"],
+    logo: images["../assets/about-me-view/TCC_logo.png"],
     positions: [
       {
         title: "網宣組長",

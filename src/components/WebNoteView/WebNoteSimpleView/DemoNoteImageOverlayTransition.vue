@@ -71,7 +71,7 @@ onUnmounted(() => {
   position: sticky;
   top: 0;
   height: 100vh;
-  background-image: url("../../../assets/about-me/timeline/IMG_8373.jpg");
+  background-image: url("../../../assets/about-me-view/timeline/IMG_8373.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;
@@ -81,7 +81,7 @@ onUnmounted(() => {
 .overlay-image {
   height: 100%;
   width: 0%;
-  background-image: url("../../../assets/about-me/timeline/IMG_2696.jpg");
+  background-image: url("../../../assets/about-me-view/timeline/IMG_2696.jpg");
   background-size: cover;
   background-repeat: no-repeat;
   background-attachment: fixed;

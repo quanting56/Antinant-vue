@@ -78,13 +78,13 @@ hljs.registerLanguage("javascript", javascript);
 import { onMounted, ref, computed, nextTick } from "vue";
 
 // import照片，用於tabs
-import cimeiTheTiger2019 from "../../assets/web-note/2019_Cimei_thetiger.jpg";
-import taiAnBedroom2023 from "../../assets/web-note/2023_Tai'an_bedroom.jpg";
-import taiAnTheTiger2023 from "../../assets/web-note/2023_Tai'an_thetiger.jpg";
-import dsc4378 from "../../assets/web-note/DSC4378.jpg";
-import dsc5360 from "../../assets/web-note/DSC_5360.jpg";
-import dsc5434 from "../../assets/web-note/DSC_5434.jpg";
-import erlin012021 from "../../assets/web-note/2021_Erlin_暫01.jpg";
+import cimeiTheTiger2019 from "../../assets/web-note-view/2019_Cimei_thetiger.jpg";
+import taiAnBedroom2023 from "../../assets/web-note-view/2023_Tai'an_bedroom.jpg";
+import taiAnTheTiger2023 from "../../assets/web-note-view/2023_Tai'an_thetiger.jpg";
+import dsc4378 from "../../assets/web-note-view/DSC4378.jpg";
+import dsc5360 from "../../assets/web-note-view/DSC_5360.jpg";
+import dsc5434 from "../../assets/web-note-view/DSC_5434.jpg";
+import erlin012021 from "../../assets/web-note-view/2021_Erlin_暫01.jpg";
 
 const tabs = [
   {

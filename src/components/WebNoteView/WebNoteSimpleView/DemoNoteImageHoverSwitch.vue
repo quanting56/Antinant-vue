@@ -16,8 +16,8 @@
 
 <script setup>
 import { ref } from "vue"
-import defaultImage from "../../../assets/about-me/ntubicdsab_trademark.JPG";
-import hoverImage from "../../../assets/about-me/ntubicd_trademark.png";
+import defaultImage from "../../../assets/about-me-view/ntubicdsab_trademark.JPG";
+import hoverImage from "../../../assets/about-me-view/ntubicd_trademark.png";
 
 const hovering = ref(false)
 

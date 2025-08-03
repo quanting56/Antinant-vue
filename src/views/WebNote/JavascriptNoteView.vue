@@ -113,7 +113,7 @@ const tabs = [
   {
     id: "bottomUpdateMessageNote",
     title: "按鈕更新文字",
-    description: `<p>註：此處是用傳統 <code>JavaScript</code> 寫的 DOM 操作，若在 <code>Vue.js</code> 中，可以改透過 <code>v-text</code> 、 <code>{{ message }}</code> 或 <code>v-html</code> 等「響應式資料綁定」來實現畫面更新。</p>`,
+    description: `<p>註：此處是用傳統 JavaScript 寫的 DOM 操作，若在 Vue.js 中，可以改透過 <code>v-text</code> 、 <code>{{ message }}</code> 或 <code>v-html</code> 等「響應式資料綁定」來實現畫面更新。</p>`,
     demoStyle: null,
     component: defineAsyncComponent(() =>
       import("../../components/WebNoteView/JavascriptNoteView/ButtomUpdateMessageNoteDemo.vue")

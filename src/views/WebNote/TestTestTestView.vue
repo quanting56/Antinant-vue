@@ -1,112 +1,79 @@
-<!-- D3DataImportDemo.vue -->
 <template>
-  <div id="d3js-api-demo">
-    <h3>匯入資料的 API（ JSON / CSV ）</h3>
-    <hr />
+  <div class="random-bar-chart">
+    <label>資料數量</label>
+    <input
+      type="number"
+      v-model.number="dataLength"
+      placeholder="請輸入 0 ~ 5 的數"/>
+    <button @click="generateRandomData">點擊產生隨機資料</button>
 
-    <!-- JSON 範例 一般 -->
-    <section>
-      <h4>以 JSON 方式匯入（無 CORS 問題）</h4>
-      <button @click="loadJson">載入 JSON</button>
-      <pre>{{ jsonData }}</pre>
-    </section>
+    <div class="my-2">
+      data資料集：<span>{{ randomData.join(', ') }}</span>
+    </div>
 
-    <!-- JSON 範例 CORS -->
-    <section>
-      <h4>以 JSON 方式匯入（繞過 CORS）</h4>
-      <button @click="loadJsonCORS">載入 JSON (AllOrigins)</button>
-      <pre>{{ jsonCorsData }}</pre>
-    </section>
-
-    <!-- CSV 範例 -->
-    <section>
-      <h4>以 CSV 方式匯入</h4>
-      <button @click="loadCsv">載入 CSV</button>
-      <pre>{{ csvData }}</pre>
-    </section>
-
-    <!-- CSV 篩選範例 -->
-    <section>
-      <h4>篩選並排序 CSV 中「里程_單位公里」欄位</h4>
-      <button @click="loadMileageData">載入並處理里程資料</button>
-      <div class="mileage-summary">
-        <p>最短里程：<strong>{{ minMileage }}</strong> km</p>
-        <p>最長里程：<strong>{{ maxMileage }}</strong> km</p>
-        <div class="mileage-list" v-html="formattedMileageList"></div>
-      </div>
-    </section>
+    <div ref="chartWrap" class="chart-wrap"></div>
   </div>
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, watch, onMounted } from 'vue'
 import * as d3 from 'd3'
 
-// Reactive state
-const jsonData = ref(null)
-const jsonCorsData = ref(null)
-const csvData = ref(null)
+const dataLength = ref(5)
+const randomData = ref([])
+const chartWrap = ref(null)
+let svg = null
 
-const mileageRaw = ref([])       // 篩選前
-const minMileage = ref(null)
-const maxMileage = ref(null)
-const formattedMileageList = ref('')
-
-// 1. 直接用 d3.json()
-async function loadJson() {
-  const url = '/path/to/data.json'
-  jsonData.value = await d3.json(url)
-}
-
-// 2. 用 AllOrigins 繞過 CORS
-async function loadJsonCORS() {
-  const cors = 'https://api.allorigins.win/get?url='
-  const target = encodeURIComponent('https://example.com/data.json')
-  const resp = await d3.json(`${cors}${target}`)
-  // AllOrigins 回傳 data 在 contents 欄位
-  jsonCorsData.value = resp.contents
-}
-
-// 3. 直接用 d3.csv()
-async function loadCsv() {
-  const url = '/path/to/data.csv'
-  csvData.value = await d3.csv(url)
-}
-
-// 4. 專門讀取里程資料、篩選排序
-async function loadMileageData() {
-  // 讀入並轉成 number
-  const raw = await d3.csv('/assets/testAssets/CountyRoad_1021003.csv',
-    d => +d['里程_單位公里']
+const generateRandomData = () => {
+  randomData.value = Array.from({ length: dataLength.value }, () =>
+    Math.floor(Math.random() * 5)
   )
-  // 篩掉 <=0 或 >=200
-  const filtered = raw.filter(d => d > 0 && d < 200)
-  // 排序
-  const sorted = filtered.sort((a, b) => a - b)
-  // 最小最大
-  minMileage.value = d3.min(filtered)
-  maxMileage.value = d3.max(filtered)
-  // 轉成 <br> 分行
-  formattedMileageList.value = sorted.join('<br>')
+  drawDiagram()
 }
+
+const drawDiagram = () => {
+  if (!svg) return
+
+  svg.selectAll('rect')
+    .data(randomData.value)
+    .join(
+      (enter) =>
+        enter
+          .append('rect')
+          .attr('width', 0)
+          .attr('height', 40)
+          .style('fill', '#967259')
+          .attr('x', 0)
+          .attr('y', (d, i) => i * 60)
+          .transition()
+          .duration(500)
+          .attr('width', (d) => d * 60),
+      (update) =>
+        update
+          .transition()
+          .duration(500)
+          .attr('width', (d) => d * 60),
+      (exit) => exit.remove()
+    )
+}
+
+onMounted(() => {
+  svg = d3
+    .select(chartWrap.value)
+    .append('svg')
+    .attr('width', 400)
+    .attr('height', 300)
+    .style('border', '1px solid rgb(96, 96, 96)')
+
+  generateRandomData() // 初始渲染
+})
 </script>
 
 <style scoped>
-#d3js-api-demo section {
-  margin-bottom: 2rem;
-  padding: 1rem;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+.random-bar-chart input {
+  margin: 0 8px;
 }
-.mileage-summary {
-  background: #f6f6f6;
-  padding: 1rem;
-}
-.mileage-list {
-  max-height: 200px;
-  overflow-y: auto;
-  background: white;
-  padding: 0.5rem;
-  border: 1px solid #ccc;
+.chart-wrap {
+  margin-top: 1rem;
 }
 </style>

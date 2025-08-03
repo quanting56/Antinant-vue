@@ -48,11 +48,12 @@
               v-for="list in currentTab.lists"
               :key="list.listTitle"
             >
-              <h4 class="list-title">{{ list.listTitle }}</h4>
-              <span
+              <h4 class="list-title" v-html="list.listTitle"></h4>
+              <div
                 v-if="list.listSubtitle"
                 class="list-subtitle"
-              >{{ list.listSubtitle }}</span>
+                v-html="list.listSubtitle"
+              ></div>
               <div
                 v-if="list.listComponent"
                 class="lists-demo"
@@ -66,12 +67,12 @@
                 class="code"
               >
                 <template v-if="list.listCode.htmlCode">
-                  html code:
+                  <!-- html code: -->
                   <pre><code class="html">{{ list.listCode.htmlCode }}</code></pre>
                 </template>
 
                 <template v-if="list.listCode.jsCode">
-                  javascript code:
+                  <!-- javascript code: -->
                   <pre><code class="javascript">{{ list.listCode.jsCode }}</code></pre>
                 </template>
               </div>
@@ -83,8 +84,12 @@
                   v-for="detail in list.listDetails"
                   :key="detail.detailTitle"
                 >
-                  <h5 class="detail-title">{{ detail.detailTitle }}</h5>
-                  <small class="detail-subtitle">{{ detail.detailSubtitle }}</small>
+                  <h5 class="detail-title" v-html="detail.detailTitle"></h5>
+                  <div
+                    v-if="detail.detailSubtitle"
+                    class="detail-subtitle"
+                    v-html="detail.detailSubtitle"
+                  ></div>
                   <div v-if="detail.detailComponent" class="details-demo">
                     <component :is="detail.detailComponent"></component>
                   </div>
@@ -95,12 +100,12 @@
                     class="code"
                   >
                     <template v-if="detail.detailCode.htmlCode">
-                      html code
+                      <!-- html code: -->
                       <pre><code class="html">{{ detail.detailCode.htmlCode }}</code></pre>
                     </template>
 
                     <template v-if="detail.detailCode.jsCode">
-                      javascript code:
+                      <!-- javascript code: -->
                       <pre><code class="javascript">{{ detail.detailCode.jsCode }}</code></pre>
                     </template>
                   </div>
@@ -122,7 +127,7 @@ import { d3jsNoteViewTabs } from "../../data/web-note-view/d3js-note-view/d3js-n
 const tabs = d3jsNoteViewTabs;
 
 // 處理 tab 切換
-const activeTab = ref(tabs[0].id);
+const activeTab = ref(tabs[1].id);
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];
 });

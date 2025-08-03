@@ -26,6 +26,17 @@ pre code {
   word-break: break-word;
 }
 
+code:not(pre code) {
+  background-color: #f4f4f4;
+  padding: 0.2em 0.4em;
+  white-space: break-spaces;
+  border-radius: 6px;
+  color: #c7254e;
+  font-family: "Monaspace Neon", ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+  border: 1px solid #e1e1e1;
+  font-size: 85%;
+}
+
 h1 {font-size: 40px; font-weight: 500;}
 h2 {font-size: 32px; font-weight: 500;}
 h2 {font-size: 28px; font-weight: 500;}

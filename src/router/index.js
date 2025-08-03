@@ -14,26 +14,31 @@ const routes = [
     path: "/about-me",
     name: "about-me",
     component: () => import("../views/AboutMeView.vue"),
+    meta: { title: "關於我"}
   },
   {
     path: "/photo-portfolio",
     name: "photo-portfolio",
     component: () => import("../views/PhotoPortfolioView.vue"),
+    meta: { title: "攝影"}
   },
   {
     path: "/photo/ntuphoto-life",
     name: "ntuphoto-life",
-    component: () => import("../views/Photo/NtuphotoLifeView.vue")
+    component: () => import("../views/Photo/NtuphotoLifeView.vue"),
+    meta: { title: "攝影社故事"}
   },
   {
     path: "/photo/photographic-equipment",
     name: "photographic-equipment",
-    component: () => import("../views/Photo/PhotographicEquipment.vue")
+    component: () => import("../views/Photo/PhotographicEquipment.vue"),
+    meta: { title: "攝影器材"}
   },
   {
     path: "/web-note",
     name: "web-note",
     component: () => import("../views/WebNoteView.vue"),
+    meta: { title: "網頁練習筆記"},
     children: [
       {
         path: "web-note-simple",
@@ -79,6 +84,7 @@ const routes = [
       import(
         "../views/WebNote/TestTestTestView.vue"
       ),
+    meta: { title: "測試區"}
   },
 ];
 
@@ -98,6 +104,16 @@ const router = createRouter({
 //     // 其他情況：總是捲動到頁面最上方
 //     return { top: 0 };
 //   }
+});
+
+router.beforeEach((to, from, next) => {
+  const siteName = "阿蛤ㄉ窩";
+  if (to.meta.title) {
+    document.title = `${siteName}｜${to.meta.title}`;
+  } else {
+    document.title = siteName;
+  };
+  next();
 });
 
 export default router;

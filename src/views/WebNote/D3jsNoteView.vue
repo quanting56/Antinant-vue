@@ -63,7 +63,7 @@
 
               <!-- 大項程式碼 -->
               <div
-                v-if="list.listCode.htmlCode || list.listCode.jsCode"
+                v-if="list.listCode.htmlCode || list.listCode.jsCode || list.listCode.vueCode"
                 class="code"
               >
                 <template v-if="list.listCode.htmlCode">
@@ -74,6 +74,11 @@
                 <template v-if="list.listCode.jsCode">
                   <!-- javascript code: -->
                   <pre><code class="javascript">{{ list.listCode.jsCode }}</code></pre>
+                </template>
+
+                <template v-if="list.listCode.vueCode">
+                  Vue SFC 這樣寫（Vue 3 - Composition API）：
+                  <pre><code class="html">{{ list.listCode.vueCode }}</code></pre>
                 </template>
               </div>
 
@@ -96,7 +101,7 @@
 
                   <!-- 小項程式碼 -->
                   <div
-                    v-if="detail.detailCode.htmlCode || detail.detailCode.jsCode"
+                    v-if="detail.detailCode.htmlCode || detail.detailCode.jsCode || detail.detailCode.vueCode"
                     class="code"
                   >
                     <template v-if="detail.detailCode.htmlCode">
@@ -107,6 +112,11 @@
                     <template v-if="detail.detailCode.jsCode">
                       <!-- javascript code: -->
                       <pre><code class="javascript">{{ detail.detailCode.jsCode }}</code></pre>
+                    </template>
+
+                    <template v-if="detail.detailCode.vueCode">
+                      Vue SFC 這樣寫（Vue 3 - Composition API）：
+                      <pre><code class="html">{{ detail.detailCode.vueCode }}</code></pre>
                     </template>
                   </div>
                 </li>
@@ -127,7 +137,7 @@ import { d3jsNoteViewTabs } from "../../data/web-note-view/d3js-note-view/d3js-n
 const tabs = d3jsNoteViewTabs;
 
 // 處理 tab 切換
-const activeTab = ref(tabs[1].id);
+const activeTab = ref(tabs[3].id);
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];
 });
@@ -220,7 +230,7 @@ function handleHighlight() {
 /* Demo 區塊樣式 */
 .lists-demo,
 .details-demo {
-  padding: 16px;
+  padding: 40px 16px;
   margin-bottom: 16px;
 }
 

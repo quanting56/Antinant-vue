@@ -18,11 +18,12 @@ export const d3jsNoteViewTabs = [
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
-            detailTitle: "將 js 文件引用到 &lt;head&gt; 裡：",
+            detailTitle: "將 js 文件引用到 <code>&lt;head&gt;</code> 裡：",
             detailSubtitle: null,
             detailComponent: null,
             detailCode: {
@@ -32,11 +33,12 @@ export const d3jsNoteViewTabs = [
   <script src="js/d3_v7.9.0_min.js"></script>
   ...
 </head>`,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           },
           {
-            detailTitle: "或是以 CDN 連結的方式引用到 &lt;head&gt; 裡：",
+            detailTitle: "或是以 CDN 連結的方式引用到 <code>&lt;head&gt;</code> 裡：",
             detailSubtitle: null,
             detailComponent: null,
             detailCode: {
@@ -46,7 +48,8 @@ export const d3jsNoteViewTabs = [
   <script src="https://d3js.org/d3.v7.min.js"></script>
   ...
 </head>`,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -63,7 +66,8 @@ npm install d3
 
 
 // 再匯入 D3.js
-import * as d3 from "d3";`
+import * as d3 from "d3";`,
+          vueCode: null
         },
         listDetails: [
           {
@@ -72,7 +76,8 @@ import * as d3 from "d3";`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -114,14 +119,15 @@ import * as d3 from "d3";`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
             detailTitle: "selection.enter()",
             detailSubtitle: "DOM 比較少，用 <code>enter()</code> 和 <code>append()</code> 調整。",
             detailComponent: defineAsyncComponent(() =>
-              import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3SelectionEnterDemo.vue")
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3jsSelectionEnterDemo.vue")
             ),
             detailCode: {
               htmlCode: 
@@ -145,14 +151,15 @@ import * as d3 from "d3";`
   // 此處console.log資訊要由開發者工具的console來看
   console.log('d3DataEnter', d3DataEnter);
 </script>`,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           },
           {
             detailTitle: "selection.exit()",
             detailSubtitle: "DOM 比較多，用 <code>exit()</code> 和 <code>remove()</code> 調整。",
             detailComponent: defineAsyncComponent(() =>
-              import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3SelectionExitDemo.vue")
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3jsSelectionExitDemo.vue")
             ),
             detailCode: {
               htmlCode: 
@@ -177,14 +184,15 @@ import * as d3 from "d3";`
   // 此處console.log資訊要由開發者工具的console來看
   console.log('d3DataExit', d3DataExit);
 </script>`,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           },
           {
             detailTitle: "selection.join()",
             detailSubtitle: "用 <code>join()</code> 來調整 DOM 與 data 的數量差異。",
             detailComponent: defineAsyncComponent(() =>
-              import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3SelectionJoin1Demo.vue")
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3jsSelectionJoin1Demo.vue")
             ),
             detailCode: {
               htmlCode: 
@@ -206,14 +214,15 @@ import * as d3 from "d3";`
   // 此處console.log資訊要由開發者工具的console來看
   console.log('d3DataJoin1', d3DataJoin1);
 </script>`,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           },
           {
             detailTitle: "selection.join(enter[, update][, exit])",
             detailSubtitle: "用 <code>join(enter, update, exit)</code> 來調整 DOM 與 data 的數量差異。",
             detailComponent: defineAsyncComponent(() =>
-              import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3SelectionJoin2Demo.vue")
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3jsSelectionJoin2Demo.vue")
             ),
             detailCode: {
               htmlCode: 
@@ -240,7 +249,8 @@ import * as d3 from "d3";`
   // 此處console.log資訊要由開發者工具的console來看
   console.log('d3DataJoin2', d3DataJoin2);
 </script>`,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -252,10 +262,209 @@ import * as d3 from "d3";`
   <li>畫面上有一個輸入資料數量的框框、隨機產生資料的按紐、目前的資料集，以及與資料搭配的柱狀圖表。</li>
   <li>每次點擊按鈕時，會根據資料數量隨機產生不同的資料，柱狀圖表也會隨著資料更新而變化。</li>
 </ol>`,
-        listComponent: null, // 目前開發到元件（在TestTestTest.vue裡面編輯）
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3jsDataBindingPractice.vue")
+        ),
         listCode: {
-          htmlCode: null,
-          jsCode: null
+          htmlCode: 
+`<div>
+  <label>資料數量</label>
+  <input type="number" id="d3jsPractice_dataLength">
+  <button type="button" id="d3jsPractice_getRandomData">點擊產生隨機資料</button>
+</div>
+<div class="my-2">data資料集：<span id="d3jsPractice_showData"></span></div>
+<div id="d3jsPractice_chartWrap"></div>
+
+<script>
+  const getRandomData = document.querySelector('#d3jsPractice_getRandomData');
+  const dataLength = document.querySelector('#d3jsPractice_dataLength');
+  const showData = document.querySelector('#d3jsPractice_showData');
+  let randomData = [];
+  
+  getRandomData.addEventListener("click", (e) => {
+    randomData.length = 0;
+  
+    for (i = 0; i < dataLength.value; i++) {
+      // 產生並塞入隨機亂數資料
+      let random = Math.floor(Math.random() * 5);
+      randomData.push(random);
+    };
+
+    // 畫面呈現目前資料集
+    showData.innerHTML = randomData;
+
+    // 繪製圖表
+    drawDiagram();
+  });
+
+  // 建立SVG畫布
+  const rangeSelect = d3.select('#d3jsPractice_chartWrap')
+                        .append('svg')
+                        .attr('width', 400)
+                        .attr('height', 300)
+                        .style('border', '1px solid rgb(96, 96, 96)');
+
+  const drawDiagram = () => {
+    // 綁定update資料
+    let rects = rangeSelect.selectAll('rect')
+                           .data(randomData);
+
+    rects.enter()
+         .append('rect')
+         .attr('width', 0) // 初始化寬度為0
+         .attr('height', 40)
+         .style('fill', '#967259')
+         .attr('x', (d, index) => 0)
+         .attr('y', (d, index) => index * 60)
+         .transition()
+         .duration(500)
+         .attr('width', (d) => d * 60);
+
+    // 更新資料，重新設定長條圖的寬度
+    rects.transition()
+         .duration(500)
+         .attr('width', (d) => d * 60);
+
+    // 移除多的DOM元素
+    rects.exit().remove();
+  };
+</script>`,
+          jsCode: 
+`// 而亦可將其中下面這段enter、update、exit分開寫的code改寫成join()的形式
+
+// 此為原始code
+
+const drawDiagram = () => {
+  // 綁定update資料
+  let rects = rangeSelect.selectAll('rect')
+                         .data(randomData);
+  
+  rects.enter()
+       .append('rect')
+       .attr('width', 0) // 初始化寬度為0
+       .attr('height', 40)
+       .style('fill', '#967259')
+       .attr('x', (d, index) => 0)
+       .attr('y', (d, index) => index * 60)
+       .transition()
+       .duration(500)
+       .attr('width', (d) => d * 60);
+
+  // 更新資料，重新設定長條圖的寬度
+  rects.transition()
+       .duration(500)
+       .attr('width', (d) => d * 60);
+  
+  // 移除多的DOM元素
+  rects.exit().remove();
+};
+  
+  
+  
+// 下面這段code為改寫成join()的形式
+
+const drawDiagram = () => {
+  // 綁定update資料
+  let rects = rangeSelect.selectAll('rect')
+                         .data(randomData)
+                         .join(
+                           (enter) => enter.append('rect')
+                                           .attr('width', 0) // 初始化寬度為0
+                                           .attr('height', 40)
+                                           .style('fill', '#967259')
+                                           .attr('x', (d, index) => 0)
+                                           .attr('y', (d, index) => index * 60)
+                                           .transition()
+                                           .duration(500)
+                                           .attr('width', (d) => d * 60),
+                           (update) => update.transition()
+                                             .duration(500)
+                                             .attr('width', (d) => d * 60),
+                           (exit) => exit.remove()
+                         );
+};`,
+          vueCode: 
+`<template>
+  <div class="random-bar-chart">
+    <label>資料數量</label>
+    <input
+      type="number"
+      v-model.number="dataLength"
+      placeholder="請輸入 0 ~ 5 的數"/>
+    <button @click="generateRandomData">點擊產生隨機資料</button>
+
+    <div>
+      產生的 data 資料集：<span>{{ randomData.join(", ") }}</span>
+    </div>
+
+    <div ref="chartWrap" class="chart-wrap"></div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const dataLength = ref(5);
+const randomData = ref([]);
+const chartWrap = ref(null);
+let svg = null;
+
+const generateRandomData = () => {
+  // 用 Array.from 建立一個長度為 dataLength 的陣列，每個元素都是 0～4 的隨機整數
+  randomData.value = Array.from({ length: dataLength.value }, () =>
+    Math.floor(Math.random() * 5)
+  );
+  drawDiagram();
+};
+
+const drawDiagram = () => {
+  if (!svg) return;
+
+  svg.selectAll("rect")
+    .data(randomData.value)
+    .join(
+      (enter) =>
+        enter
+          .append("rect")
+          .attr("width", 0)
+          .attr("height", 40)
+          .style("fill", "#967259")
+          .attr("x", 0)
+          .attr("y", (d, i) => i * 60)
+          .transition()
+          .duration(500)
+          .attr("width", (d) => d * 60),
+      (update) =>
+        update
+          .transition()
+          .duration(500)
+          .attr("width", (d) => d * 60),
+      (exit) => exit.remove()
+    );
+};
+
+onMounted(() => {
+  svg = d3
+    .select(chartWrap.value)
+    .append("svg")
+    .attr("width", 400)
+    .attr("height", 300)
+    .style("border", "1px solid rgb(96, 96, 96)");
+
+  generateRandomData(); // 初始渲染
+});
+</script>
+
+<style scoped>
+.random-bar-chart input {
+  margin: 0 8px;
+}
+.chart-wrap {
+  margin-top: 8px;
+}
+</style>
+`
         },
         listDetails: [
           {
@@ -264,7 +473,8 @@ import * as d3 from "d3";`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           },
         ]
@@ -284,7 +494,8 @@ import * as d3 from "d3";`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -300,7 +511,8 @@ const getJSONData = async () => {
   console.log("d3.json()", resData);
 };
 
-getJSONData();`
+getJSONData();`,
+              vueCode: null
             }
           },
           {
@@ -317,7 +529,54 @@ const getCorsData = async () => {
   console.log("d3.json()", dataGet);
 };
 
-getCorsData();`
+getCorsData();`,
+              vueCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "以 CSV 的方式匯入",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "取得 csv 資料",
+            detailSubtitle: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`const getCsvData = async () => {
+  const csvData = await d3.csv("串接網址 or 檔案路徑");
+  console.log("csvData", csvData);
+};
+
+getCsvData();
+`,
+              vueCode: null
+            }
+          },
+          {
+            detailTitle: "只取得 csv 資料中所有特定類別的資料（類似 R 語言中 <code>food$vegetable</code> 的用法）",
+            detailSubtitle: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`const getCsvSpecificData = async () => {
+  const csvData = await d3.csv("檔案路徑", (d) => d.特定類別名);
+  // 例：const csvData = await d3.csv("data/food.csv", (d) => d.vegetable);
+  console.log("csvData", csvData);
+};
+
+getCsvSpecificData();`,
+              vueCode: null
             }
           }
         ]
@@ -327,7 +586,46 @@ getCorsData();`
   {
     id: "d3jsApiForDataOrganizationNote",
     title: "資料整理",
-    description: null,
+    description: // 處理到這邊，再來要調整表格樣式
+`<h4>Array分類</h4>
+<table>
+  <thead>
+    <tr>
+      <th>Array分類</th>
+      <th>常用的API</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>Statistics（統計數據）</td>
+      <td><code>d3.min</code>、<code>d3.max</code>、<code>d3.extent</code>、<code>d3.sum</code></td>
+    </tr>
+    <tr>
+      <td>Search（尋找）</td>
+      <td>d3.ascending、d3.descending</td>
+    </tr>
+    <tr>
+      <td>Transformations（改變結構）</td>
+      <td>d3.merge、d3.range</td>
+    </tr>
+    <tr>
+      <td>Iterables（迭代）</td>
+      <td><code>d3.every</code>、<code>d3.some</code>、d3.map、<code>d3.filter</code>、<code>d3.sort</code></td>
+    </tr>
+    <tr>
+      <td>Sets（數組）</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Histograms（直條圖）</td>
+      <td></td>
+    </tr>
+    <tr>
+      <td>Interning</td>
+      <td></td>
+    </tr>
+  </tbody>
+</table>`,
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
@@ -337,7 +635,8 @@ getCorsData();`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -346,7 +645,8 @@ getCorsData();`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -366,7 +666,8 @@ getCorsData();`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -375,7 +676,8 @@ getCorsData();`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -395,7 +697,8 @@ getCorsData();`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -404,7 +707,8 @@ getCorsData();`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -424,7 +728,8 @@ getCorsData();`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -433,7 +738,8 @@ getCorsData();`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -453,7 +759,8 @@ getCorsData();`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -462,7 +769,8 @@ getCorsData();`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -482,7 +790,8 @@ getCorsData();`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -491,7 +800,8 @@ getCorsData();`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -511,7 +821,8 @@ getCorsData();`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -520,7 +831,8 @@ getCorsData();`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -540,7 +852,8 @@ getCorsData();`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -549,7 +862,8 @@ getCorsData();`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -569,7 +883,8 @@ getCorsData();`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -578,7 +893,8 @@ getCorsData();`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -598,7 +914,8 @@ getCorsData();`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -607,7 +924,8 @@ getCorsData();`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]
@@ -627,7 +945,8 @@ getCorsData();`
         listComponent: null,
         listCode: {
           htmlCode: null,
-          jsCode: null
+          jsCode: null,
+          vueCode: null
         },
         listDetails: [
           {
@@ -636,7 +955,8 @@ getCorsData();`
             detailComponent: null,
             detailCode: {
               htmlCode: null,
-              jsCode: null
+              jsCode: null,
+              vueCode: null
             }
           }
         ]

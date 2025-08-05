@@ -35,6 +35,7 @@
           <div
             v-if="currentTab.descriptionComponent"
             :style="currentTab.descriptionComponentStyle"
+            class="description-component"
           >
             <component :is="currentTab.descriptionComponent"></component>
           </div>
@@ -47,6 +48,7 @@
             <li
               v-for="list in currentTab.lists"
               :key="list.listTitle"
+              class="list"
             >
               <h4 class="list-title" v-html="list.listTitle"></h4>
               <div
@@ -88,6 +90,7 @@
                 <li
                   v-for="detail in list.listDetails"
                   :key="detail.detailTitle"
+                  class="detail"
                 >
                   <h5 class="detail-title" v-html="detail.detailTitle"></h5>
                   <div
@@ -137,7 +140,7 @@ import { d3jsNoteViewTabs } from "../../data/web-note-view/d3js-note-view/d3js-n
 const tabs = d3jsNoteViewTabs;
 
 // 處理 tab 切換
-const activeTab = ref(tabs[3].id);
+const activeTab = ref(tabs[1].id);
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];
 });
@@ -227,6 +230,51 @@ function handleHighlight() {
   margin-bottom: 8px;
 }
 
+/* import 的內容格式 */
+::v-deep(.content h1),
+::v-deep(.content h2),
+::v-deep(.content h3:not(.content-title)),
+::v-deep(.content h4),
+::v-deep(.content h5),
+::v-deep(.content h6) {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.description {
+  margin-bottom: 36px;
+}
+
+.list {
+  margin-bottom: 60px;
+}
+
+.list-title {
+  font-size: 22px;
+}
+
+.detail {
+  margin-bottom: 28px;
+}
+
+.detail-title {
+  font-size: 16px;
+}
+
+.detail-subtitle {
+  color: rgba(33, 37, 41, 0.75);
+  font-size: 12px;
+  font-style: italic;
+}
+
+.detail-subtitle code {
+  font-style: normal;
+}
+
+.detail-subtitle::before {
+  content: "- ";
+}
+
 /* Demo 區塊樣式 */
 .lists-demo,
 .details-demo {
@@ -261,5 +309,17 @@ pre code {
     padding: 8px 12px;
     border: 1px solid #cccccc;
   }
+}
+
+/* 表格樣式 */
+::v-deep(table) {
+  border: 1px solid #666666;
+  border-collapse: collapse;
+}
+
+::v-deep(th),
+::v-deep(td) {
+  border: 1px solid #666666;
+  padding: 4px;
 }
 </style>

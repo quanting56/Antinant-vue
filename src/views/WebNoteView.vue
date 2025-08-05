@@ -111,5 +111,6 @@ const currentTitle = computed(() => {
 
 .webnote-chapter-title {
   background-color: #ffc107;
+  font-size: 28px;
 }
 </style>

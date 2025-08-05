@@ -124,7 +124,7 @@ import * as d3 from "d3";`,
         },
         listDetails: [
           {
-            detailTitle: "selection.enter()",
+            detailTitle: "<code>selection.enter()</code>",
             detailSubtitle: "DOM 比較少，用 <code>enter()</code> 和 <code>append()</code> 調整。",
             detailComponent: defineAsyncComponent(() =>
               import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3jsSelectionEnterDemo.vue")
@@ -156,7 +156,7 @@ import * as d3 from "d3";`,
             }
           },
           {
-            detailTitle: "selection.exit()",
+            detailTitle: "<code>selection.exit()</code>",
             detailSubtitle: "DOM 比較多，用 <code>exit()</code> 和 <code>remove()</code> 調整。",
             detailComponent: defineAsyncComponent(() =>
               import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3jsSelectionExitDemo.vue")
@@ -189,7 +189,7 @@ import * as d3 from "d3";`,
             }
           },
           {
-            detailTitle: "selection.join()",
+            detailTitle: "<code>selection.join()</code>",
             detailSubtitle: "用 <code>join()</code> 來調整 DOM 與 data 的數量差異。",
             detailComponent: defineAsyncComponent(() =>
               import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3jsSelectionJoin1Demo.vue")
@@ -219,7 +219,7 @@ import * as d3 from "d3";`,
             }
           },
           {
-            detailTitle: "selection.join(enter[, update][, exit])",
+            detailTitle: "<code>selection.join(enter[, update][, exit])</code>",
             detailSubtitle: "用 <code>join(enter, update, exit)</code> 來調整 DOM 與 data 的數量差異。",
             detailComponent: defineAsyncComponent(() =>
               import("../../../components/WebNoteView/D3jsNoteView/D3jsDataBindingNote/D3jsSelectionJoin2Demo.vue")
@@ -587,12 +587,12 @@ getCsvSpecificData();`,
     id: "d3jsApiForDataOrganizationNote",
     title: "資料整理",
     description: // 處理到這邊，再來要調整表格樣式
-`<h4>Array分類</h4>
+`<h4>Array 分類</h4>
 <table>
   <thead>
     <tr>
-      <th>Array分類</th>
-      <th>常用的API</th>
+      <th>Array 分類</th>
+      <th>常用的 API</th>
     </tr>
   </thead>
   <tbody>
@@ -602,15 +602,15 @@ getCsvSpecificData();`,
     </tr>
     <tr>
       <td>Search（尋找）</td>
-      <td>d3.ascending、d3.descending</td>
+      <td><code>d3.ascending</code>、<code>d3.descending</code></td>
     </tr>
     <tr>
       <td>Transformations（改變結構）</td>
-      <td>d3.merge、d3.range</td>
+      <td><code>d3.merge</code>、<code>d3.range</code></td>
     </tr>
     <tr>
       <td>Iterables（迭代）</td>
-      <td><code>d3.every</code>、<code>d3.some</code>、d3.map、<code>d3.filter</code>、<code>d3.sort</code></td>
+      <td><code>d3.every</code>、<code>d3.some</code>、<code>d3.map</code>、<code>d3.filter</code>、<code>d3.sort</code></td>
     </tr>
     <tr>
       <td>Sets（數組）</td>
@@ -630,7 +630,7 @@ getCsvSpecificData();`,
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
+        listTitle: "Arrays 分類的常用 API",
         listSubtitle: null,
         listComponent: null,
         listCode: {
@@ -640,6 +640,45 @@ getCsvSpecificData();`,
         },
         listDetails: [
           {
+            detailTitle: "<code>d3.min()</code> 尋找最小值",
+            detailSubtitle: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`const numberData = [5, 1, 35, 13, 15, 18, 21, 31, 29];
+const minNumber = d3.min(numberData);
+console.log("minimum", minNumber);`,
+              vueCode: null
+            }
+          },
+          {
+            detailTitle: "<code>d3.max()</code> 尋找最大值",
+            detailSubtitle: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`const numberData = [5, 1, 35, 13, 15, 18, 21, 31, 29];
+const maxNumber = d3.max(numberData);
+console.log("maximum", maxNumber);`,
+              vueCode: null
+            }
+          },
+          {
+            detailTitle: "<code>d3.extent()</code> 同時找出最小值與最大值",
+            detailSubtitle: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`const numberData = [5, 1, 35, 13, 15, 18, 21, 31, 29];
+const extent = d3.extent(numberData);
+console.log("minimum and maximum", extent);`,
+              vueCode: null
+            }
+          },
+          {
             detailTitle: null,
             detailSubtitle: null,
             detailComponent: null,
@@ -648,7 +687,7 @@ getCsvSpecificData();`,
               jsCode: null,
               vueCode: null
             }
-          }
+          },
         ]
       }
     ]

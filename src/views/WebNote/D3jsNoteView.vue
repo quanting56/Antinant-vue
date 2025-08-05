@@ -140,7 +140,7 @@ import { d3jsNoteViewTabs } from "../../data/web-note-view/d3js-note-view/d3js-n
 const tabs = d3jsNoteViewTabs;
 
 // 處理 tab 切換
-const activeTab = ref(tabs[1].id);
+const activeTab = ref(tabs[4].id);
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];
 });
@@ -253,6 +253,10 @@ function handleHighlight() {
   font-size: 22px;
 }
 
+.list-subtitle {
+  margin-bottom: 28px;
+}
+
 .detail {
   margin-bottom: 28px;
 }
@@ -267,7 +271,7 @@ function handleHighlight() {
   font-style: italic;
 }
 
-.detail-subtitle code {
+.detail-subtitle ::v-deep(code) {
   font-style: normal;
 }
 

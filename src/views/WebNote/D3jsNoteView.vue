@@ -140,7 +140,7 @@ import { d3jsNoteViewTabs } from "../../data/web-note-view/d3js-note-view/d3js-n
 const tabs = d3jsNoteViewTabs;
 
 // 處理 tab 切換
-const activeTab = ref(tabs[5].id);
+const activeTab = ref(tabs[6].id);
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];
 });
@@ -269,6 +269,7 @@ function handleHighlight() {
   color: rgba(33, 37, 41, 0.75);
   font-size: 12px;
   font-style: italic;
+  margin-bottom: 8px;
 }
 
 .detail-subtitle ::v-deep(code) {

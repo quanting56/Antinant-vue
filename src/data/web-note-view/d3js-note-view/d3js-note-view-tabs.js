@@ -648,7 +648,9 @@ getCsvSpecificData();`,
               jsCode: 
 `const numberData = [5, 1, 35, 13, 15, 18, 21, 31, 29];
 const minNumber = d3.min(numberData);
-console.log("minimum", minNumber);`,
+console.log("minimum", minNumber);
+
+// minimum 1`,
               vueCode: null
             }
           },
@@ -661,7 +663,9 @@ console.log("minimum", minNumber);`,
               jsCode: 
 `const numberData = [5, 1, 35, 13, 15, 18, 21, 31, 29];
 const maxNumber = d3.max(numberData);
-console.log("maximum", maxNumber);`,
+console.log("maximum", maxNumber);
+
+// maximum 35`,
               vueCode: null
             }
           },
@@ -674,7 +678,9 @@ console.log("maximum", maxNumber);`,
               jsCode: 
 `const numberData = [5, 1, 35, 13, 15, 18, 21, 31, 29];
 const extent = d3.extent(numberData);
-console.log("minimum and maximum", extent);`,
+console.log("minimum and maximum", extent);
+
+// minimum and maximum [1, 35]`,
               vueCode: null
             }
           },
@@ -688,7 +694,8 @@ console.log("minimum and maximum", extent);`,
 `const numberData = [5, 1, 35, 13, 15, 18, 21, 31, 29];
 const sum = d3.sum(numberData);
 console.log("sum", sum);
-`,
+
+// sum 168`,
               vueCode: null
             }
           },
@@ -701,7 +708,9 @@ console.log("sum", sum);
               jsCode: 
 `const numberData = [5, 1, 35, 13, 15, 18, 21, 31, 29];
 const isAllIntegerBiggerThanTwenty = d3.every(numberData, (d) => d > 20);
-console.log("every > 20", isAllIntegerBiggerThanTwenty);`,
+console.log("every > 20", isAllIntegerBiggerThanTwenty);
+
+// every > 20 false`,
               vueCode: null
             }
           },
@@ -714,7 +723,9 @@ console.log("every > 20", isAllIntegerBiggerThanTwenty);`,
               jsCode: 
 `const numberData = [5, 1, 35, 13, 15, 18, 21, 31, 29];
 const isAnyIntegerBiggerThanTwenty = d3.some(numberData, (d) => d > 20);
-console.log("any > 20", isAnyIntegerBiggerThanTwenty);`,
+console.log("any > 20", isAnyIntegerBiggerThanTwenty);
+
+// any > 20 true`,
               vueCode: null
             }
           },
@@ -727,7 +738,9 @@ console.log("any > 20", isAnyIntegerBiggerThanTwenty);`,
               jsCode: 
 `const numberData = [5, 1, 35, 13, 15, 18, 21, 31, 29];
 const filter = d3.filter(numberData, (d) => d > 20);
-console.log("filter", filter);`,
+console.log("filter", filter);
+
+// filter [35, 21, 31, 29]`,
               vueCode: null
             }
           },
@@ -741,7 +754,8 @@ console.log("filter", filter);`,
 `const numberData = [5, 1, 35, 13, 15, 18, 21, 31, 29];
 const sort = d3.sort(numberData);
 console.log("sort", sort);
-`,
+
+// sort [1, 5, 13, 15, 18, 21, 29, 31, 35]`,
               vueCode: null
             }
           }
@@ -818,9 +832,15 @@ const timeData = "2024-07-25";
 const timeParse = d3.timeParse("%Y-%m-%d");
 console.log("d3標準格式時間", timeParse(timeData));
 
+// d3標準格式時間 Thu Jul 25 2024 00:00:00 GMT+0800 (台北標準時間)
+
+
+
 // 另外一種寫法
 const timeParse = d3.timeParse("%Y-%m-%d")("2024-07-25");
-console.log("d3標準格式時間", timeParse);`,
+console.log("d3標準格式時間", timeParse);
+
+// d3標準格式時間 Thu Jul 25 2024 00:00:00 GMT+0800 (台北標準時間)`,
               vueCode: null
             }
           },
@@ -836,13 +856,17 @@ const timeFormat = d3.timeFormat("%Y.%m.%d");
 console.log("我們要的時間格式", timeFormat(此處放入d3標準格式時間));
 
 
+
 // 也可用於先將一般格式轉換成d3標準格式時間
 const timeParse = d3.timeParse("%Y-%m-%d")("2024-07-25");
 console.log("d3標準格式時間", timeParse);
 
 // 再套入函式轉換為我們要的時間格式
 const timeFormat = d3.timeFormat("%Y.%m.%d");
-console.log("我們要的時間格式", timeFormat(timeParse));`,
+console.log("我們要的時間格式", timeFormat(timeParse));
+
+// d3標準格式時間 Thu Jul 25 2024 00:00:00 GMT+0800 (台北標準時間)
+// 我們要的時間格式 2024.07.25`,
               vueCode: null
             }
           }
@@ -870,17 +894,25 @@ const numberFormat = d3.format(".4f");
 const roundFormat = numberFormat(Math.PI);
 console.log("四捨五入至小數點後第四位", roundFormat);
 
+// 四捨五入至小數點後第四位 3.1416
+
+
 
 // 將數字轉換成二進位數字
 const numberFormat = d3.format("b");
 const binaryFormat = numberFormat(2024);
 console.log("二進位數字", binaryFormat);
 
+// 二進位數字 11111101000
+
+
 
 // 將數值每三位加上一個逗號
 const data = [99920, 11022, 35352, 11442];
 const dataAdjusted = data.map((d) => d3.format(",")(d));
-console.log("將數值千位一個逗號", dataAdjusted);`,
+console.log("將數值千位一個逗號", dataAdjusted);
+
+// 將數值千位一個逗號 ['99,920', '11,022', '35,352', '11,442']`,
               vueCode: null
             }
           }
@@ -1036,7 +1068,9 @@ console.log("隨機變數", randomNum);`,
           {
             detailTitle: "Lines",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsHelperFunctionNote/D3jsLinesDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="lineWrapper"></svg>
@@ -1067,13 +1101,48 @@ console.log("隨機變數", randomNum);`,
   // 其中<path>中的d，因不易用人工直接寫出，所以需要這段d3.js的code協助。
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg ref="svgRef" width="500" height="150"></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const svgRef = ref(null);
+
+onMounted(() => {
+  const data = [
+    { x: 50, y: 180 },
+    { x: 50, y: 100 },
+    { x: 200, y: 100 },
+    { x: 200, y: 20 },
+    { x: 400, y: 20 },
+  ];
+
+  const drawLine = d3.line()
+    .x((d) => d.x)
+    .y((d) => d.y);
+  
+  d3.select(svgRef.value)
+    .append("path")
+    .attr("d", drawLine(data))
+    .attr("stroke", "black")
+    .attr("stroke-width", "2")
+    .attr("fill", "none");
+});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "Areas",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsHelperFunctionNote/D3jsAreasDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="areaWrapper"></svg>
@@ -1100,13 +1169,50 @@ console.log("隨機變數", randomNum);`,
     .attr("fill", "rgba(31, 211, 255, 0.2)");
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg ref="areaSvgRef" width="500" height="200"></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const areaSvgRef = ref(null);
+
+onMounted(() => {
+  const data = [
+    { x: 30, y: 180 },
+    { x: 50, y: 100 },
+    { x: 200, y: 100 },
+    { x: 200, y: 20 },
+    { x: 400, y: 20 },
+  ];
+
+  const drawArea = d3.area()
+    .x((d) => d.x)
+    .y0(10)
+    .y1((d) => d.y);
+  // 此處一般至少會有三個參數，例如：area.x().y0().y1()
+
+  d3.select(areaSvgRef.value)
+    .append("path")
+    .attr("d", drawArea(data))
+    .attr("stroke", "black")
+    .attr("stroke-width", "2")
+    .attr("fill", "rgba(31, 211, 255, 0.2)");
+});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "Curves",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsHelperFunctionNote/D3jsCurvesDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="curveWrapper"></svg>
@@ -1132,13 +1238,49 @@ console.log("隨機變數", randomNum);`,
     .attr("fill", "none");
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg ref="curveSvgRef" width="500" height="200"></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const curveSvgRef = ref(null);
+
+onMounted(() => {
+  const data = [
+    { x: 50, y: 180 },
+    { x: 50, y: 100 },
+    { x: 200, y: 100 },
+    { x: 200, y: 20 },
+    { x: 400, y: 20 },
+  ];
+
+  const drawLineCurvesBasis = d3.line()
+    .curve(d3.curveBasis)  // 選好要代入的d3.js曲線種類參數
+    .x((d) => d.x)
+    .y((d) => d.y);
+
+  d3.select(curveSvgRef.value)
+    .append("path")
+    .attr("d", drawLineCurvesBasis(data))
+    .attr("stroke", "black")
+    .attr("stroke-width", "2")
+    .attr("fill", "none");
+});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "Arcs",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsHelperFunctionNote/D3jsArcsDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="arcWrapper"></svg>
@@ -1159,7 +1301,35 @@ console.log("隨機變數", randomNum);`,
     .attr("fill", "rgba(31, 211, 255, 0.2)");
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg ref="arcSvgRef" width="500" height="200"></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const arcSvgRef = ref(null);
+
+onMounted(() => {
+  const drawArc = d3.arc()
+    .innerRadius(80)
+    .outerRadius(90)
+    .startAngle(Math.PI * 1.2)
+    .endAngle(Math.PI * 2.8);
+
+  d3.select(arcSvgRef.value)
+    .append("g")
+    .attr("transform", "translate(200, 100)")  // 圓心預設在[0, 0]，要透過transform移到畫面中
+    .append("path")
+    .attr("d" ,drawArc)
+    .attr("stroke", "black")
+    .attr("fill", "rgba(31, 211, 255, 0.2)");
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]
@@ -1177,7 +1347,9 @@ console.log("隨機變數", randomNum);`,
           {
             detailTitle: "Axes",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsHelperFunctionNote/D3jsAxesDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="axeWrapper"></svg>
@@ -1210,7 +1382,47 @@ console.log("隨機變數", randomNum);`,
     .attr("transform", "translate(0, 130)");  // 調整X軸位置
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg ref="axisSvgRef" width="500" height="120"></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const axisSvgRef = ref(null);
+
+onMounted(() => {
+  // 預設一組資料，用這組資料來繪製出一條X軸線
+  const data = [
+    { x: 10, y: 100 },
+    { x: 20, y: 100 },
+    { x: 30, y: 100 },
+    { x: 90, y: 20 },
+    { x: 220, y: 10 },
+  ];
+
+  // 抓出X軸要使用的資料
+  const xData = data.map((d) => d.x);
+
+  // 設定X軸的比例尺與繪製範圍
+  const xScale = d3.scaleLinear()
+    .domain([0, d3.max(xData)])
+    .range([10, 290]);
+
+  // 使用xScale的設定，繪製刻度(ticks)朝下的軸線
+  const xAxis = d3.axisBottom(xScale);
+
+  // 繪製軸線
+  d3.select(axisSvgRef.value)
+    .append("g")
+    .call(xAxis)
+    .attr("transform", "translate(0, 50)")  // 調整X軸位置
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]
@@ -1228,7 +1440,9 @@ console.log("隨機變數", randomNum);`,
           {
             detailTitle: "Stacks",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsHelperFunctionNote/D3jsStacksDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="stackWrapper"></svg>
@@ -1272,7 +1486,58 @@ console.log("隨機變數", randomNum);`,
    .attr("height", 20);
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg ref="stackSvgRef" width="500" height="140"></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const stackSvgRef = ref(null);
+
+onMounted(() => {
+  const data = [
+    { month: new Date(2023, 0, 1), China: 132, America: 120, Taiwan: 30 },
+    { month: new Date(2023, 1, 1), China: 70, America: 127, Taiwan: 98 },
+    { month: new Date(2023, 2, 1), China: 130, America: 33, Taiwan: 118 },
+    { month: new Date(2023, 3, 1), China: 60, America: 90, Taiwan: 60 },
+  ];
+
+  // 設定資料的keys
+  const stackGenerator = d3.stack()
+    .keys(["China", "America", "Taiwan"]);
+
+  // 把資料帶入stack方法
+  const stackedSeries = stackGenerator(data);
+
+  // 設定顏色
+  const colorScale = d3.scaleOrdinal()
+    .domain(["China", "America", "Taiwan"])
+    .range(["red", "blue", "orange"]);
+
+  // 建立集合g、設定顏色
+  const g = d3.select(stackSvgRef.value)
+    .attr("width", 300)
+    .selectAll(stackSvgRef.value.g)
+    .data(stackedSeries)
+    .enter()
+    .append("g")
+    .attr("fill", (d) => colorScale(d.key));
+
+  // 繪製長條圖
+  g.selectAll("rect")
+    .data((d) => d)
+    .join("rect")
+    .attr("width", (d) => d[1] - d[0])
+    .attr("x" ,(d) => d[0])
+    .attr("y" , (d, i) => i * 35)
+    .attr("height", 20);
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]

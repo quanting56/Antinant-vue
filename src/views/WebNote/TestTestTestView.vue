@@ -68,6 +68,16 @@ onMounted(() => {
 
   generateRandomData(); // 初始渲染
 });
+
+onMounted(() => {
+// 沒有設定最小值
+const randomNum = d3.randomInt(100)();
+
+// 有設定最大值
+// const randomNum = d3.randomInt(50, 100)();
+
+console.log("隨機變數", randomNum);
+});
 </script>
 
 <style scoped>

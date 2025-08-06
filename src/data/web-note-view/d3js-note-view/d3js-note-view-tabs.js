@@ -1897,7 +1897,7 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
       {
         listTitle: "各種軸線與刻度（Axes & Ticks）",
         listSubtitle: null,
-        listComponent: null,  // 從畫這邊圖（需新建Vue SFC）開始
+        listComponent: null,
         listCode: {
           htmlCode: null,
           jsCode: null,
@@ -1907,7 +1907,9 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
           {
             detailTitle: "各種刻度方向的軸線",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsAxesDirectionsDemo.vue")
+            ),
             detailCode: {
               htmlCode: null,
               jsCode: null,
@@ -1917,7 +1919,9 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
           {
             detailTitle: "繪製一般的 x 軸",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsXAxisDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="xAxis"></div>
@@ -1950,13 +1954,53 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
 '    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="xAxisSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = (width - height) / 2;
+
+const xAxisSvgRef = ref(null);
+
+onMounted(() => {
+  // 設定比例尺
+  const xScale = d3.scaleLinear()
+                   .domain([0, 100])
+                   .range([margin, width - margin]);
+
+  // 設定軸線產生方式
+  const xAxisGenerator = d3.axisBottom(xScale);
+
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(xAxisSvgRef.value)
+    .append("g")
+    .call(xAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "<code>axis.ticks(<i>刻度數[, 格式]</i>)</code> 調整刻度（tick）數量",
             detailSubtitle: "該方法僅接受 2、5、10 倍數的刻度數量，否則會自動抓取最近倍數來調整。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsAxisTickTestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="axisTickTest"></div>
@@ -1990,7 +2034,46 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
 '    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="axisTickTestSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = (width - height) / 2;
+
+const axisTickTestSvgRef = ref(null);
+
+onMounted(() => {
+  // 設定比例尺
+  const axisTickTestScale = d3.scaleLinear()
+                              .domain([0, 100])
+                              .range([margin, width - margin]);
+
+  // 設定軸線產生方式
+  const axisTickTestAxisGenerator = d3.axisBottom(axisTickTestScale)
+                                      .ticks(5);  // 軸線刻度數量5個，以及最前方的1個起始值
+
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(axisTickTestSvgRef.value)
+    .append("g")
+    .call(axisTickTestAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
@@ -2895,7 +2978,27 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: null,
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<svg id="move" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
+<button id="moveBtn" class="btn btn-primary mt-2" type="button">移動</button>
+<button id="moveBtnReset" class="btn btn-primary mt-2 ms-1" type="button">回復</button>
+
+<script>
+  const moveRect = d3.select("#move")
+                     .append("rect")
+                     .attr("width", 40)
+                     .attr("height", 40)
+                     .attr("fill", "#f68b47")
+                     .attr("stroke", "#f68b47");
+  
+  document.querySelector("#moveBtn").addEventListener("click", () => {
+    moveRect.attr("transform", "translate(140, 60)");
+  });
+
+  document.querySelector("#moveBtnReset").addEventListener("click", () => {
+    moveRect.attr("transform", "translate(0, 0)");
+  });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -2905,7 +3008,28 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: null,
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<svg id="transition" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
+<button id="transitionBtn" class="btn btn-primary mt-2" type="button">移動</button>
+<button id="transitionBtnReset" class="btn btn-primary mt-2 ms-1" type="button">回復</button>
+
+<script>
+  const transitionRect = d3.select("#transition")
+                           .append("rect")
+                           .attr("width", 40)
+                           .attr("height", 40)
+                           .attr("fill", "#f68b47")
+                           .attr("stroke", "#f68b47");
+  
+  document.querySelector("#transitionBtn").addEventListener("click", () => {
+    transitionRect.transition()  // 使用transition()
+                  .attr("transform", "translate(140, 60)");
+  });
+
+  document.querySelector("#transitionBtnReset").addEventListener("click", () => {
+    transitionRect.attr("transform", "translate(0, 0)");
+  });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -2915,7 +3039,29 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: "單位：ms。",
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<svg id="transitionDuration" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
+<button id="transitionDurationBtn" class="btn btn-primary mt-2" type="button">移動</button>
+<button id="transitionDurationBtnReset" class="btn btn-primary mt-2 ms-1" type="button">回復</button>
+
+<script>
+  const transitionDurationRect = d3.select("#transitionDuration")
+                                   .append("rect")
+                                   .attr("width", 40)
+                                   .attr("height", 40)
+                                   .attr("fill", "#f68b47")
+                                   .attr("stroke", "#f68b47");
+  
+  document.querySelector("#transitionDurationBtn").addEventListener("click", () => {
+    transitionDurationRect.transition()
+                          .duration(2000)  // 設定動畫時間持續2秒鐘
+                          .attr("transform", "translate(140, 60)");
+  });
+
+  document.querySelector("#transitionDurationBtnReset").addEventListener("click", () => {
+    transitionDurationRect.attr("transform", "translate(0, 0)");
+  });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -2925,7 +3071,34 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: null,
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<svg id="transitionColor" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
+<button id="transitionColorBtn" class="btn btn-primary mt-2" type="button">變色</button>
+<button id="transitionColorBtnReset" class="btn btn-primary mt-2 ms-1" type="button">回復</button>
+
+<script>
+  const transitionColorRect = d3.select("#transitionColor")
+                                .append("rect")
+                                .attr("width", 40)
+                                .attr("height", 40)
+                                .attr("fill", "#f68b47")
+                                .attr("stroke", "#f68b47")
+                                .attr("transform", "translate(140, 60)");
+  
+  document.querySelector("#transitionColorBtn").addEventListener("click", () => {
+    transitionColorRect.transition()
+                       .duration(1000)
+                       .attr("fill", "green")
+                       .attr("stroke-width", 6)
+                       .attr("stroke", "red");
+  });
+
+  document.querySelector("#transitionColorBtnReset").addEventListener("click", () => {
+    transitionColorRect.attr("fill", "#f68b47")
+                       .attr("stroke-width", 1)
+                       .attr("stroke", "#f68b47");
+  });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -2935,7 +3108,38 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: "本例為逐漸移動再改變顏色",
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<svg id="transitionColorAndDelay" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
+<button id="transitionColorAndDelayBtn" class="btn btn-primary mt-2" type="button">開始動作</button>
+<button id="transitionColorAndDelayBtnReset" class="btn btn-primary mt-2 ms-1" type="button">回復</button>
+
+<script>
+  const transitionColorAndDelayRect = d3.select("#transitionColorAndDelay")
+                                        .append("rect")
+                                        .attr("width", 40)
+                                        .attr("height", 40)
+                                        .attr("fill", "#f68b47")
+                                        .attr("stroke", "#f68b47")
+  
+  document.querySelector("#transitionColorAndDelayBtn").addEventListener("click", () => {
+    transitionColorAndDelayRect.transition()  // 這裡開始第一段動畫
+                               .duration(1500)
+                               .delay(300)  // 按下按鈕後，延遲0.3秒再執行下列動作
+                               .attr("transform", "translate(140, 60)")
+                               .transition()  // 這裡開始第二段動畫
+                               .delay(500)  // 移動到定位後，延遲0.5秒再執行下列動作
+                               .attr("fill", "green")
+                               .attr("stroke-width", 6)
+                               .attr("stroke", "red");
+  });
+
+  document.querySelector("#transitionColorAndDelayBtnReset").addEventListener("click", () => {
+    transitionColorAndDelayRect.attr("transform", "translate(0, 0)")
+                               .attr("fill", "#f68b47")
+                               .attr("stroke-width", 1)
+                               .attr("stroke", "#f68b47");
+  });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -2945,7 +3149,41 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: "本例為球依次移動。",
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<svg id="delayCircleMove" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
+<button id="delayCircleMoveBtn" class="btn btn-primary mt-3" type="button">開始動作</button>
+<button id="delayCircleMoveBtnReset" class="btn btn-primary mt-3 ms-1" type="button">回復上一動</button>
+
+<script>
+  // 用for迴圈設定延遲時間
+  const dataDelay = [];
+  for (let i = 0; i < 8; i++) {
+    dataDelay.push(160 - i * 20);
+  };
+  // 160 140 120 100 ... 20
+
+  const delayCircleMove = d3.select("#delayCircleMove")
+                                .selectAll("circle")
+                                .data(dataDelay)
+                                .join("circle")
+                                .attr("cx", (d) => d)
+                                .attr("cy", 30)
+                                .attr("r", 15)
+                                .attr("fill", "#f48b47")
+                                .attr("opacity", 0.5);
+
+  document.querySelector("#delayCircleMoveBtn").addEventListener("click", () => {
+    delayCircleMove.transition()
+                   .delay((d, i) => i * 200)  // 分別延遲
+                   .attr("cx", (d) => d + 120);  // 位移距離
+  });
+
+  document.querySelector("#delayCircleMoveBtnReset").addEventListener("click", () => {
+    delayCircleMove.transition()
+                   .delay((d, i) => 1600 - i * 200)  // 先進後出
+                   .attr("cx", (d) => d);  // 回復原位
+  });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -2955,7 +3193,42 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: "ease動畫展示。",
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<svg id="easeDemonstration" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg>
+<div class="d-flex align-items-baseline">
+  <select name="easeDemonstration" id="easeDemonstrationSelection" class="m-3">
+    <option></option>
+  </select>
+  <button id="easeDemonstrationBtn" class="btn btn-primary mt-3" type="button" onclick="updateEase()">Ease開始</button>
+</div>
+
+<script>
+  const easeDot = d3.select("#easeDemonstration")
+                    .append("circle")
+                    .attr("cx", 40)
+                    .attr("cy", 40)
+                    .attr("r", 30)
+                    .attr("fill", "#f68b47");
+              
+  // 抓出 D3.js 中所有 API 中名稱帶有 ease 開頭的 API
+  const easeNames = Object.keys(d3).filter((d) => d.slice(0, 4) === "ease");  // 註：'slice(0, 4)'是將字符串的第0個到第4個字符提取出來（不包含第4個字符）
+              
+  d3.select("#easeDemonstrationSelection")
+    .selectAll("option")
+    .data(easeNames)
+    .join("option")
+    .attr("value", (d) => d)` + "\n" +
+'    .text((d) => `d3.${d}`);' + "\n" +
+`
+  const updateEase = () => {
+    const easeName = d3.select("#easeDemonstrationSelection")
+                       .node().value;
+    easeDot.attr("cx", 40)  // 回原點
+           .transition()
+           .ease(d3[easeName])  // 設定動畫效果
+           .attr("cx", 200);
+  };
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -2965,7 +3238,34 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: "<code>typename = ['start', 'end', 'interrupt', 'cancel']</code>",
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<svg id="loopAnimation" style="border: 1px solid rgb(103, 102, 102);"></svg>
+
+<script>
+  const loopAnimation = d3.select("#loopAnimation")
+                          .append("circle")
+                          .attr("cx", 50)
+                          .attr("cy", 50)
+                          .attr("r", 25)
+                          .attr("fill", "#f68b47")
+                          .transition()
+                          .duration(2000)
+                          .on("start", goRight);
+
+  function goRight() {
+    d3.active(this)  // 取得正在進行中的過渡效果（transition）的函數
+      .attr("cx", 250)
+      .transition()
+      .on("start", goLeft);
+  };
+
+  function goLeft() {
+    d3.active(this)  // 取得正在進行中的過渡效果（transition）的函數
+      .attr("cx", 50)
+      .transition()
+      .on("start", goRight);
+  };
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -2996,7 +3296,39 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: '點擊事件發生。此處使用 <code>.on("click", listener)</code>。',
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<svg id="clickSVG" style="border: 1px solid rgb(103, 102, 102);"></svg>
+
+<script>
+  const clickCircle = d3.select("#clickSVG")
+                        .append("circle")
+                        .attr("cx", 30)
+                        .attr("cy", 20)
+                        .attr("r", 20)
+                        .attr("fill", "#f68b47")
+                        .attr("cursor", "pointer");
+  let isMoved = false;  // 用來追蹤圓球是否已經移動
+
+  clickCircle.on("click", (e) => {
+    if (!isMoved) {
+      d3.select(e.target)
+        .transition()
+        .ease(d3.easeBack)
+        .duration(1000)
+        .attr("fill", "blue")
+        .attr("transform", "translate(240, 0)");
+      isMoved = true;  // 更新狀態為已移動
+    } else {
+      d3.select(e.target)
+        .transition()
+        .ease(d3.easeBack)
+        .duration(1000)
+        .attr("fill", "#f68b47")
+        .attr("transform", "translate(0, 0)");
+      isMoved = false;  // 更新狀態為未移動
+    };
+  });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -3006,7 +3338,33 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: '滑鼠拂過變色。此處使用 <code>.on("mouseover", listener)</code> 與 <code>.on("mouseleave", listener)</code>。',
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<svg id="mouseoverSVG" style="border: 1px solid rgb(103, 102, 102);"></svg>
+
+<script>
+  const mouseoverCircle = d3.select("#mouseoverSVG")
+                            .append("circle")
+                            .attr("cx", 20)
+                            .attr("cy", 20)
+                            .attr("r", 50)
+                            .attr("cursor", "pointer")
+                            .attr("fill", "#f68b47")
+                            .attr("transform", "translate(130, 55)");
+
+  mouseoverCircle
+    .on("mouseover", (e) => {
+      d3.select(e.target)
+        .transition()
+        .duration(2000)
+        .attr("fill", "blue");
+    })
+    .on("mouseleave", (e) => {
+      d3.select(e.target)
+        .transition()
+        .duration(2000)
+        .attr("fill", "#f68b47");
+    });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -3016,7 +3374,30 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: "<code>event</code> 代表進行的事件；<code>target</code> 代表指定（要顯示座標）的目標。",
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<svg id="pointerSVG" style="border: 1px solid rgb(103, 102, 102);"></svg>
+
+<script>
+  const pointerSVG = d3.select("#pointerSVG")
+                       .attr("width", 500)
+                       .attr("height", 300)
+                       .attr("cursor", "pointer");
+  let pointerTxt = pointerSVG.append("text");
+
+  pointerSVG
+    .on("mousemove", (e) => {
+      let pointerPosition = d3.pointer(e, pointerSVG.node());
+
+      pointerTxt.attr("x", pointerPosition[0])  // 取[x]
+                .attr("y", pointerPosition[1])  // 取[y]` + "\n" +
+'                .text(`x: ${parseInt(pointerPosition[0])},' + "\n" +
+'                       y: ${parseInt(pointerPosition[1])}`)' + "\n" +
+`                .style("display", "block");
+    })
+    .on("mouseleave", (e) => {
+      pointerTxt.style("display", "none");  // 離開SVG後不顯示文字
+    });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -3026,7 +3407,48 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: null,
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="tooltip"></div>
+
+<script>
+  const tooltipCircle = d3.select("#tooltip")
+                          .append("svg")
+                          .append("circle")
+                          .attr("cx", 80)
+                          .attr("cy", 75)
+                          .attr("r", 40)
+                          .attr("cursor", "pointer")
+                          .attr("fill", "#f6cefc");
+  const tooltip = d3.select("#tooltip")
+                    .style("position", "relative")
+                    .append("div")
+                    .style("position", "absolute")
+                    .style("display", "none")  // 初始隱藏Tooltip
+                    .style("border", "1px solid black")
+                    .style("border-radius", "5px")
+                    .style("padding", "8px")
+                    .html(` + "\n" +
+'                      `<p>' + "\n" +
+`                        <b>我是Tooltip</b><br>
+                        這裡可以放入想放入的文字，<br>
+                        也可以插入圖片
+                       </p>
+                       <img src="assets/IMG_2073.jpg" width="60px" class="d-inline-block">` + "\n" +
+'                      `);' + "\n" +
+`
+  // 加上滑鼠事件
+  tooltipCircle
+    .on("mouseover", (e) => {
+      tooltip.style("display", "block");  
+    })
+    .on("mousemove", (e) => {
+      tooltip.style("top", "-5px")
+             .style("left", "180px");
+    })
+    .on("mouseleave", (e) => {
+      tooltip.style("display", "none");
+    });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -3036,7 +3458,65 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: null,
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="d3jsMouseEventAdvancedTooltip"></div>
+
+<script>
+  const data = [
+    {r: 17, x: 134, y: 181},
+    {r: 23, x: 294, y: 131},
+    {r: 14, x: 84, y: 273},
+    {r: 9, x: 323, y: 59},
+    {r: 18, x: 172, y: 251},
+    {r: 26, x: 404, y: 154}
+  ];
+  const svg = d3.select("#d3jsMouseEventAdvancedTooltip")
+                .append("svg")
+                .style("border", "1px solid rgb(103, 102, 102)")
+                .attr("width", 500)
+                .attr("height", 300);
+  
+  // 設定顏色
+  const rData = data.map((d) => d.r);
+  const colors = d3.scaleOrdinal(d3.schemeTableau10)  // 因'd3.schemeTableau10'已預設輸出域，所以不有另設定'.range()'
+                   .domain(rData);
+
+  // 建立圓點
+  const dots = svg.selectAll("circle")
+                  .data(data)
+                  .join("circle")
+                  .attr("cx", (d) => d.x)
+                  .attr("cy", (d) => d.y)
+                  .attr("r", (d) => d.r)
+                  .attr("fill", (d) => colors(d.x))
+                  .style("cursor", "pointer");
+
+  // 建立tooltip
+  const tooltip = d3.select("#d3jsMouseEventAdvancedTooltip")
+                    .style("position", "relative")
+                    .append("div")
+                    .style("display", "none")
+                    .style("position", "absolute")
+                    .style("background-color", "white")
+                    .style("border", "2px solid")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px");
+
+  // 顯示tooltip
+  dots
+    .on("mouseover", (e) => {
+      tooltip.style("display", "block");
+    })
+    .on("mousemove", (e) => {
+      let pt = d3.pointer(e, e.target);  // 抓圓點位置` + "\n" +
+'      tooltip.style("left", `${pt[0] + 30}px`)  // 設定tooltip的水平位置' + "\n" +
+'             .style("top", `${pt[1]}px`)  // 設定tooltip的垂直位置' + "\n" +
+'             .html(`圓半徑：${e.target.__data__.r}`);' + "\n" +
+`    })
+    .on("mouseleave", (e) => {
+      tooltip.style("display", "none");
+    });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -3046,7 +3526,81 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: "點擊以打開包含其他 web 的 Tooltip，再點擊一次關閉。",
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="d3jsMouseEventInsertHTMLWeb"></div>
+
+<script>
+  const tooltipIcon = d3.select("#d3jsMouseEventInsertHTMLWeb")
+                        .append("svg")
+                        .attr("height", 200)
+                        .attr("width", 200)
+                        .append("g")
+                        .style("cursor", "pointer");
+  const tooltipIconCircle = tooltipIcon.append("circle")
+                                       .attr("cx", 100)
+                                       .attr("cy", 100)
+                                       .attr("r", 60)
+                                       .attr("fill", "#69b3a2");
+  const tooltipIconText = tooltipIcon.append("text")
+                                     .text("按鈕")
+                                     .attr("fill", "#eeeeee")
+                                     .attr("x", 100)
+                                     .attr("y", 110)
+                                     .attr("text-anchor", "middle")
+                                     .attr("font-size", 30)
+                                     .attr("font-family", "sans-serif");
+  const tooltip = d3.select("#d3jsMouseEventInsertHTMLWeb")
+                    .style("position", "relative")
+                    .append("div")
+                    .attr("id", "tooltipWebsite")
+                    .style("position", "absolute")
+                    .style("display", "none")
+                    .style("border", "2px solid black")
+                    .style("border-radius", "10px")
+                    .style("width", "700px")
+                    .style("max-height", "600px")
+                    .style("overflow", "auto")
+                    .style("background-color", "#ffffff")
+                    .style("padding", "20px");
+
+  // 判斷是否已點擊開啟tooltip用
+  let isClick = false;
+
+  tooltipIcon
+    .on("click", (e) => {
+      if (!isClick) {
+        // 引用其他網頁內容
+        d3.html("study/statistics_note.html").then( (d) => {
+          const bodyContent = d3.select(d).select("body").html();  // 只選取該網頁<body>內的內容
+
+          d3.select("#tooltipWebsite")
+            .style("display", "block")
+            .html(bodyContent);  // 將選取的內容插入到Tooltip中
+
+          MathJax.typesetPromise();  // 重新渲染 MathJax 公式
+        });
+        isClick = true;  // 切換至已開啟tooltip狀態
+      } else {
+        d3.select("#tooltipWebsite")
+          .style("display", "none");
+        isClick = false;  // 切換至未開啟tooltip狀態
+      };
+    })
+    .on("mouseover", () => {
+      tooltipIconCircle.attr("stroke", "#ffffff")
+                       .attr("stroke-width", 5);
+    })
+    .on("mousemove", (e) => {
+      let pt = d3.pointer(e, e.target);
+      // 設置Tooltip位置
+      d3.select("#tooltipWebsite")` + "\n" +
+'        .style("left", `${pt[0] + 40}px`)' + "\n" +
+'        .style("top", `${pt[1] - 30}px`);' + "\n" +
+`    })
+    .on("mouseleave", () => {
+      tooltipIconCircle.attr("stroke-width", 0);
+    });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -3072,7 +3626,60 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: null,
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="d3jsDragContainer"></div>
+
+<script>
+  const data = [
+    {name: "A", x: 200, y: 340},
+    {name: "B", x: 220, y: 300},
+    {name: "C", x: 250, y: 198},
+    {name: "D", x: 360, y: 296},
+    {name: "E", x: 160, y: 150},
+    {name: "F", x: 320, y: 60},
+    {name: "G", x: 187, y: 250}
+  ];
+  const width = 600;
+  const height = 400;
+  const svg = d3.select("#d3jsDragContainer")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .style("border", "1px solid rgb(103, 102, 102)");
+
+  // 建立圓點
+  const dots = svg.append("g")
+                  .selectAll("circle")
+                  .data(data)
+                  .join("circle")
+                  .attr("r", 25)
+                  .attr("cx", (d) => d.x)
+                  .attr("cy", (d) => d.y)
+                  .style("fill", "#19d3a2")
+                  .style("fill-opacity", 0.3)
+                  .attr("stroke", "#b3a2c8")
+                  .attr("stroke-width", 4)
+                  .style("cursor", "pointer");
+
+  // 建立拖曳方法
+  // 在d3.drag()事件處理器中，應避免使用箭頭函數來確保'this'能綁定到正確的DOM元素
+  const drag = d3.drag()
+                 .on("start", function() {  // 因為要用'this'，所以用普通函數
+                   d3.select(this).style("stroke", "blue");
+                 })
+                 .on("drag", function(e) {  // 因為要用'this'，所以用普通函數
+                   const pt = d3.pointer(e, this);
+                   d3.select(this)
+                     .attr("cx", pt[0])
+                     .attr("cy", pt[1]);
+                 })
+                 .on("end", function() {  // 因為要用'this'，所以用普通函數
+                   d3.select(this).style("stroke", "#b3a2c8");
+                 });
+
+  // 呼叫拖曳方法
+  dots.call(drag);
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -3106,7 +3713,53 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: null,
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="zoomBasic"></div>
+
+<button id="resetBtn" type="button" class="btn btn-primary mt-2">重設</button>
+<script>
+  const width = 450;
+  const height = 300;
+  const svg = d3.select("#zoomBasic")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .style("border", "1px solid gray");
+        
+  // 加個圓點
+  const circle = svg.append("circle")
+                    .attr("id", "dot")
+                    .attr("cx", width / 2)
+                    .attr("cy", height / 2)
+                    .attr("r", 50)
+                    .attr("fill", "#69b3a2")
+                    .style("cursor", "pointer");
+
+  // 建立Zoom事件
+  const zoomEvent = d3.zoom()
+                      .extent([
+                        [0, 0], [250, 250]
+                      ])
+                      .scaleExtent([1/5, 5])  // 縮放大小倍率限制
+                      .duration(600)
+                      .on("zoom", (e) => {
+                        const transform = e.transform;
+                        // 這邊決定要放大誰
+                        // 使用transform.k調整選定元素屬性的transform的k，避免動到x、y造成元素位置改變
+                        // 50為圓原半徑
+                        circle.attr("r", (d) => 50 * transform.k);
+                      });
+        
+  // 呼叫Zoom事件
+  svg.call(zoomEvent);
+  
+  // 設立重置按鈕，以回復到原本狀態
+  d3.select("#resetBtn")
+    .on("click", () => {
+      const transform = d3.zoomIdentity.scale(1);
+      svg.call(zoomEvent.transform, transform);
+    });
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -3134,7 +3787,66 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
             detailSubtitle: null,
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="brush"></div>
+
+<script>
+  const width = 540;
+  const height = 360;
+  const data = [
+    {r: 20, x: 200, y: 120},
+    {r: 35, x: 350, y: 280},
+    {r: 25, x: 120, y: 240},
+  ];
+
+  // 建立SVG
+  const svg = d3.select("#brush")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height)
+                .style("border", "1px solid gray");
+
+  // 加上圓點
+  const dots = svg.selectAll("circle")
+                  .data(data)
+                  .join("circle")
+                  .attr("cx", (d) => d.x)
+                  .attr("cy", (d) => d.y)
+                  .attr("r", (d) => d.r)
+                  .style("fill", "#69b3a2");
+
+  // 設定brush的功能
+  // 使用e.selection取得目前的selection
+  // selection會產出一個二維陣列
+  // 分別代表'x0', 'x1', 'y0', 'y1'，左上到右下的位置
+  // 讓開發者有辦法重新計算目前位置的extent，進而進行其他操作。
+  const brushed = (e) => {
+    const brushExtent = e.selection;
+    dots.style("fill", (d) => 
+      isBrushed(brushExtent, d.x, d.y) ? "blue" : "#69b3a2"
+    );
+
+    // 判斷圓點是否在brush選到的區域內
+    function isBrushed (brush_coors, cx, cy) {  // 'brush_coors', 'cx', 'cy'三者皆僅為函數變數名
+      let x0 = brush_coors[0][0],
+          x1 = brush_coors[1][0],
+          y0 = brush_coors[0][1],
+          y1 = brush_coors[1][1];
+      return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;  // 如果圓點在brush的範圍內，就會傳true：反之，則回傳false
+    };
+  };
+
+  // 建立brush事件
+  const brushEvent = d3.brush()
+                       .extent([
+                         [0, 0],
+                         [600, 600]
+                       ])  // extent限制刷子的活動區塊，理想是比SVG畫布稍大
+                       .on("start brush", brushed);  // 綁定brush事件
+
+  // 呼叫brush事件
+  svg.call(brushEvent);
+</script>`,
               jsCode: null,
               vueCode: null
             }

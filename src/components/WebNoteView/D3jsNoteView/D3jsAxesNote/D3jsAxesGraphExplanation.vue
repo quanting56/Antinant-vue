@@ -1,5 +1,5 @@
 <template>
-  <svg ref="svgRef"></svg>
+  <svg ref="svgRef" width="300" height="100"></svg>
 </template>
 
 <script setup>
@@ -22,7 +22,7 @@ onMounted(() => {
   const g = d3.select(svgRef.value)
     .append("g")
     .call(scaleGenerator)
-    .attr("transform", "translate(30, 50)");
+    .attr("transform", "translate(40, 45)");
 
   g.selectAll("path")
     .attr("stroke", "#ff8030")

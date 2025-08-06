@@ -283,8 +283,8 @@ function handleHighlight() {
 /* Demo 區塊樣式 */
 .lists-demo,
 .details-demo {
-  padding: 40px 16px;
-  margin-bottom: 16px;
+  padding: 16px 16px;
+  margin-bottom: 8px;
 }
 
 /* 其他樣式寫在style.css裡 */

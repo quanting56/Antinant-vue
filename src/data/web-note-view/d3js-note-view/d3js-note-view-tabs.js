@@ -2079,7 +2079,9 @@ onMounted(() => {
           {
             detailTitle: "<code>axis.ticks(<i>刻度數[, 格式]</i>)</code> 調整刻度的數字格式",
             detailSubtitle: "亦可改用 <code>axis.tickFormat()</code> 調整（見第 8 點）。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsFormatTestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="axisFormatTest"></div>
@@ -2113,13 +2115,54 @@ onMounted(() => {
 '    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="axisFormatTestSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = (width - height) / 2;
+
+const axisFormatTestSvgRef = ref(null);
+
+onMounted(() => {
+  // 設定比例尺
+  const axisFormatTestScale = d3.scaleLinear()
+                                .domain([0, 100])
+                                .range([margin, width - margin]);
+                            
+  // 設定軸線產生方式
+  const axisFormatTestAxisGenerator = d3.axisBottom(axisFormatTestScale)
+                                        .ticks(5, '.1f');  // 本行亦可換成".ticks(5).tickFormat(d3.format('.1f'))"
+
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(axisFormatTestSvgRef.value)
+    .append("g")
+    .call(axisFormatTestAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "時間比例尺的軸線",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsAxisTimeTickTestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="axisTimeTickTest"></div>
@@ -2154,14 +2197,68 @@ onMounted(() => {
     .call(axisTimeTickTestAxisGenerator)` + "\n" +
 '    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
 `</script>`,
-              jsCode: null,
-              vueCode: null
+              jsCode: 
+`// 註：Time Formats常用說明字符如下：
+// '%Y' => 西元年。
+// '%y'	=> 西元年最末的兩位數。
+// '%m'	=> 一年的某一個月（01~12）。
+// '%d'	=> 一月的某一天（01~31）。
+// '%j'	=> 一年的某一天（001~366）。
+// '%B'	=> 月份。
+// '%b'	=> 月份的縮寫。
+// '%A'	=> 星期幾。
+// '%a'	=> 星期幾的縮寫。`,
+              vueCode: 
+`<template>
+  <svg
+    ref="axisTimeTickTestSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { onMounted, ref } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = 20;
+
+const January = new Date(2024, 0);
+const December = new Date(2024, 11);
+
+const axisTimeTickTestSvgRef = ref(null);
+
+onMounted(() => {
+  // 設定比例尺
+  const axisTimeTickTestScale = d3.scaleTime()
+                                  .domain([January, December])
+                                  .range([margin , width - margin]);
+
+  // 設定軸線產生方式
+  const axisTimeTickTestAxisGenerator = d3.axisBottom(axisTimeTickTestScale)
+                                          .ticks(12, "%b");
+
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(axisTimeTickTestSvgRef.value)
+    .append("g")
+    .call(axisTimeTickTestAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "<code>axis.tickValues()</code> 指定特殊刻度",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsAxisTickValueTestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="axisTickValueTest"></div>
@@ -2195,13 +2292,54 @@ onMounted(() => {
 '    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="axisTickValueTestSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const axisTickValueTestSvgRef = ref(null);
+
+onMounted(() => {
+  // 設定比例尺
+  const axisTickValueTestScale = d3.scaleLinear()
+                                   .domain([0, 100])
+                                   .range([margin, width - margin]);
+
+  // 設定軸線產生方式
+  const axisTickValueTestAxisGenerator = d3.axisBottom(axisTickValueTestScale)
+                                           .tickValues([0, 15, 23, 34, 60, 81, 100]);
+
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(axisTickValueTestSvgRef.value)
+    .append("g")
+    .call(axisTickValueTestAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "<code>axis.tickValues()</code> 指定特殊刻度（用動態方式減少顯示的標籤數，以利閱讀）",
             detailSubtitle: "ScaleBand 比例尺呈現指定刻度。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsScaleBandTickValueTestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="axisScaleBandTickValueTest"></div>
@@ -2235,13 +2373,56 @@ onMounted(() => {
 '                               .attr("transform", `translate(0, ${ height / 2})`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="axisScaleBandTickValueTestSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { onMounted, ref } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const axisScaleBandTickValueTestSvgRef = ref(null);
+
+const zodiacData = ["鼠", "牛", "虎", "兔", "龍", "蛇", "馬", "羊", "猴", "雞", "狗", "豬"];
+
+onMounted(() => {
+  // 設定比例尺
+  const axisScaleBandTickValueTestScale = d3.scaleBand()
+                                            .domain(zodiacData)
+                                            .range([margin, width - margin]);
+
+  // 設定軸線產生方式
+  const axisScaleBandTickValueTestAxisGenerator = d3.axisBottom(axisScaleBandTickValueTestScale)
+                                                    .tickValues(axisScaleBandTickValueTestScale.domain().filter((d, idx) => idx%2 === 0));  // 加這行減少顯示的標籤數（即指定刻度），以利閱讀
+
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(axisScaleBandTickValueTestSvgRef.value)
+    .append("g")
+    .call(axisScaleBandTickValueTestAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2})`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "<code>axis.tickFormat(<i>[format]</i>)</code> 調整刻度文字的樣式",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsAxisTickFormatTestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="axisTickFormatTest"></div>
@@ -2276,13 +2457,55 @@ onMounted(() => {
 '    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="axisTickFormatTestSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const axisTickFormatTestSvgRef = ref(null);
+
+onMounted(() => {
+  // 設定比例尺
+  const axisTickFormatTestScale = d3.scaleLinear()
+                                    .domain([0, 100])
+                                    .range([margin, width - margin]);
+
+  // 設定軸線產生方式
+  const axisTickFormatTestAxisGenerator = d3.axisBottom(axisTickFormatTestScale)
+                                            .ticks(5)
+                                            .tickFormat(d3.format('.2f'));  // 兩位小數
+
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(axisTickFormatTestSvgRef.value)
+    .append("g")
+    .call(axisTickFormatTestAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "增加刻度單位（類調整刻度文字樣式）",
             detailSubtitle: "使用 <code>axis.tickFormat()</code> 調整。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsAxisTickFormatUnitTestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="axisTickFormatUnitTest"></div>
@@ -2317,13 +2540,55 @@ onMounted(() => {
 '    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="axisTickFormatUnitTestSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const axisTickFormatUnitTestSvgRef = ref(null);
+
+onMounted(() => {
+  // 設定比例尺
+  const axisTickFormatUnitTestScale = d3.scaleLinear()
+                                        .domain([0, 100])
+                                        .range([margin, width - margin]);
+
+  // 設定軸線產生方式
+  const axisTickFormatUnitTestAxisGenerator = d3.axisBottom(axisTickFormatUnitTestScale)
+                                                .ticks(5)` + "\n" +
+'                                                .tickFormat(d => `${d}元`);  // 增加文字單位' + "\n" +
+`
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(axisTickFormatUnitTestSvgRef.value)
+    .append("g")
+    .call(axisTickFormatUnitTestAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "<code>axis.tickSize()</code> 調整刻度線段長度",
             detailSubtitle: "刻度線段長度預設長度為 6。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsAxisTickSizeTestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="axisTickSizeTest"></div>
@@ -2356,13 +2621,54 @@ onMounted(() => {
 '                     .attr("transform", `translate(0, ${ height / 2 })`)' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="axisTickSizeTestSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const axisTickSizeTestSvgRef = ref(null);
+
+onMounted(() => {
+  // 設定比例尺
+  const axisTickSizeTestScale = d3.scaleLinear()
+                                  .domain([0, 100])
+                                  .range([margin, width - margin]);
+
+  // 設定軸線產生方式，以此例來說，代入正數向下延伸，代入負數向上延伸
+  const axisTickSizeTestAxisGenerator = d3.axisBottom(axisTickSizeTestScale)
+                                          .tickSize(30);
+
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(axisTickSizeTestSvgRef.value)
+    .append("g")
+    .call(axisTickSizeTestAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "<code>axis.tickSizeInner()</code>、<code>axis.tickSizeOuter()</code> 分開調整長度",
             detailSubtitle: "D3.js 的刻度線段分成 Inner 與 Outer，可分開調整。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsAxisTickSizeIOTestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="axisTickSizeIOTest"></div>
@@ -2398,13 +2704,57 @@ onMounted(() => {
 '    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="axisTickSizeIOTestSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const axisTickSizeIOTestSvgRef =ref(null);
+
+const zodiacData = ["鼠", "牛", "虎", "兔", "龍", "蛇", "馬", "羊", "猴", "雞", "狗", "豬"];
+
+onMounted(() => {
+  // 設定比例尺
+  const axisTickSizeIOTestScale = d3.scaleBand()
+                                    .domain(zodiacData)
+                                    .range([margin, width - margin]);
+
+  // 設定軸線產生方式
+  const axisTickSizeIOTestAxisGeneratorInner = d3.axisBottom(axisTickSizeIOTestScale)
+                                                 .tickSizeInner(30);  // 調Inner用這個
+                                                 // .tickSizeOuter(30);  調Outer用這個
+
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(axisTickSizeIOTestSvgRef.value)
+    .append("g")
+    .call(axisTickSizeIOTestAxisGeneratorInner)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "<code>axis.tickSizeInner()</code>、<code>axis.tickSizeOuter()</code> 無法完全分開調整長度？",
-            detailSubtitle: "由於 Outer 刻度其實並非刻度線段之一，而是隸屬軸線，所以Outer在某些情況下會和首末Inner刻度線段重疊，例如使用連續性比例尺（d3.scaleLinear）時。",
-            detailComponent: null,
+            detailSubtitle: "由於 Outer 刻度其實並非刻度線段之一，而是隸屬軸線，所以 Outer 在某些情況下會和首末 Inner 刻度線段重疊，例如使用連續性比例尺（d3.scaleLinear）時。",
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsAxisTickSizeIO2TestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="axisTickSizeIO2Test"></div>
@@ -2439,13 +2789,55 @@ onMounted(() => {
 '    .attr("transform", `translate(0, ${ height / 2 })`)' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="axisTickSizeIO2TestSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const axisTickSizeIO2TestSvgRef = ref(null);
+
+onMounted(() => {
+  // 設定比例尺
+  const axisTickSizeIO2TestScale = d3.scaleLinear()
+                                     .domain([0, 100])
+                                     .range([margin, width - margin]);
+
+  // 設定軸線產生方式
+  const axisTickSizeIO2TestAxisGeneratorInner = d3.axisBottom(axisTickSizeIO2TestScale)
+                                                  .tickSizeInner(30);  // 調Inner用這個
+                                                  // .tickSizeOuter(30);  調Outer用這個
+
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(axisTickSizeIO2TestSvgRef.value)
+    .append("g")
+    .call(axisTickSizeIO2TestAxisGeneratorInner)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`)' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "<code>axis.tickPadding()</code> 調整刻度線段與文字標籤的距離",
             detailSubtitle: "刻度線段與文字標籤的距離預設為 3。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsAxisTickPaddingTestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="axisTickPaddingTest"></div>
@@ -2479,13 +2871,54 @@ onMounted(() => {
 '    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="axisTickPaddingTestSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const axisTickPaddingTestSvgRef = ref(null);
+
+onMounted(() => {
+  // 設定比例尺
+  const axisTickPaddingTestScale = d3.scaleLinear()
+                                     .domain([0, 100])
+                                     .range([margin, width - margin]);
+
+  // 設定軸線產生方式
+  const axisTickPaddingTestAxisGenerator = d3.axisBottom(axisTickPaddingTestScale)
+                                             .tickPadding(30);
+
+  // 建立<g>元素並呼叫軸線產生方式，生成軸線
+  d3.select(axisTickPaddingTestSvgRef.value)
+    .append("g")
+    .call(axisTickPaddingTestAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "建立 x、y 軸",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsXYAxesDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="xyAxes"></div>
@@ -2537,13 +2970,78 @@ onMounted(() => {
 '           .attr("transform", `translate(${margin}, ${margin})`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="xyAxesSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const xyAxesSvgRef = ref(null);
+
+// 給定的數據
+const data = [
+  {x: 100, y: 20},
+  {x: 18, y: 30},
+  {x: 90, y: 250}
+];
+
+// 抓出x軸、y軸需要用到的資料
+const xData = data.map((d) => d.x);
+const yData = data.map((d) => d.y);
+
+onMounted(() => {
+  // x比例尺與軸線
+  const xScale = d3.scaleLinear()
+                   .domain([0, d3.max(xData)])
+                   .range([margin, width - margin])
+                   .nice();
+  const xAxisGenerator = d3.axisBottom(xScale)
+                           .ticks(10);  // 調整數量，讓間距看起來跟y軸差不多
+
+  // y比例尺與軸線
+  const yScale = d3.scaleLinear()
+                   .domain([0, d3.max(yData)])
+                   .range([height - margin * 2, 0])
+                   .nice();
+  const yAxisGenerator = d3.axisLeft(yScale)
+                           .ticks(5)  // 調整數量，讓間距看起來跟x軸差不多
+                           .tickSizeOuter(0);  // 消除非整數倍的刻度線段
+
+  // 建立<g>元素並呼叫軸線產生方式，分別生成x與y軸線
+  d3.select(xyAxesSvgRef.value)
+    .append("g")
+    .call(xAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height - margin })`);' + "\n" +
+`
+  d3.select(xyAxesSvgRef.value)
+    .append("g")
+    .call(yAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(${margin}, ${margin})`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "建立棋盤軸線樣式的 x、y 軸",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsXYAxesCheckerBoardStyleDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="xyAxesCheckerboardStyle"></div>
@@ -2596,13 +3094,79 @@ onMounted(() => {
 '                            .attr("transform", `translate(${margin}, ${margin})`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="xyAxesCheckerBoardStyleSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const xyAxesCheckerBoardStyleSvgRef = ref(null);
+
+// 給定的數據
+const data = [
+  {x: 100, y: 20},
+  {x: 18, y: 30},
+  {x: 90, y: 95}
+];
+
+// 抓出x軸、y軸需要用到的資料
+const xData = data.map((d) => d.x);
+const yData = data.map((d) => d.y);
+
+onMounted(() => {
+  // x比例尺與軸線
+  const xScale = d3.scaleLinear()
+                   .domain([0, d3.max(xData)])
+                   .range([margin, width - margin])
+                   .nice();
+  const xAxisGenerator = d3.axisBottom(xScale)
+                           .tickSize( -height + margin * 2 )  // y軸線長度
+                           .tickPadding(7);  // 讓標籤文字跟軸線保持一段距離
+
+  // y比例尺與軸線
+  const yScale = d3.scaleLinear()
+                   .domain([0, d3.max(yData)])
+                   .range([height - margin * 2, 0])
+                   .nice();
+  const yAxisGenerator = d3.axisLeft(yScale)
+                           .tickSize( -width + margin * 2 )  // x軸線長度
+                           .tickPadding(7);  // 讓標籤文字跟軸線保持一段距離
+
+  // 建立<g>元素並呼叫軸線產生方式，分別生成x與y軸線
+  d3.select(xyAxesCheckerBoardStyleSvgRef.value)
+    .append("g")
+    .call(xAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height - margin })`);' + "\n" +
+`
+  d3.select(xyAxesCheckerBoardStyleSvgRef.value)
+    .append("g")
+    .call(yAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(${margin}, ${margin})`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "建立井字軸線樣式的 x、y 軸",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsXYAxesHashtagStyleDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="xyAxesHashtagStyle"></div>
@@ -2663,13 +3227,85 @@ onMounted(() => {
 '                       .attr("transform", `translate(${ -margin / 2 }, 0)`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="xyAxesHashtagStyleSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const xyAxesHashtagStyleSvgRef = ref(null);
+
+// 給定的數據
+const data = [
+  {x: 100, y: 20},
+  {x: 18, y: 30},
+  {x: 90, y: 95}
+];
+
+// 抓出x軸、y軸需要用到的資料
+const xData = data.map((d) => d.x);
+const yData = data.map((d) => d.y);
+
+onMounted(() => {
+  // x比例尺與軸線
+  const xScale = d3.scaleLinear()
+                   .domain([0, d3.max(xData)])
+                   .range([margin, width - margin])
+                   .nice();
+  const xAxisGenerator = d3.axisBottom(xScale)
+                           .tickSize( -height + margin )  // y軸線長度
+                           .tickSizeOuter(0)
+                           .tickPadding( margin / 2 + 7 );  // 讓標籤文字跟軸線保持一段距離
+
+  // y比例尺與軸線
+  const yScale = d3.scaleLinear()
+                   .domain([0, d3.max(yData)])
+                   .range([height - margin * 2, 0])
+                   .nice();
+  const yAxisGenerator = d3.axisLeft(yScale)
+                           .tickSize( -width + margin )  // x軸線長度
+                           .tickSizeOuter(0)
+                           .tickPadding( margin - 20 );  // 讓標籤文字跟軸線保持一段距離
+
+  // 建立<g>元素並呼叫軸線產生方式，分別生成x與y軸線
+  d3.select(xyAxesHashtagStyleSvgRef.value)
+    .append("g")
+    .call(xAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height - margin })`)' + "\n" +
+`    .selectAll("line")` + "\n" +
+'    .attr("transform", `translate(0, ${ margin / 2 })`);' + "\n" +
+`
+  d3.select(xyAxesHashtagStyleSvgRef.value)
+    .append("g")
+    .call(yAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(${margin}, ${margin})`)' + "\n" +
+`    .selectAll("line")` + "\n" +
+'    .attr("transform", `translate(${ -margin / 2 }, 0)`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "建立 Grid 軸線樣式的 x、y 軸",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsXYAxesGridStyleDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="xyAxesGridStyle"></div>
@@ -2743,13 +3379,96 @@ onMounted(() => {
                     .attr("stroke", "#e4e4e4");
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="xyAxesGridStyleSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const xyAxesGridStyleSvgRef = ref(null);
+
+// 給定的數據
+const data = [
+  {x: 100, y: 20},
+  {x: 18, y: 30},
+  {x: 105, y: 250}
+];
+
+// 抓出x軸、y軸需要用到的資料
+const xData = data.map((d) => d.x);
+const yData = data.map((d) => d.y);
+
+onMounted(() => {
+  const svg = d3.select(xyAxesGridStyleSvgRef.value);
+
+  // x比例尺與軸線
+  const xScale = d3.scaleLinear()
+                   .domain([0, d3.max(xData)])
+                   .range([margin, width - margin]);
+                   // .nice();  // 加不加'.nice()'看情況
+
+  const xAxisGenerator = d3.axisBottom(xScale)
+                           .ticks(10)  // 調整數量，讓間距看起來跟y軸差不多
+                           .tickSizeOuter(0);  // 消除非整數倍的刻度線段
+
+  // y比例尺與軸線
+  const yScale = d3.scaleLinear()
+                   .domain([0, d3.max(yData)])
+                   .range([height - margin * 2, 0])
+                   .nice();  // 加不加'.nice()'看情況
+
+  const yAxisGenerator = d3.axisLeft(yScale)
+                           .ticks(5)  // 調整數量，讓間距看起來跟x軸差不多
+                           .tickSizeOuter(0);  // 消除非整數倍的刻度線段
+
+  // 建立<g>元素並呼叫軸線產生方式，先分別生成x與y軸線，再繪製x軸向上與y軸向右的不同色軸線
+  svg.append("g")
+     .call(xAxisGenerator)` + "\n" +
+'     .attr("transform", `translate(0, ${ height - margin })`)' + "\n" +
+`     .selectAll(".tick")  // '.tick'為預設的class名稱
+     .append("line")
+     .attr("x1", 0)
+     .attr("x2", 0)
+     .attr("y1", 0)
+     .attr("y2", -height + margin * 2 )
+     .attr("stroke", "#e4e4e4");
+
+  svg.append("g")
+     .call(yAxisGenerator)` + "\n" +
+'     .attr("transform", `translate(${margin}, ${margin})`)' + "\n" +
+`     .selectAll(".tick")  // '.tick'為預設的class名稱
+     .filter((d, i) => i !== 0)  // 不繪製第一條與x軸重疊的y軸線
+     .append("line")
+     .attr("x1", 0)
+     .attr("x2", width - margin * 2)
+     .attr("y1", 0)
+     .attr("y2", 0)
+     .attr("stroke", "#e4e4e4");
+});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "文字標籤旋轉",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsXYAxesTickTextRotationDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="xyAxesTickTextRotation"></div>
@@ -2811,13 +3530,81 @@ onMounted(() => {
                            .attr("transform", "translate(-27, 22) rotate(-45)");
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="xyAxesTickTextRotationSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+const margin = ( width - height ) / 2;
+
+const xyAxesTickTextRotationSvgRef = ref(null);
+
+// 給定的數據
+const data = [
+  {x: new Date(2024, 0), y: 30},
+  {x: new Date(2024, 2), y: 80},
+  {x: new Date(2024, 8), y: 90},
+  {x: new Date(2024, 11), y: 20},
+];
+
+// 抓出x軸、y軸需要用到的資料
+const xData = data.map((d) => d.x);
+const yData = data.map((d) => d.y);
+
+onMounted(() => {
+  const svg = d3.select(xyAxesTickTextRotationSvgRef.value);
+
+  // x比例尺與軸線
+  const xScale = d3.scaleTime()
+                   .domain([new Date(2024, 0), new Date(2024, 11)])
+                   .range([margin, width - margin]);
+  const xAxisGenerator = d3.axisBottom(xScale)
+                           .tickFormat(d3.timeFormat("%Y-%m-%d"))
+                           .tickSize(10);  // 延長刻度線，方便判讀
+
+  // y比例尺與軸線
+  const yScale = d3.scaleLinear()
+                   .domain([0, d3.max(yData)])
+                   .range([height - margin * 2, 0]);
+  const yAxisGenerator = d3.axisLeft(yScale)
+                           .ticks(5)
+                           .tickSize(10)  // 延長刻度線，方便判讀
+                           .tickSizeOuter(0);  // 消除非整數倍的刻度線段                          
+
+  // 建立<g>元素並呼叫軸線產生方式，分別生成x與y軸線
+  svg.append("g")
+     .call(xAxisGenerator)` + "\n" +
+'     .attr("transform", `translate(0, ${ height - margin - 15})`)' + "\n" +
+`     .selectAll("text")  // '.tick'為預設的class名稱
+     .attr("transform", "translate(-27, 22) rotate(-45)");  // 旋轉x軸上的文字標籤
+
+  svg.append("g")
+     .call(yAxisGenerator)` + "\n" +
+'     .attr("transform", `translate(${margin}, ${margin - 15})`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "時鐘刻度軸線",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsClockAxisDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="clockAxisTest"></div>

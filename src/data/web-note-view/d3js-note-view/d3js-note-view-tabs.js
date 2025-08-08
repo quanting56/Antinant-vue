@@ -3697,13 +3697,114 @@ onMounted(() => {
    .style("font-weight", "bolder");
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="clockAxisSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = width;
+// const margin = ( width - height ) / 2; 此例不用另外設定margin
+
+const clockAxisSvgRef = ref(null);
+
+onMounted(() => {
+  const svg = d3.select(clockAxisSvgRef.value);
+
+  // 設定變數
+  const clockRadius = height / 3;  // 時鐘半徑，設定為<svg>高度的三分之一
+  const minuteTickInnerRadius = clockRadius - 10;  // 分鐘刻度線長度，設定為10
+  const hourTickInnerRadius = clockRadius - 17;  // 小時刻度線長度，設定為17
+  const degToRad = Math.PI / 180;  // 弧度，將度數轉換為弧度
+  const minuteLabelRadius = clockRadius + 15;  // 分鐘文字標籤半徑，設定為時鐘半徑+15
+  const minuteLabelYOffset = 5;  // 分鐘文字標籤Y方向的偏移量（y位置為文字基線，需再修正），避免標籤與刻度線重疊
+  const hourLabelRadius = clockRadius - 35;  // 小時文字標籤半徑，設定為時鐘半徑-15
+  const hourLabelYOffset = 6;  // 小時文字標籤Y方向上的偏移量（y位置為文字基線，需再修正）
+
+  // 設定小時刻度比例尺和分鐘刻度比例尺
+  // 小時比例尺（12小時映射到360度）
+  const hourScale = d3.scaleLinear()
+                      .domain([0, 12])
+                      .range([0, 360]);
+  // 分鐘比例尺（60分鐘映射到360度）
+  const minuteScale = d3.scaleLinear()
+                        .domain([0, 60])
+                        .range([0, 360]);
+
+  // 建立<g>，起始點移動到<svg>中心
+  const G = svg.append("g")` + "\n" +
+'               .attr("transform", `translate(${[Math.round( width / 2 ), Math.round( height / 2 )]})`);' + "\n" +
+`
+  // 分鐘刻度
+  G.selectAll(".minuteTicks")
+   .data(d3.range(0, 60))  // 建立0到59的數列
+   .join("line")
+   .attr("class", "minuteTicks")
+   .attr("x1", "0")
+   .attr("x2", "0")
+   .attr("y1", clockRadius)
+   .attr("y2", minuteTickInnerRadius)
+   .attr("stroke-width", "3")
+   .attr("stroke", "black")` + "\n" +
+'   .attr("transform", (d) => `rotate(${minuteScale(d)})`);' + "\n" +
+`
+  // 分鐘數字標籤
+  G.selectAll(".minuteLabels")
+   .data(d3.range(5, 61, 5))  // 5到60，間隔5
+   .join("text")
+   .attr("class", "minuteLabels")
+   .attr("x", (d) => minuteLabelRadius * Math.sin(minuteScale(d) * degToRad))  // 標籤的半徑乘以sin(比例尺承弧度)
+   .attr("y", (d) => -minuteLabelRadius * Math.cos(minuteScale(d) * degToRad) + minuteLabelYOffset)  // 標籤的半徑乘以cos(比例尺承弧度)
+   .text((d) => d)
+   .attr("text-anchor", "middle")
+   .attr("font-size", "14")
+   .style("fill", "#a0a0a0");
+
+  // 時鐘刻度
+  G.selectAll(".hourTicks")
+   .data(d3.range(0, 12))  // 建立0到11的數列
+   .join("line")
+   .attr("class", "hourTicks")
+   .attr("x1", "0")
+   .attr("x2", "0")
+   .attr("y1", clockRadius)
+   .attr("y2", hourTickInnerRadius)
+   .attr("stroke-width", "5")
+   .attr("stroke", "black")` + "\n" +
+'   .attr("transform", (d) => `rotate(${hourScale(d)})`);' + "\n" +
+`
+  // 時鐘數字標籤
+  G.selectAll(".hourLabels")
+   .data(d3.range(3, 13, 3))  // 3到12，間隔3
+   .join("text")
+   .attr("class", "hourLabels")
+   .attr("x", (d) => hourLabelRadius * Math.sin(hourScale(d) * degToRad))  // 標籤的半徑乘以sin(比例尺承弧度)
+   .attr("y", (d) => -hourLabelRadius * Math.cos(hourScale(d) * degToRad) + hourLabelYOffset)  // 標籤的半徑乘以cos(比例尺承弧度)
+   .text((d) => d)
+   .attr("text-anchor", "middle")
+   .style("font-weight", "bolder");
+});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "響應式圖表",
             detailSubtitle: "使用現有寬度來調整寬度大小（需重新整理）。當放置在 Bootstrap 標籤頁（Tabs）裡非首頁時，渲染可能會失敗。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsRWDAxisTestDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="RWDAxisTest"></div>
@@ -3736,7 +3837,54 @@ onMounted(() => {
 '    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
 `</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<!-- 本例僅在初次掛載時依容器寬度渲染，無監聽resize事件，視窗調整後不會自動更新 -->
+
+<template>
+  <svg
+    ref="rwdAxisTestSvgRef"
+    :width="rwdAxisTestCurrentWidth"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const rwdAxisTestSvgRef = ref(null);
+
+// 圖表尺寸與內邊距設定（初始化）
+const rwdAxisTestCurrentWidth = ref("100%");
+const height = 300;
+const rwdAxisTestCurrentMargin = Math.abs((rwdAxisTestCurrentWidth.value - height) / 2);
+
+onMounted(() => {
+  // 圖表尺寸與內邊距設定（需掛載完成才計算）
+  const rwdAxisTestCurrentWidth = parseInt(d3.select(rwdAxisTestSvgRef.value).style("width"));
+  const height = 300;
+  const rwdAxisTestCurrentMargin = rwdAxisTestCurrentWidth > height
+    ? ( rwdAxisTestCurrentWidth - height ) / 2
+    : ( height - rwdAxisTestCurrentWidth ) / 2;
+
+  // 設定比例尺
+  const xScale = d3.scaleLinear()
+                   .domain([0, 100])
+                   .range([rwdAxisTestCurrentMargin, rwdAxisTestCurrentWidth - rwdAxisTestCurrentMargin]);
+
+  // 設定軸線產生方式
+  const xAxisGenerator = d3.axisTop(xScale);
+
+  // 再建立<g>元素，並呼叫軸線產生方法，生成軸線
+  d3.select(rwdAxisTestSvgRef.value)
+    .append("g")
+    .call(xAxisGenerator)` + "\n" +
+'    .attr("transform", `translate(0, ${ height / 2 })`);' + "\n" +
+`});
+</script>
+
+<style scoped></style>`
             }
           }
         ]

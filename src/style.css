@@ -29,7 +29,7 @@ pre code {
 code:not(pre code) {
   background-color: #f4f4f4;
   padding: 0.2em 0.4em;
-  white-space: break-spaces;
+  white-space: nowrap;
   border-radius: 6px;
   color: #c7254e;
   font-family: "Monaspace Neon", ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;

@@ -1888,9 +1888,12 @@ console.log("pointStepTest", pointScale.step());  // return 50`,
   <li><code>&lt;path&gt;</code>：一條直線，繪製軸線的線段。</li>
   <li><code>&lt;line&gt;</code>：一組延著軸線的刻度記號。</li>
   <li><code>&lt;text&gt;</code>：每個刻度記號的標籤文字。</li>
+
+  <p style="color: #248666;"><i>（右下待補圖（SvgCoordinateComparison.vue））</i></p>
 </ul>`,
     descriptionComponent: defineAsyncComponent(() =>
       import("../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/D3jsAxesGraphExplanation.vue")
+      // 可再視情況加上 ../../../components/WebNoteView/D3jsNoteView/D3jsAxesNote/SvgCoordinateComparison.vue
     ),
     descriptionComponentStyle: null,
     lists: [
@@ -3911,7 +3914,9 @@ onMounted(() => {
           {
             detailTitle: "瞬間移動",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAnimationNote/D3jsMoveDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="move" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
@@ -3935,13 +3940,121 @@ onMounted(() => {
   });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="moveSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+  <div class="btn-container">
+    <button
+      type="button"
+      class="move-btn"
+      @click="move"
+    >
+      移動
+    </button>
+    <button
+      type="button"
+      class="reset-btn"
+      @click="reset"
+    >
+      回復
+    </button>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const moveSvgRef = ref(null);
+let moveRect = null;
+
+onMounted(() => {
+  moveRect = d3.select(moveSvgRef.value)
+               .append("rect")
+               .attr("width", 40)
+               .attr("height", 40)
+               .attr("fill", "#f68b47")
+               .attr("stroke", "#f68b47");
+});
+
+const move = () => {
+  moveRect.attr("transform", "translate(140, 60)");
+};
+
+const reset = () => {
+  moveRect.attr("transform", "translate(0, 0)");
+};
+</script>
+
+<style scoped>
+.btn-container {
+  display: flex;
+  gap: 5px;
+}
+
+.move-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #0d6efd;
+  background-color: #ffffff;
+  border: 1px solid #0d6efd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.move-btn:hover {
+  color: #ffffff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.reset-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #dc3545;
+  background-color: #ffffff;
+  border: 1px solid #dc3545;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.reset-btn:hover {
+  color: #ffffff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+</style>`
             }
           },
           {
             detailTitle: "<code>selection.transition()</code> 平滑移動",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAnimationNote/D3jsTransitionDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="transition" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
@@ -3966,13 +4079,123 @@ onMounted(() => {
   });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="transitionSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+  <div class="btn-container">
+    <button
+      type="button"
+      class="move-btn"
+      @click="move"
+    >
+      移動
+    </button>
+    <button
+      type="button"
+      class="reset-btn"
+      @click="reset"
+    >
+      回復
+    </button>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const transitionSvgRef = ref(null);
+let transitionRect = null;
+
+onMounted(() => {
+  transitionRect = d3.select(transitionSvgRef.value)
+                     .append("rect")
+                     .attr("width", 40)
+                     .attr("height", 40)
+                     .attr("fill", "#f68b47")
+                     .attr("stroke", "#f68b47");
+});
+
+const move = () => {
+  transitionRect.transition()  // 使用transition()
+                .attr("transform", "translate(140, 60)");
+};
+
+const reset = () => {
+  transitionRect.transition()  // 使用transition()
+                .attr("transform", "translate(0, 0)");
+};
+</script>
+
+<style scoped>
+.btn-container {
+  display: flex;
+  gap: 5px;
+}
+
+.move-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #0d6efd;
+  background-color: #ffffff;
+  border: 1px solid #0d6efd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.move-btn:hover {
+  color: #ffffff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.reset-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #dc3545;
+  background-color: #ffffff;
+  border: 1px solid #dc3545;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.reset-btn:hover {
+  color: #ffffff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+</style>`
             }
           },
           {
             detailTitle: "<code>transition.duration()</code> 設定持續時間",
             detailSubtitle: "單位：ms。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAnimationNote/D3jsTransitionDurationDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="transitionDuration" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
@@ -3998,13 +4221,124 @@ onMounted(() => {
   });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="transitionDurationSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+  <div class="btn-container">
+    <button
+      type="button"
+      class="move-btn"
+      @click="move"
+    >
+      移動
+    </button>
+    <button
+      type="button"
+      class="reset-btn"
+      @click="reset"
+    >
+      回復
+    </button>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const transitionDurationSvgRef = ref(null);
+let transitionDurationRect = null;
+
+onMounted(() => {
+  transitionDurationRect = d3.select(transitionDurationSvgRef.value)
+                             .append("rect")
+                             .attr("width", 40)
+                             .attr("height", 40)
+                             .attr("fill", "#f68b47")
+                             .attr("stroke", "#f68b47");
+});
+
+const move = () => {
+  transitionDurationRect.transition()
+                        .duration(2000)  // 設定動畫時間持續2秒鐘
+                        .attr("transform", "translate(140, 60)");
+};
+
+const reset = () => {
+  transitionDurationRect.transition()
+                        .attr("transform", "translate(0, 0)");
+};
+</script>
+
+<style scoped>
+.btn-container {
+  display: flex;
+  gap: 5px;
+}
+
+.move-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #0d6efd;
+  background-color: #ffffff;
+  border: 1px solid #0d6efd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.move-btn:hover {
+  color: #ffffff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.reset-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #dc3545;
+  background-color: #ffffff;
+  border: 1px solid #dc3545;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.reset-btn:hover {
+  color: #ffffff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+</style>`
             }
           },
           {
             detailTitle: "逐漸改變顏色",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAnimationNote/D3jsTransitionColorDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="transitionColor" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
@@ -4035,13 +4369,129 @@ onMounted(() => {
   });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="transitionColorSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+  <div class="btn-container">
+    <button
+      type="button"
+      class="change-color-btn"
+      @click="changeColor"
+    >
+      變色
+    </button>
+    <button
+      type="button"
+      class="reset-btn"
+      @click="reset"
+    >
+      回復
+    </button>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const transitionColorSvgRef = ref(null);
+let transitionColorRect = null;
+
+onMounted(() => {
+  transitionColorRect = d3.select(transitionColorSvgRef.value)
+                          .append("rect")
+                          .attr("width", 40)
+                          .attr("height", 40)
+                          .attr("fill", "#f68b47")
+                          .attr("stroke", "#f68b47")
+                          .attr("transform", "translate(140, 60)");
+});
+
+const changeColor = () => {
+  transitionColorRect.transition()
+                     .duration(1000)
+                     .attr("fill", "green")
+                     .attr("stroke-width", 6)
+                     .attr("stroke", "red");
+};
+
+const reset = () => {
+  transitionColorRect.transition()
+                     .attr("fill", "#f68b47")
+                     .attr("stroke-width", 1)
+                     .attr("stroke", "#f68b47");
+};
+</script>
+
+<style scoped>
+.btn-container {
+  display: flex;
+  gap: 5px;
+}
+
+.change-color-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #0d6efd;
+  background-color: #ffffff;
+  border: 1px solid #0d6efd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.change-color-btn:hover {
+  color: #ffffff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.reset-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #dc3545;
+  background-color: #ffffff;
+  border: 1px solid #dc3545;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.reset-btn:hover {
+  color: #ffffff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+</style>`
             }
           },
           {
             detailTitle: "<code>transition.delay()</code> 延遲發動動畫的時間",
             detailSubtitle: "本例為逐漸移動再改變顏色",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAnimationNote/D3jsTransitionColorAndDelayDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="transitionColorAndDelay" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
@@ -4076,13 +4526,135 @@ onMounted(() => {
   });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="transitionColorAndDelaySvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+  <div class="btn-container">
+    <button
+      type="button"
+      class="move-and-change-btn"
+      @click="moveAndChangeColor"
+    >
+      開始動作
+    </button>
+    <button
+      type="button"
+      class="reset-btn"
+      @click="reset"
+    >
+      回復
+    </button>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const transitionColorAndDelaySvgRef = ref(null);
+let transitionColorAndDelayRect = null;
+
+onMounted(() => {
+  transitionColorAndDelayRect = d3.select(transitionColorAndDelaySvgRef.value)
+                                  .append("rect")
+                                  .attr("width", 40)
+                                  .attr("height", 40)
+                                  .attr("fill", "#f68b47")
+                                  .attr("stroke", "#f68b47");
+});
+
+const moveAndChangeColor = () => {
+  transitionColorAndDelayRect.transition()  // 這裡開始第一段動畫
+                             .duration(1500)
+                             .delay(300)  // 按下按鈕後，延遲0.3秒再執行下列動作
+                             .attr("transform", "translate(140, 60)")
+                             .transition()  // 這裡開始第二段動畫
+                             .delay(500)  // 移動到定位後，延遲0.5秒再執行下列動作
+                             .attr("fill", "green")
+                             .attr("stroke-width", 6)
+                             .attr("stroke", "red");
+};
+
+const reset = () => {
+  transitionColorAndDelayRect.transition()
+                             .attr("fill", "#f68b47")
+                             .attr("stroke-width", 1)
+                             .attr("stroke", "#f68b47")
+                             .transition()
+                             .delay(300)
+                             .attr("transform", "translate(0, 0)");
+};
+</script>
+
+<style scoped>
+.btn-container {
+  display: flex;
+  gap: 5px;
+}
+
+.move-and-change-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #0d6efd;
+  background-color: #ffffff;
+  border: 1px solid #0d6efd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.move-and-change-btn:hover {
+  color: #ffffff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.reset-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #dc3545;
+  background-color: #ffffff;
+  border: 1px solid #dc3545;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.reset-btn:hover {
+  color: #ffffff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+</style>`
             }
           },
           {
             detailTitle: "<code>transition.delay()</code> 動畫逐漸發動",
             detailSubtitle: "本例為球依次移動。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAnimationNote/D3jsDelayCircleMove.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="delayCircleMove" style="border: 1px solid rgb(103, 102, 102);"></svg><br>
@@ -4098,14 +4670,14 @@ onMounted(() => {
   // 160 140 120 100 ... 20
 
   const delayCircleMove = d3.select("#delayCircleMove")
-                                .selectAll("circle")
-                                .data(dataDelay)
-                                .join("circle")
-                                .attr("cx", (d) => d)
-                                .attr("cy", 30)
-                                .attr("r", 15)
-                                .attr("fill", "#f48b47")
-                                .attr("opacity", 0.5);
+                            .selectAll("circle")
+                            .data(dataDelay)
+                            .join("circle")
+                            .attr("cx", (d) => d)
+                            .attr("cy", 30)
+                            .attr("r", 15)
+                            .attr("fill", "#f48b47")
+                            .attr("opacity", 0.5);
 
   document.querySelector("#delayCircleMoveBtn").addEventListener("click", () => {
     delayCircleMove.transition()
@@ -4120,13 +4692,130 @@ onMounted(() => {
   });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="delayCircleMoveSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+  <div class="btn-container">
+    <button
+      type="button"
+      class="move-btn"
+      @click="move"
+    >
+      開始動作
+    </button>
+    <button
+      type="button"
+      class="reset-btn"
+      @click="reset"
+    >
+      回復上一動
+    </button>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const delayCircleMoveSvgRef = ref(null);
+let circles = null;
+const dataDelay = Array.from({ length: 8}, (d, i) => 160 - i * 20);  // 用Array.from()設定延遲時間
+// [160, 140, 120, 100, ... 20]
+
+onMounted(() => {
+  circles = d3.select(delayCircleMoveSvgRef.value)
+              .selectAll("circle")
+              .data(dataDelay)
+              .join("circle")
+              .attr("cx", (d) => d)
+              .attr("cy", 30)
+              .attr("r", 15)
+              .attr("fill", "#f48b47")
+              .attr("opacity", 0.5);
+});
+
+const move = () => {
+  circles.transition()
+         .delay((d, i) => i * 200)  // 分別延遲
+         .attr("cx", (d) => d + 120);  // 位移距離
+};
+
+const reset = () => {
+  circles.transition()
+         .delay((d, i) => 1600 - i * 200)  // 先進後出
+         .attr("cx", (d) => d);  // 回復原位（每個圓形<circle>的cx起始位置就是它的d值，它們在前面就「記住了」自己的資料值）
+};
+</script>
+
+<style scoped>
+.btn-container {
+  display: flex;
+  gap: 5px;
+}
+
+.move-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #0d6efd;
+  background-color: #ffffff;
+  border: 1px solid #0d6efd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.move-btn:hover {
+  color: #ffffff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+
+.reset-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #dc3545;
+  background-color: #ffffff;
+  border: 1px solid #dc3545;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.reset-btn:hover {
+  color: #ffffff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+</style>`
             }
           },
           {
             detailTitle: "<code>transition.ease()</code>",
             detailSubtitle: "ease動畫展示。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAnimationNote/D3jsEaseDemonstration.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="easeDemonstration" class="mt-1" style="border: 1px solid rgb(103, 102, 102);"></svg>

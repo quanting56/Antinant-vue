@@ -42,8 +42,8 @@ function closeWindow() {
   cursor: pointer;
   transition:
     color 0.15s ease-in-out,
-    background-color 0.15s ease-in-out;
-    border-color: 0.15s ease-in-out;
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
 }
 
 .open-document-button:hover {
@@ -65,8 +65,8 @@ function closeWindow() {
   cursor: pointer;
   transition:
     color 0.15s ease-in-out,
-    background-color 0.15s ease-in-out;
-    border-color: 0.15s ease-in-out;
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
 }
 
 .close-window-button:hover {

@@ -1,1 +1,0 @@
-import"./transform-BGpuWWbS.js";import{r as s,o as c,c as r,f as n,u as i}from"./index-CSRsMGOp.js";const l=["height"],e=300,g={__name:"D3jsClockAxisDemo",setup(a){const t=e,o=s(null);return c(()=>{}),(h,_)=>(n(),r("svg",{ref_key:"clockAxisSvgRef",ref:o,width:e,height:i(t),style:{border:"1px solid lightgray"}},null,8,l))}};export{g as default};

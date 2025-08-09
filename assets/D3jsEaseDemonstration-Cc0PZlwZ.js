@@ -1,1 +1,0 @@
-import"./transform-BGpuWWbS.js";import{r as t,c as s,f as o}from"./index-Dky9J6f4.js";const r=300,n=200,m={__name:"D3jsEaseDemonstration",setup(a){const e=t(null);return(c,i)=>(o(),s("svg",{ref_key:"easeDemonstrationSvgRef",ref:e,width:r,height:n,style:{border:"1px solid lightgray"}},null,512))}};export{m as default};

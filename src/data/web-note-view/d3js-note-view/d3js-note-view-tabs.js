@@ -4854,13 +4854,113 @@ const reset = () => {
   };
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="easeDemonstrationSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+  <div class="ease-container">
+    <select v-model="selectedEase" class="ease-select">
+      <option value="">請選擇</option>
+      <option
+        v-for="ease in easeNames"
+        :key="ease"
+        :value="ease"
+      >
+        d3.{{ ease }}
+      </option>
+    </select>
+
+    <button
+      type="button"
+      class="ease-button"
+      @click="updateEase"
+    >
+      Ease 開始
+    </button>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const easeDemonstrationSvgRef = ref(null);
+const selectedEase = ref("");
+const easeNames = Object.keys(d3).filter(((d) => d.startsWith("ease")));
+
+let easeDot = null;
+
+onMounted(() =>{
+  // 建立圓點
+  easeDot = d3.select(easeDemonstrationSvgRef.value)
+              .append("circle")
+              .attr("cx", 40)
+              .attr("cy", 40)
+              .attr("r", 30)
+              .attr("fill", "#f68b47");
+});
+
+const updateEase = () => {
+  if (!selectedEase) return;
+
+  easeDot.attr("cx", 40)  // 回原點
+         .transition()
+         .duration(500)
+         .ease(d3[selectedEase.value])  // 設定動畫效果
+         .attr("cx", 200);
+};
+</script>
+
+<style scoped>
+.ease-container {
+  display: flex;
+  gap: 8px
+}
+
+.ease-select {
+  font-size: 16px;
+  padding-left: 6px;
+}
+
+.ease-button {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #0d6efd;
+  background-color: #ffffff;
+  border: 1px solid #0d6efd;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.ease-button:hover {
+  color: #ffffff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+</style>`
             }
           },
           {
             detailTitle: "<code>transition.on(<i>typename[, 想執行的程式]</i>)</code>",
             detailSubtitle: "<code>typename = ['start', 'end', 'interrupt', 'cancel']</code>",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsAnimationNote/D3jsLoopAnimationDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="loopAnimation" style="border: 1px solid rgb(103, 102, 102);"></svg>
@@ -4891,7 +4991,54 @@ const reset = () => {
   };
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="loopAnimationSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const loopAnimationSvgRef = ref(null);
+
+onMounted(() => {
+  d3.select(loopAnimationSvgRef.value)
+    .append("circle")
+    .attr("cx", 50)
+    .attr("cy", 50)
+    .attr("r", 25)
+    .attr("fill", "#f68b47")
+    .transition()
+    .duration(2000)
+    .on("start", goRight);
+
+  function goRight() {
+    d3.active(this)  // 取得正在進行中的過渡效果（transition）的函數
+      .attr("cx", 250)
+      .transition()
+      .on("start", goLeft);
+  };
+
+  function goLeft() {
+    d3.active(this)  // 取得正在進行中的過渡效果（transition）的函數
+      .attr("cx", 50)
+      .transition()
+      .on("start", goRight);
+  };
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]
@@ -4918,7 +5065,9 @@ const reset = () => {
           {
             detailTitle: "<code>selection.on()</code> 滑鼠觸發事件 - 點擊",
             detailSubtitle: '點擊事件發生。此處使用 <code>.on("click", listener)</code>。',
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsMouseEventNote/D3jsClickSvgDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="clickSVG" style="border: 1px solid rgb(103, 102, 102);"></svg>
@@ -4954,13 +5103,67 @@ const reset = () => {
   });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="clickSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const clickSvgRef = ref(null);
+let isMoved = false;  // 用來追蹤圓球是否已經移動
+
+onMounted(() => {
+  const clickCircle = d3.select(clickSvgRef.value)
+                        .append("circle")
+                        .attr("cx", 30)
+                        .attr("cy", 30)
+                        .attr("r", 20)
+                        .attr("fill", "#f68b47")
+                        .attr("cursor", "pointer");
+
+  clickCircle.on("click", (e) => {
+    if (!isMoved) {
+      d3.select(e.target)
+        .transition()
+        .ease(d3.easeBack)
+        .duration(1000)
+        .attr("fill", "blue")
+        .attr("transform", "translate(240, 0)");
+      isMoved = true;  // 更新狀態為已移動
+    } else {
+      d3.select(e.target)
+        .transition()
+        .ease(d3.easeBack)
+        .duration(1000)
+        .attr("fill", "#f68b47")
+        .attr("transform", "translate(0, 0)");
+      isMoved = false;  // 更新狀態為未移動
+    };
+  })
+});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "<code>selection.on()</code> 滑鼠觸發事件 - 拂過",
             detailSubtitle: '滑鼠拂過變色。此處使用 <code>.on("mouseover", listener)</code> 與 <code>.on("mouseleave", listener)</code>。',
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsMouseEventNote/D3jsMouseOverDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="mouseoverSVG" style="border: 1px solid rgb(103, 102, 102);"></svg>
@@ -4990,13 +5193,60 @@ const reset = () => {
     });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="mouseOverSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const mouseOverSvgRef = ref(null);
+
+onMounted(() => {
+  const mouseOverCircle = d3.select(mouseOverSvgRef.value)
+                            .append("circle")
+                            .attr("cx", 20)
+                            .attr("cy", 20)
+                            .attr("r", 50)
+                            .attr("cursor", "pointer")
+                            .attr("fill", "#f68b47")
+                            .attr("transform", "translate(130, 55)");
+
+  mouseOverCircle.on("mouseover", (e) => {
+                    d3.select(e.target)
+                      .transition()
+                      .duration(2000)
+                      .attr("fill", "blue");
+                  })
+                  .on("mouseleave", (e) => {
+                    d3.select(e.target)
+                      .transition()
+                      .duration(2000)
+                      .attr("fill", "#f68b47");
+                  });
+});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "<code>d3.pointer(<i>event[, target]</i>)</code> 取得 DOM 節點的座標軸座標",
             detailSubtitle: "<code>event</code> 代表進行的事件；<code>target</code> 代表指定（要顯示座標）的目標。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsMouseEventNote/D3jsPointerSvgDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<svg id="pointerSVG" style="border: 1px solid rgb(103, 102, 102);"></svg>

@@ -1,1 +1,0 @@
-import"./transform-B8o8CA6g.js";import{r as t,c as o,f as r}from"./index-dDlPNz8Q.js";const a=300,c=200,p={__name:"D3jsAdvancedTooltipDemo",setup(n){const e=t(null);return(s,l)=>(r(),o("svg",{ref_key:"advancedTooltipSvgRef",ref:e,width:a,height:c,style:{border:"1px solid lightgray"}},null,512))}};export{p as default};

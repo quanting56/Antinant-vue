@@ -1,1 +1,0 @@
-import"./transform-B8o8CA6g.js";import{r as e,c as s,f as r}from"./index-dDlPNz8Q.js";const o=300,c=200,h={__name:"TestTestTestView",setup(n){const t=e(null);return(l,a)=>(r(),s("svg",{ref_key:"TEst",ref:t,width:o,height:c,style:{border:"1px solid lightgray"}},null,512))}};export{h as default};

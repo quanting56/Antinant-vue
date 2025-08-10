@@ -5273,13 +5273,60 @@ onMounted(() => {
     });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="pointerSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray; cursor: pointer;"
+    @mousemove="onMouseMove"
+    @mouseleave="onMouseLeave"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const pointerSvgRef = ref(null);
+let pointerTxt = null;
+
+onMounted(() => {
+  const pointerSvg = d3.select(pointerSvgRef.value);
+  pointerTxt = pointerSvg.append("text")
+                         .style("display", "none");
+});
+
+// 滑鼠移動時顯示座標
+const onMouseMove = (e) => {
+  const [x, y] = d3.pointer(e, pointerSvgRef.value);
+
+  pointerTxt.attr("x", x)
+            .attr("y", y)` + "\n" +
+'            .text(`x: ${Math.floor(x)}, y: ${Math.floor(y)}`)' + "\n" +
+`            .style("display", "block");
+};
+
+// 滑鼠離開時隱藏文字
+const onMouseLeave = () => {
+  pointerTxt.style("display", "none");  // 離開SVG後不顯示文字
+};
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "工具提示框（Tooltips）",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsMouseEventNote/D3jsTooltipDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="tooltip"></div>
@@ -5324,13 +5371,84 @@ onMounted(() => {
     });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div style="position: relative;">
+    <svg
+      ref="tooltipSvgRef"
+      :width="width"
+      :height="height"
+      style="border: 1px solid lightgray;"
+    ></svg>
+    <div
+      v-show="isTooltipVisible"
+      style="position: absolute; top: 15px; left: 220px;"
+      class="tooltip"
+    >
+      <p>
+        <b>我是Tooltip</b><br />
+        這裡可以放入想放入的文字，<br />
+        也可以插入圖片
+      </p>
+      <img :src="tooltipImg" width="60px">
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+import tooltipImg from "../../../../assets/IMG_2073.jpg";
+
+// 圖表尺寸與內邊距設定
+const width = 200;
+const height = 200;
+
+const tooltipSvgRef = ref(null);
+const isTooltipVisible = ref(false);
+let tooltipCircle = null;
+
+onMounted(() => {
+  const tooltipSvg = d3.select(tooltipSvgRef.value);
+
+  tooltipCircle = tooltipSvg.append("circle")
+                            .attr("cx", 100)
+                            .attr("cy", 100)
+                            .attr("r", 40)
+                            .attr("cursor", "pointer")
+                            .attr("fill", "#f6cefc")
+                            .on("mouseover", () => {
+                              isTooltipVisible.value = true;
+                            })
+                            .on("mouseleave", () => {
+                              isTooltipVisible.value = false;
+                            });
+});
+</script>
+
+<style scoped>
+.tooltip {
+  border: 1px solid black;
+  border-radius: 5px;
+  padding: 8px;
+}
+
+.tooltip p {
+  margin-top: 4px;
+}
+
+.tooltip img {
+  margin-bottom: 0;
+}
+</style>`
             }
           },
           {
             detailTitle: "進階工具提示框（Tooltips）",
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsMouseEventNote/D3jsAdvancedTooltipDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="d3jsMouseEventAdvancedTooltip"></div>
@@ -5352,7 +5470,7 @@ onMounted(() => {
   
   // 設定顏色
   const rData = data.map((d) => d.r);
-  const colors = d3.scaleOrdinal(d3.schemeTableau10)  // 因'd3.schemeTableau10'已預設輸出域，所以不有另設定'.range()'
+  const colors = d3.scaleOrdinal(d3.schemeTableau10)  // 因'd3.schemeTableau10'已預設輸出域，所以不用另外設定'.range()'
                    .domain(rData);
 
   // 建立圓點
@@ -5392,13 +5510,104 @@ onMounted(() => {
     });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div style="position: relative;">
+    <svg
+      ref="advancedTooltipSvgRef"
+      :width="width"
+      :height="height"
+      style="border: 1px solid lightgray;"
+    ></svg>
+
+    <!-- tooltip -->
+    <div
+      v-show="tooltip.visible"
+      :style="{
+        left: tooltip.x + 'px',
+        top: tooltip.y + 'px',
+      }"
+      class="tooltip"
+    >
+      {{ tooltip.text }}
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, reactive } from "vue";
+import * as d3 from "d3";
+
+const advancedTooltipSvgRef = ref(null);
+const tooltip = reactive({
+  visible: false,
+  x: 0,
+  y: 0,
+  text: ""
+});
+
+const data = [
+  {r: 17, x: 134, y: 181},
+  {r: 23, x: 294, y: 131},
+  {r: 14, x: 84, y: 273},
+  {r: 9, x: 323, y: 59},
+  {r: 18, x: 172, y: 251},
+  {r: 26, x: 404, y: 154}
+];
+
+// 圖表尺寸與內邊距設定
+const width = d3.max(data, (d) => d.x) + 50;
+const height = d3.max(data, (d) => d.y) + 50;
+
+onMounted(() => {
+  const svg = d3.select(advancedTooltipSvgRef.value);
+
+  // 設定顏色
+  const rData = data.map((d) => d.r);
+  const colors = d3.scaleOrdinal(d3.schemeTableau10)  // 因'd3.schemeTableau10'已預設輸出域，所以不用另外設定'.range()'
+                   .domain(rData);
+
+  // 建立圓點
+  svg.selectAll("circle")
+     .data(data)
+     .join("circle")
+     .attr("cx", (d) => d.x)
+     .attr("cy", (d) => d.y)
+     .attr("r", (d) => d.r)
+     .attr("fill", (d) => colors(d.x))
+     .style("cursor", "pointer")
+     .on("mouseover", () => {
+       tooltip.visible = true;
+     })
+     .on("mousemove", (e, d) => {
+       const pt = d3.pointer(e, svg.node());
+       tooltip.x = pt[0] + 30;
+       tooltip.y = pt[1];` + "\n" +
+'       tooltip.text = `圓半徑： ${d.r}`;' + "\n" +
+`     })
+     .on("mouseleave", () => {
+       tooltip.visible = false;
+     });
+});
+</script>
+
+<style scoped>
+.tooltip {
+  position: absolute;
+  background-color: white;
+  border: 2px solid;
+  border-radius: 5px;
+  padding: 5px;
+}
+</style>`
             }
           },
           {
             detailTitle: "插入其他 html 頁面",
             detailSubtitle: "點擊以打開包含其他 web 的 Tooltip，再點擊一次關閉。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsMouseEventNote/D3jsMouseEventInsertHtmlWeb.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="d3jsMouseEventInsertHTMLWeb"></div>
@@ -5476,7 +5685,114 @@ onMounted(() => {
     });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div class="tooltip-container">
+    <svg
+      class="tooltip-svg"
+      ref="insertHtmlSvgRef"
+      :width="width"
+      :height="height"
+    ></svg>
+
+    <div
+      class="tooltip-html"
+      v-show="tooltip.visible"
+      :style="{ left: tooltip.x + 'px', top: tooltip.y + 'px' }"
+      v-html="tooltip.html"
+    ></div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, reactive } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 200;
+const height = 200;
+
+const insertHtmlSvgRef = ref(null);
+const tooltip = reactive({
+  visible: false,
+  x: 0,
+  y: 0,
+  html: ""
+});
+
+let isClick = false;
+
+onMounted(() => {
+  const svg = d3.select(insertHtmlSvgRef.value)
+                .append("g")
+                .style("cursor", "pointer");
+
+  const circle = svg.append("circle")
+                    .attr("cx", 100)
+                    .attr("cy", 100)
+                    .attr("r", 60)
+                    .attr("fill", "#69b3a2");
+
+  // btnIcon的文字
+  svg.append("text")
+     .text("按鈕")
+     .attr("fill", "#eeeeee")
+     .attr("x", 100)
+     .attr("y", 110)
+     .attr("text-anchor", "middle")
+     .attr("font-size", 30)
+     .attr("font-family", "sans-serif");
+
+  svg
+    .on("click", () => {
+      if (!isClick) {
+        d3.html("https://quanting56.github.io/Antinant/study/statistics_note.html").then((doc) => {
+          const bodyContent = d3.select(doc).select("body").html();
+          tooltip.html = bodyContent;
+          tooltip.visible = true;
+
+          // MathJax.typesetPromise();  // 重新渲染MathJax公式（但前端使用上建議用CDN方式引入，真有需要再用）
+        });
+        isClick = true;
+      } else {
+        tooltip.visible = false;
+        isClick = false;
+      };
+    })
+    .on("mouseover", () => {
+      circle.attr("stroke", "#ffffff").attr("stroke-width", 5);
+    })
+    .on("mousemove", (e) => {
+      const pt = d3.pointer(e, svg.node());
+      tooltip.x = pt[0] + 40;
+      tooltip.y = pt[1] - 30;
+    })
+    .on("mouseleave", () => {
+      circle.attr("stroke-width", 0);
+    });
+});
+</script>
+
+<style scoped>
+.tooltip-container {
+  position: relative;
+}
+
+.tooltip-svg {
+  border: 1px solid lightgray;
+}
+
+.tooltip-html {
+  position: absolute;
+  border: 2px solid black;
+  border-radius: 10px;
+  width: 700px;
+  max-height: 600px;
+  overflow: auto;
+  background-color: #ffffff;
+  padding: 20px;
+}
+</style>`
             }
           }
         ]
@@ -5498,7 +5814,9 @@ onMounted(() => {
   <li><code>drag.on(<i>"typenames"[, listener]</i>)</code>：設定拖曳的細節，兩個參數分別是事件 <code>typenames</code> 與函式 <code>listener</code>，其中 <code>typenames</code> 有 <code>"start"</code>、<code>"dragged"</code>、<code>"end"</code> 三個階段。</li>
 </ul>`,
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsMouseEventNote/D3jsDragDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="d3jsDragContainer"></div>
@@ -5555,7 +5873,74 @@ onMounted(() => {
   dots.call(drag);
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="dragSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const dragSvgRef = ref(null);
+
+const data = [
+  {name: "A", x: 200, y: 340},
+  {name: "B", x: 220, y: 300},
+  {name: "C", x: 250, y: 198},
+  {name: "D", x: 360, y: 296},
+  {name: "E", x: 160, y: 150},
+  {name: "F", x: 320, y: 60},
+  {name: "G", x: 187, y: 250}
+];
+
+// 圖表尺寸與內邊距設定
+const width = d3.max(data, (d) => d.x + 40);
+const height = d3.max(data, (d) => d.y + 40);
+
+onMounted(() => {
+  // 建立圓點
+  const dots = d3.select(dragSvgRef.value)
+                 .append("g")
+                 .selectAll("circle")
+                 .data(data)
+                 .join("circle")
+                 .attr("r", 25)
+                 .attr("cx", (d) => d.x)
+                 .attr("cy", (d) => d.y)
+                 .style("fill", "#19d3a2")
+                 .style("fill-opacity", 0.3)
+                 .attr("stroke", "#b3a2c8")
+                 .attr("stroke-width", 4)
+                 .style("cursor", "pointer");
+
+  // 建立拖曳方法
+  // 在d3.drag()事件處理器中，應避免使用箭頭函數來確保"this"能綁定到正確的DOM元素
+  const drag = d3.drag()
+                 .on("start", function() {  // 因為要用"this"，所以用普通函數
+                   d3.select(this).style("stroke", "blue");
+                 })
+                 .on("drag", function(e) {  // 因為要用"this"，所以用普通函數
+                   const pt = d3.pointer(e, this);
+                   d3.select(this)
+                     .attr("cx", pt[0])
+                     .attr("cy", pt[1]);
+                 })
+                 .on("end", function() {  // 因為要用"this"，所以用普通函數
+                   d3.select(this).style("stroke", "#b3a2c8");
+                 });
+
+  // 呼叫拖曳方法
+  dots.call(drag);
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]
@@ -5585,12 +5970,14 @@ onMounted(() => {
 </code></pre>
 </ul>`,
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsMouseEventNote/D3jsZoomDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="zoomBasic"></div>
-
 <button id="resetBtn" type="button" class="btn btn-primary mt-2">重設</button>
+
 <script>
   const width = 450;
   const height = 300;
@@ -5617,7 +6004,9 @@ onMounted(() => {
                       .scaleExtent([1/5, 5])  // 縮放大小倍率限制
                       .duration(600)
                       .on("zoom", (e) => {
-                        const transform = e.transform;
+                        const transform = e.transform; // e.transform是一個d3.zoomTransform物件
+                        // transfrom裡面有transform.x、transform.y、transform.k三個參數可以調整
+                        // transform.x管x平移量，transform.y管y平移量，transform.k管縮放倍率
                         // 這邊決定要放大誰
                         // 使用transform.k調整選定元素屬性的transform的k，避免動到x、y造成元素位置改變
                         // 50為圓原半徑
@@ -5635,7 +6024,99 @@ onMounted(() => {
     });
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="zoomSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+  <div class="btn-container">
+    <button
+      type="button"
+      ref="zoomResetBtnRef"
+      class="reset-btn">重設</button>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 300;
+const height = 200;
+
+const zoomSvgRef = ref(null);
+const zoomResetBtnRef = ref(null);
+
+onMounted(() => {
+  // 加個圓點
+  const circle = d3.select(zoomSvgRef.value)
+                   .append("circle")
+                   .attr("id", "dot")
+                   .attr("cx", width / 2)
+                   .attr("cy", height / 2)
+                   .attr("r", 50)
+                   .attr("fill", "#69b3a2")
+                   .style("cursor", "pointer");
+
+  // 建立Zoom事件
+  const zoomEvent = d3.zoom()
+                      .scaleExtent([1/5, 5])  // 縮放大小倍率限制
+                      .duration(600)
+                      .on("zoom", (e) => {
+                        const transform = e.transform;  // e.transform是一個d3.zoomTransform物件
+                        // transfrom裡面有transform.x、transform.y、transform.k三個參數可以調整
+                        // transform.x管x平移量，transform.y管y平移量，transform.k管縮放倍率
+                        // 使用transform.k調整選定元素屬性的transform的k，避免動到x、y造成元素位置改變
+                        // 50為圓原半徑
+                        circle.attr("r", (d) => 50 * transform.k);
+                      });
+        
+  // 呼叫Zoom事件
+  circle.call(zoomEvent);
+
+  // 設立重置按鈕
+  d3.select(zoomResetBtnRef.value)
+    .on("click", () => {
+      const transformReset = d3.zoomIdentity.scale(1);
+      circle.transition()
+            .call(zoomEvent.transform, transformReset);
+    });
+});
+</script>
+
+<style scoped>
+.btn-container {
+  display: flex;
+  gap: 5px;
+}
+
+.reset-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #dc3545;
+  background-color: #ffffff;
+  border: 1px solid #dc3545;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.reset-btn:hover {
+  color: #ffffff;
+  background-color: #dc3545;
+  border-color: #dc3545;
+}
+</style>`
             }
           }
         ]
@@ -5659,7 +6140,9 @@ onMounted(() => {
   <li><code>brush.extent(<i>[[x0, y0], [x1, y1]]</i>)</code>：設定允許刷取的範圍，<code>[x0, y0]</code>為範圍左上角，<code>[x1, y1]</code> 為範圍右下角。</li>
 </ul>`,
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsMouseEventNote/D3jsBrushDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="brush"></div>
@@ -5722,7 +6205,78 @@ onMounted(() => {
   svg.call(brushEvent);
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="brushSvgRef"
+    :width="width"
+    :height="height"
+    style="border: 1px solid lightgray;"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const data = [
+  {r: 20, x: 200, y: 120},
+  {r: 35, x: 350, y: 280},
+  {r: 25, x: 120, y: 240},
+];
+
+// 圖表尺寸與內邊距設定
+const width = d3.max(data, (d) => d.x + 60);
+const height = d3.max(data, (d) => d.y + 60);
+
+const brushSvgRef = ref(null);
+
+onMounted(() => {
+  const svg = d3.select(brushSvgRef.value);
+
+  // 加上圓點
+  const dots = svg.selectAll("circle")
+                  .data(data)
+                  .join("circle")
+                  .attr("cx", (d) => d.x)
+                  .attr("cy", (d) => d.y)
+                  .attr("r", (d) => d.r)
+                  .style("fill", "#69b3a2");
+
+  // 設定brush的功能
+  // 使用e.selection取得目前的selection
+  // selection會產出一個二維陣列
+  // 分別代表'x0', 'x1', 'y0', 'y1'，左上到右下的位置
+  // 讓開發者有辦法重新計算目前位置的extent，進而進行其他操作。
+  const brushed = (e) => {
+    const brushExtent = e.selection;
+    dots.style("fill", (d) => 
+      isBrushed(brushExtent, d.x, d.y) ? "blue" : "#69b3a2"
+    );
+
+    // 判斷圓點是否在brush選到的區域內
+    function isBrushed (brush_coors, cx, cy) {  // 'brush_coors', 'cx', 'cy'三者皆僅為函數變數名
+      let x0 = brush_coors[0][0],
+          x1 = brush_coors[1][0],
+          y0 = brush_coors[0][1],
+          y1 = brush_coors[1][1];
+      return x0 <= cx && cx <= x1 && y0 <= cy && cy <= y1;  // 如果圓點在brush的範圍內，就會傳true：反之，則回傳false
+    };
+  };
+
+  // 建立brush事件
+  const brushEvent = d3.brush()
+                       .extent([
+                         [0, 0], [600, 600]
+                       ])  // extent限制刷子的活動區塊，理想是比SVG畫布稍大
+                       .on("start brush", brushed);  // 綁定brush事件
+
+  // 呼叫brush事件
+  svg.call(brushEvent);
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]

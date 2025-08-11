@@ -4,7 +4,9 @@
     :width="width"
     :height="height"
     style="border: 1px solid lightgray;"
-  ></svg>
+  >
+    <circle cx="60" cy="50" r="30" fill="#567866"></circle>
+  </svg>
 </template>
 
 <script setup>

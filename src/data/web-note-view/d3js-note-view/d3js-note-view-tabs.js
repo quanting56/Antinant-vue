@@ -6291,7 +6291,7 @@ onMounted(() => {
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
+        listTitle: "圓餅圖（Pie Chart）",
         listSubtitle: null,
         listComponent: null,
         listCode: {
@@ -6301,13 +6301,734 @@ onMounted(() => {
         },
         listDetails: [
           {
-            detailTitle: null,
-            detailSubtitle: null,
-            detailComponent: null,
+            detailTitle: "一般的圓餅圖",
+            detailSubtitle: "此處使用簡單格式的 data。",
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsPieChartNote/D3jsPieChartDemo.vue")
+            ),
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="pieChartExample"></div>
+
+<script>
+  const pieChartExampleWidth = 600;
+  const pieChartExampleHeight = 400;
+  const pieChartExampleMargin = 40;
+  const pieChartExampleData = [
+    { item: "交通", data: 3000 },
+    { item: "房租", data: 12000 },
+    { item: "日常用品", data: 1400 },
+    { item: "吃飯", data: 4000 },
+    { item: "交際應酬", data: 2400 }
+  ];
+
+  const pieChartExampleSVG = d3.select("#pieChartExample")
+                               .append("svg")
+                               .attr("width", pieChartExampleWidth)
+                               .attr("height", pieChartExampleHeight);
+
+  // 建立圓餅圖的群組元素'g'，用來容納圓餅圖的切片
+  pieChartExampleSVG.append("g")
+                    .attr("id", "pieChartExampleSlices")` + "\n" +
+'                    .attr("transform", `translate(${pieChartExampleWidth / 2}, ${pieChartExampleHeight / 2})`);' + "\n" +
+`
+  // 設定顏色比例尺，從'd3.schemeSet2'配色方案中選取顏色
+  const pieChartExampleColor = d3.scaleOrdinal().range(d3.schemeSet2);
+
+  // 設定圓餅圖的半徑
+  const pieChartExampleRadius = Math.min(pieChartExampleWidth, pieChartExampleHeight) / 2 - pieChartExampleMargin;
+
+  // 設定圓餅圖的生成器，指定根據'data'屬性來生成圖表
+  const pieChartExamplePieChartGenerator = d3.pie().value((d) => d.data);
+
+  // 設定每個圓餅圖切片的弧度生成器，定義內半徑和外半徑
+  const pieChartExampleArc = d3.arc()
+                               .innerRadius(0)  // 設定內半徑為0（實心圓）
+                               .outerRadius(pieChartExampleRadius)  // 設定外半徑為計算出的半徑值
+                               .padAngle(0);  // 設定每個切片之間的間隔角度為0
+
+  // 設定外弧，用於放置標籤或其他用途
+  const pieChartExampleOuterArc = d3.arc()
+                                    .outerRadius(pieChartExampleRadius)
+                                    .innerRadius(pieChartExampleRadius - 10);
+
+  // 使用圓餅圖生成器將資料轉換為可以繪製的形式
+  const pieChartExamplePieChartData = pieChartExamplePieChartGenerator(pieChartExampleData);
+
+  // 在群組元素中綁定資料並生成'path'元素，代表圓餅圖的每一塊
+  const pieChartExampleExpensesChart = pieChartExampleSVG.select("#pieChartExampleSlices")
+                                                         .selectAll("path")
+                                                         .data(pieChartExamplePieChartData)
+                                                         .join("path")
+                                                         .attr("d", pieChartExampleArc)  // 根據生成的弧形路徑繪製圓餅圖
+                                                         .attr("class", "pieChartExampleArc")  // 設定弧形們的class
+                                                         .attr("fill", pieChartExampleColor)  // 根據資料設定填充顏色
+                                                         .attr("stroke", "#ffffff")  // 設定弧形的邊框顏色為白色
+                                                         .attr("stroke-width", "3px")  // 設定邊框寬度為3像素
+                                                         .style("opacity", 1);  // 設定每個切片的透明度為1（不透明）
+
+  
+  // 加上每個區塊的數字標示，計算百分比並設定標籤文字
+  const pieChartExampleTotal = d3.sum(pieChartExampleData, (d) => d.data);  // 計算總支出金額
+  pieChartExampleData.forEach((i) => {  // 透過一個forEach迴圈，計算每項支出佔總額的百分比
+    i.percentage = Math.round((i.data / pieChartExampleTotal) * 100);  // 在原始data新增一個名為'percentage'的新屬性，儲存百分比
+  });
+
+  // 綁定標籤資料，生成'text'元素並設定位置、文字內容、樣式
+  const pieChartExampleLabels = d3.select("#pieChartExampleSlices")
+                                  .selectAll("text")
+                                  .data(pieChartExamplePieChartData)  // 需使用d3.pie()處理後的資料，因為原始資料沒有角度資訊
+                                  .join("text")
+                                  .attr("class", "pieChartExampleLabels")` + "\n" +
+'                                  .attr("transform", (d) => `translate(${pieChartExampleOuterArc.centroid(d)})`)  // ".centroid()"是取得圓弧線段中心的座標' + "\n" +
+`                                  .text((d) => d.data.item + " " + d.data.percentage + "%")  // 'd.data'是d3.pie()處理後的資料裡所包含的原始資料部分
+                                  .style("text-anchor", "middle")
+                                  .style("font-size", 16)
+                                  .style("fill", "black");
+
+  
+  // 設定滑鼠互動事件，當滑鼠移到圓餅圖的切片上時，切片會放大並產生陰影
+  d3.selectAll(".pieChartExampleArc")
+    .style("cursor", "pointer")
+    .on("mouseover", (e, d) => {  // 當滑鼠移到切片上時觸發
+      d3.select(e.target)
+        .transition()
+        .duration(500)
+        .style("transform", "scale(1.1)");  // 將切片放大至1.1倍
+
+      d3.selectAll(".pieChartExampleLabels")
+        .filter((labelData) => labelData.index === d.index)  // 選取對應的標籤
+        .transition()
+        .duration(500)
+        .style("font-size", "24px");
+    })
+    .on("mousemove", (d) => {
+      d3.select(d.target)
+        .style("filter", "drop-shadow(2px 4px 6px #000000)");  // 加上陰影效果
+    })
+    .on("mouseleave", (e, d) => {  // 當滑鼠離開切片時觸發
+      d3.select(e.target)
+        .transition()
+        .duration(500)
+        .style("filter", "drop-shadow(0 0 0 black)")  // 移除陰影效果
+        .style("transform", "scale(1)");  // 將切片還原到原始大小
+
+      d3.selectAll(".pieChartExampleLabels")
+        .filter((labelData) => labelData.index === d.index)  // 選取對應的標籤
+        .transition()
+        .duration(500)
+        .style("font-size", "16px");
+    });
+</script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="pieChartSvgRef"
+    :width="width"
+    :height="height"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 420;
+const height = 280;
+const margin = 15;
+
+const pieChartSvgRef = ref(null);
+
+const rawData = [
+  { item: "交通", cost: 3000 },
+  { item: "房租", cost: 12000 },
+  { item: "日常用品", cost: 1400 },
+  { item: "吃飯", cost: 4000 },
+  { item: "交際應酬", cost: 2400 }
+];
+
+onMounted(() => {
+  const svg = d3.select(pieChartSvgRef.value);
+
+  // 建立圓餅圖的群組元素"g"，用來容納圓餅圖的切片
+  const g = svg.append("g")` + "\n" +
+'               .attr("transform", `translate(${width / 2}, ${height / 2})`);' + "\n" +
+`
+  // 設定顏色比例尺，從"d3.schemeSet2"配色方案中選取顏色
+  const color = d3.scaleOrdinal().range(d3.schemeSet2);
+
+  // 設定圓餅圖的半徑
+  const radius = Math.min(width, height) / 2 - margin;
+
+  // 設定圓餅圖的生成器，指定根據"cost"屬性來生成圖表
+  const pieGenerator = d3.pie().value((d) => d.cost);
+
+  // 使用圓餅圖生成器將資料轉換為可以繪製的形式
+  const arcData = pieGenerator(rawData);
+
+  // 設定每個圓餅圖切片的弧度生成器，定義內半徑和外半徑
+  const arc = d3.arc()
+                .innerRadius(0)  // 設定內半徑為0（實心圓）
+                .outerRadius(radius)  // 設定外半徑為計算出的半徑值
+                .padAngle(0);  // 設定每個切片之間的間隔角度為0
+
+  // 設定外弧，用於放置標籤或其他用途
+  const outerArc = d3.arc()
+                     .innerRadius(radius - 10)
+                     .outerRadius(radius);
+
+  // 在群組元素中綁定資料並生成"path"元素，代表圓餅圖的每一塊
+  const slices = g.selectAll("path")
+                  .data(arcData)
+                  .join("path")
+                  .attr("d", arc)  // 根據生成的弧形路徑繪製圓餅圖
+                  .attr("fill", color)  // 根據資料設定填充顏色
+                  .attr("stroke", "#ffffff")  // 設定弧形的邊框顏色為白色
+                  .attr("stroke-width", "3px")  // 設定邊框寬度為3像素
+                  .style("opacity", 1);  // 設定每個切片的透明度為1（不透明）
+
+  // 加上每個區塊的數字標示，計算百分比並設定標籤文字
+  const total = d3.sum(rawData, (d) => d.cost);  // 計算總支出金額
+  rawData.forEach((i) => {  // 透過一個forEach迴圈，計算每項支出佔總額的百分比
+    i.percentage = Math.round((i.cost / total) * 100);  // 在原始data新增一個名為"percentage"的新屬性，儲存百分比
+  });
+
+  // 綁定標籤資料，生成"text"元素並設定位置、文字內容、樣式
+  const labels = g.selectAll("text")
+                  .data(arcData)  // 需使用d3.pie()處理後的資料，因為原始資料沒有角度資訊
+                  .join("text")` + "\n" +
+'                  .attr("transform", (d) => `translate(${outerArc.centroid(d)})`)  // ".centroid()"是取得圓弧線段中心的座標' + "\n" +
+'                  .text((d) => `${d.data.item} ${d.data.percentage}%`)  // "d.data"是d3.pie()處理後的資料裡所包含的原始資料部分' + "\n" +
+`                  .style("text-anchor", "middle")
+                  .style("font-size", 16)
+                  .style("fill", "black");
+
+  // 設定滑鼠互動事件，當滑鼠移到圓餅圖的切片上時，切片會放大並產生陰影
+  slices.style("cursor", "pointer")
+        .on("mouseover", (e, d) => {  // 當滑鼠移到切片上時觸發
+          d3.select(e.target)
+            .transition()
+            .duration(500)
+            .style("transform", "scale(1.1)");  // 將切片放大至1.1倍
+
+          labels.filter((labelData) => labelData.index === d.index)  // 選取對應的標籤
+                .transition()
+                .duration(500)
+                .style("font-size", "24px");
+        })
+        .on("mousemove", (e) => {
+          d3.select(e.target)
+            .style("filter", "drop-shadow(2px 4px 6px #000000)");  // 加上陰影效果
+        })
+        .on("mouseleave", (e, d) => {  // 當滑鼠離開切片時觸發
+          d3.select(e.target)
+            .transition()
+            .duration(500)
+            .style("filter", "drop-shadow(0 0 0 black)")  // 移除陰影效果
+            .style("transform", "scale(1)");  // 將切片還原到原始大小
+
+          labels.filter((labelData) => labelData.index === d.index)  // 選取對應的標籤
+                .transition()
+                .duration(500)
+                .style("font-size", "16px");
+        });
+});
+</script>
+
+<style scoped></style>`
+            }
+          },
+          {
+            detailTitle: "可以切換不同資料的圓餅圖",
+            detailSubtitle: "此處使用個人 fatsecret 於 2023 年的飲食紀錄，資料引用外部 csv 檔案。",
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsPieChartNote/D3jsSwitchPieChartsDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<!-- 這邊的 -->
+<!-- 純 HTML/CSS/JavaScript 原始碼 -->
+<!-- 與 -->
+<!-- 下方的 Vue SFC 程式碼（有大改） -->
+<!-- 結果不太一樣 -->
+
+
+<div id="d3jsEnergyGainPieChart"></div>
+<div class="d-flex justify-content-center">
+  <button type="button" id="d3jsEnergyGainPieChart2023MayBtn" class="btn btn-warning mx-1">2023/05</button>
+  <button type="button" id="d3jsEnergyGainPieChart2023JuneBtn" class="btn btn-warning mx-1">2023/06</button>
+  <button type="button" id="d3jsEnergyGainPieChart2023JulyBtn" class="btn btn-warning mx-1">2023/07</button>
+</div>
+
+<script>
+  const d3jsEnergyGainChart = async() => {
+    const width = 600;
+    const height = 400;
+    const margin = 40;
+
+    // 切換月份的按鈕
+    const May2023Btn = d3.select("#d3jsEnergyGainPieChart2023MayBtn")
+                         .on("click", (e, d) => {
+                           May2023Btn.style("background-color", "#e09500")
+                           June2023Btn.style("background-color", "#ffc107")
+                           July2023Btn.style("background-color", "#ffc107")
+                           upDatePieData(data202305)
+                         });
+    const June2023Btn = d3.select("#d3jsEnergyGainPieChart2023JuneBtn")
+                          .on("click", (e, d) => {
+                            May2023Btn.style("background-color", "#ffc107")
+                            June2023Btn.style("background-color", "#e09500")
+                            July2023Btn.style("background-color", "#ffc107")
+                            upDatePieData(data202306)
+                          });
+    const July2023Btn = d3.select("#d3jsEnergyGainPieChart2023JulyBtn")
+                          .on("click", (e, d) => {
+                            May2023Btn.style("background-color", "#ffc107")
+                            June2023Btn.style("background-color", "#ffc107")
+                            July2023Btn.style("background-color", "#e09500")
+                            upDatePieData(data202307)
+                          });
+
+    // 獲取數據
+    let data202305 = await d3.csv("data/energyGain/202305.csv");
+    data202305 = data202305.filter((d, i) => i >= 1 && i <= 4);
+    let data202306 = await d3.csv("data/energyGain/202306.csv");
+    data202306 = data202306.filter((d, i) => i >= 1 && i <= 4);
+    let data202307 = await d3.csv("data/energyGain/202307.csv");
+    data202307 = data202307.filter((d, i) => i >= 1 && i <= 4);
+    
+    // 建立svg
+    const svg = d3.select("#d3jsEnergyGainPieChart")
+                  .append("svg")
+                  .attr("width", width)
+                  .attr("height", height);
+
+    // 建立圓餅圖的群組元素'g'，用來容納圓餅圖的切片
+    svg.append("g")
+       .attr("id", "d3jsEnergyGainPieChartSlices")` + "\n" +
+'       .attr("transform", `translate(${width / 2}, ${height / 2})`);' + "\n" +
+`
+    // 設定顏色比例尺，從'd3.schemeSet2'配色方案中選取顏色
+    const color = d3.scaleOrdinal()
+                    .domain(['breakfast', 'lunch', 'dinner', 'snack'])
+                    .range(d3.schemeTableau10);
+
+    // 設定圓餅圖的半徑
+    const radius = Math.min(width, height) / 2 - margin;
+
+    // 設定更新資料的方法，把要繪圖的函式放進去，以讓它們能夠重新繪圖
+    const upDatePieData = (data) => {
+
+      // 設定圓餅圖的生成器，指定根據'data'屬性來生成圖表
+      const pieChartGenerator = d3.pie().value((d) => d.total).sort((a, b) => d3.ascending(a.key, b.key));
+
+      // 設定每個圓餅圖切片的弧度生成器，定義內半徑和外半徑
+      const arc = d3.arc()
+                    .innerRadius(0)  // 設定內半徑為0（實心圓）
+                    .outerRadius(radius)  // 設定外半徑為計算出的半徑值
+                    .padAngle(0);
+
+      // 設定外弧，用於放置標籤或其他用途
+      const outerArc = d3.arc()
+                         .outerRadius(radius)
+                         .innerRadius(radius - 10);
+
+      // 使用圓餅圖生成器將資料轉換為可以繪製的形式
+      const pieChartData = pieChartGenerator(data);
+
+      // 在群組元素中綁定資料並生成'path'元素，代表圓餅圖的每一塊
+      const energyGainChart = svg.select("#d3jsEnergyGainPieChartSlices")
+                                 .selectAll("path")
+                                 .data(pieChartData)
+                                 .join("path")
+                                 .attr("class", "d3jsEnergyGainPieChartArc")  // 設定弧形們的class
+                                 .transition()
+                                 .duration(800)
+                                 .attr("d", arc)  // 根據生成的弧形路徑繪製圓餅圖
+                                 .attr("fill", (d) => color(d.data.date))  // 根據資料設定填充顏色（此處壓'date'乃僅因剛好資料中餐別的行首是'date'）
+                                 .attr("stroke", "#f2f2f2")  // 設定弧形的邊框顏色為類白色
+                                 .attr("stroke-width", "3px")  // 設定邊框寬度為3像素
+                                 .style("opacity", 1);  // 設定每個切片的透明度為1（不透明）
+
+      // 加上每個區塊的數字標示，計算百分比並設定標籤文字
+      const dataTotal = d3.sum(data, (d) => d.total);  // 計算總支出金額
+      data.forEach((i) => {  // 透過一個forEach迴圈，計算每項支出佔總額的百分比
+        i.percentage = Math.round((i.total / dataTotal) * 100);  // 在原始data新增一個名為'percentage'的新屬性，儲存百分比
+      });
+
+      // 定義餐別名，製作文字標籤用
+      const mealType = d3.scaleOrdinal()
+                         .domain(['breakfast', 'lunch', 'dinner', 'snack'])
+                         .range(['早餐', '午餐', '晚餐', '點心']);
+
+      // 綁定標籤資料，生成'text'元素並設定位置、文字內容、樣式
+      const labels = d3.select("#d3jsEnergyGainPieChartSlices")
+                       .selectAll("text")
+                       .data(pieChartData)  // 需使用d3.pie()處理後的資料，因為原始資料沒有角度資訊
+                       .join("text")
+                       .attr("class", "d3jsEnergyGainPieChartLabels")
+                       .transition()
+                       .duration(800)` + "\n" +
+'                       .attr("transform", (d) => `translate(${outerArc.centroid(d)})`)' + "\n" +
+`                       .text((d) => mealType(d.data.date) + " " + d.data.percentage + "%")  // 'd.data'是d3.pie()處理後的資料裡所包含的原始資料部分
+                       .style("text-anchor", "middle")
+                       .style("font-size", 16)
+                       .style("fill", "black");
+    };
+    upDatePieData(data202305);
+
+    // 設定滑鼠互動事件，當滑鼠移到圓餅圖的切片上時，切片會放大並產生陰影
+    d3.selectAll(".d3jsEnergyGainPieChartArc")
+      .style("cursor", "pointer")
+      .on("mouseover", (e, d) => {  // 當滑鼠移到切片上時觸發
+        d3.select(e.target)
+          .transition()
+          .duration(500)
+          .style("transform", "scale(1.1)");  // 將切片放大至1.1倍
+      
+        d3.selectAll(".d3jsEnergyGainPieChartLabels")
+          .filter((labelData) => labelData.index === d.index)  // 選取對應的標籤
+          .transition()
+          .duration(500)
+          .style("font-size", "24px");
+
+        // 加Tooltip
+        const pt = d3.pointer(e, e.target);
+        d3.select("#d3jsEnergyGainPieChart")
+          .style("position", "relative")
+          .append("div")
+          .style("position", "absolute")
+          .attr("class", "d3jsEnergyGainPieChartToolpix")` + "\n" +
+'          .style("left", `${pt[0] + 320}px`)  // "320"為偏移修正量' + "\n" +
+'          .style("top", `${pt[1] + 140}px`)  // "140"為偏移修正量' + "\n" +
+`          .style("background-color", "#f2f2f2")
+          .style("color", "#121212")
+          .style("border", "2px solid #121212")
+          .style("border-radius", "5px")
+          .style("padding", "10px")` + "\n" +
+'          .html(`共 ${d.data.total} 大卡`)' + "\n" +
+`      })
+      .on("mousemove", (e, d) => {
+        d3.select(e.target)
+          .style("filter", "drop-shadow(2px 4px 6px #000000)");  // 加上陰影效果
+
+        // 移動Tooltip
+        const pt = d3.pointer(e, e.target);
+        d3.select(".d3jsEnergyGainPieChartToolpix")` + "\n" +
+'          .style("left", `${pt[0] + 320}px`)  // "320"為偏移修正量' + "\n" +
+'          .style("top", `${pt[1] + 140}px`);  // "140"為偏移修正量' + "\n" +
+`      })
+      .on("mouseleave", (e, d) => {  // 當滑鼠離開切片時觸發
+        d3.select(e.target)
+          .transition()
+          .duration(500)
+          .style("filter", "drop-shadow(0 0 0 black)")  // 移除陰影效果
+          .style("transform", "scale(1)");  // 將切片還原到原始大小
+      
+        d3.selectAll(".d3jsEnergyGainPieChartLabels")
+          .filter((labelData) => labelData.index === d.index)  // 選取對應的標籤
+          .transition()
+          .duration(500)
+          .style("font-size", "16px");
+
+        // 移出圓餅圖後刪除tooltip
+        d3.select(".d3jsEnergyGainPieChartToolpix").remove();
+      });
+  };
+  d3jsEnergyGainChart();
+</script>`,
+              jsCode: null,
+              vueCode: 
+`<template>
+  <div
+    ref="containerRef"
+    :style="{ width: width + 'px' }"
+    style="position: relative;"
+  >
+    <svg ref="svgRef" :width="width" :height="height"></svg>
+    <div class="btn-container">
+      <button
+        v-for="m in months"
+        :key="m.key"
+        class="month-btn"
+        :class="{ 'active-month-btn': selectedMonth === m.key }"
+        @click="loadAndUpdate(m.key)"
+      >
+        {{ m.label }}
+      </button>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
+import * as d3 from "d3";
+
+// 你的 JSON 檔
+import energyGain202305 from "../../../../assets/web-note-view/d3js-note-view/energy-gain/202305.json";
+import energyGain202306 from "../../../../assets/web-note-view/d3js-note-view/energy-gain/202306.json";
+import energyGain202307 from "../../../../assets/web-note-view/d3js-note-view/energy-gain/202307.json";
+
+const width = 420;
+const height = 280;
+const margin = 15;
+const MEALS = ["breakfast", "lunch", "dinner", "snack"];
+
+const containerRef = ref(null);
+const svgRef = ref(null);
+const selectedMonth = ref("202305");
+
+const months = [
+  { key: "202305", label: "2023/05", data: energyGain202305 },
+  { key: "202306", label: "2023/06", data: energyGain202306 },
+  { key: "202307", label: "2023/07", data: energyGain202307 }
+];
+
+// D3狀態（提升到外層，方便共用與清理）
+let svg, g, arcsGroup, labelsGroup, color, pie, arc, outerArc, tooltipEl;
+
+function aggregateByMeal(dailyRows) {
+  // dailyRows是json檔裡每日物件陣列
+  return MEALS.map(meal => {
+    const total = d3.sum(dailyRows, r => +r[meal] || 0);
+    return { date: meal, total };
+  });
+}
+
+function createTooltip(container) {
+  const t = d3.select(container)
+              .append("div")
+              .attr("class", "d3-tooltip")
+              .style("position", "absolute")
+              .style("pointer-events", "none")
+              .style("display", "none")
+              .style("background", "#f2f2f2")
+              .style("color", "#121212")
+              .style("border", "1px solid #121212")
+              .style("border-radius", "6px")
+              .style("padding", "8px")
+              .style("font-size", "13px")
+              .style("z-index", 1000);
+  return t;
+}
+
+function updateChartFromDaily(rawDailyRows) {
+  // 1) 聚合成各餐別的資料
+  const agg = aggregateByMeal(rawDailyRows);
+  const totalAll = d3.sum(agg, d => d.total) || 1;
+  agg.forEach(d => (d.percentage = Math.round((d.total / totalAll) * 100)));
+
+  // 2) 產生pieData
+  const pieData = pie(agg);
+
+  // 3) 每一片slices，以餐別名稱作為key
+  const slices = arcsGroup.selectAll("path.slice").data(pieData, d => d.data.date);
+
+  // 新增部分
+  const enterSlices = slices.enter()
+                            .append("path")
+                            .attr("class", "slice")
+                            .attr("fill", d => color(d.data.date))
+                            .attr("stroke", "#f2f2f2")
+                            .attr("stroke-width", 3)
+                            .each(function(d) { this._current = d; }) // 保存初始 state
+                            .style("opacity", 0)
+                            .style("transform-box", "fill-box")
+                            .style("transform-origin", "center");
+
+  // 合併新增與更新部分
+  const mergedSlices = enterSlices.merge(slices);
+
+  // 在合併後的selection上綁定事件
+  mergedSlices.style("cursor", "pointer")
+              .on("mouseover", function(event, d) {
+                const el = d3.select(this);
+                el.raise();
+                el.transition().duration(500).style("transform", "scale(1.08)");
+              
+                // 放大標籤文字
+                labelsGroup.selectAll("text.label")
+                           .filter(ld => ld.data.date === d.data.date)
+                           .transition()
+                           .duration(500)
+                           .style("font-size", "20px");
+              
+                // 在相對容器位置顯示tooltip
+                const [mx, my] = d3.pointer(event, containerRef.value);` + "\n" +
+'                tooltipEl.html(`共 ${d3.format(",")(d.data.total)} 大卡`)  // 每三位一個逗號' + "\n" +
+'                         .style("left", `${mx + 12}px`)' + "\n" +
+'                         .style("top", `${my + 12}px`)' + "\n" +
+`                         .style("display", "block");
+              })
+              .on("mousemove", function(e) {
+                const [mx, my] = d3.pointer(e, containerRef.value);` + "\n" +
+'                tooltipEl.style("left", `${mx + 12}px`)' + "\n" +
+'                         .style("top", `${my + 12}px`);' + "\n" +
+`                d3.select(this)
+                  .style("filter", "drop-shadow(2px 4px 6px rgba(0, 0, 0, 0.45))");
+              })
+              .on("mouseleave", function(event, d) {
+                d3.select(this)
+                  .transition()
+                  .duration(500)
+                  .style("transform", "scale(1)")
+                  .style("filter", null);
+
+                labelsGroup.selectAll("text.label")
+                           .filter(ld => ld.data.date === d.data.date)
+                           .transition().duration(500)
+                           .style("font-size", "14px");
+
+                tooltipEl.style("display", "none");
+              });
+
+  // 4) 使用d3.interpolate()來動畫改變弧形的d屬性
+  mergedSlices.transition()
+              .duration(500)
+              .style("opacity", 1)
+              .attrTween("d", function(d) {
+                const prev = this._current || d;
+                const i = d3.interpolate(prev, d);
+                this._current = i(1);
+                return t => arc(i(t));
+              });
+
+  // 刪除部分
+  slices.exit()
+        .transition()
+        .duration(500)
+        .style("opacity", 0)
+        .remove();
+
+  const mealType = d3.scaleOrdinal()
+                     .domain(MEALS)
+                     .range(["早餐", "午餐", "晚餐", "點心"]);
+
+  const texts = labelsGroup.selectAll("text.label")
+                           .data(pieData, d => d.data.date);
+
+  const enterTexts = texts.enter()
+                          .append("text")
+                          .attr("class", "label")
+                          .attr("text-anchor", "middle")
+                          .style("font-size", "14px")
+                          .each(function(d){ this._current = d; })
+                          .style("opacity", 0);
+
+  const mergedTexts = enterTexts.merge(texts);
+
+  mergedTexts.transition()
+             .duration(500)
+             .attrTween("transform", function(d) {
+               const prev = this._current || d;
+               const i = d3.interpolate(prev, d);
+               this._current = i(1);` + "\n" +
+'               return t => `translate(${outerArc.centroid(i(t))})`;' + "\n" +
+`             })
+             .tween("text", function(d) {
+               const raw = this.textContent.replace(/[^\d]/g, "");
+               const start = raw !== "" ? +raw : d.data.percentage;
+               const interp = d3.interpolateRound(start, d.data.percentage);` + "\n" +
+'               return t => d3.select(this).text(`${mealType(d.data.date)} ${interp(t)}%`);' + "\n" +
+`             })
+             .style("opacity", 1);
+
+  texts.exit()
+       .transition()
+       .duration(500)
+       .style("opacity", 0)
+       .remove();
+}
+
+function loadAndUpdate(monthKey) {
+  selectedMonth.value = monthKey;
+  const row = months.find(m => m.key === monthKey);
+  if (!row) return;
+  updateChartFromDaily(row.data);
+}
+
+onMounted(() => {
+  svg = d3.select(svgRef.value);
+  svg.selectAll("*").remove();  // 防呆清空
+
+  g = svg.append("g")` + "\n" +
+'         .attr("transform", `translate(${width/2}, ${height/2})`);' + "\n" +
+`
+  arcsGroup = g.append("g")
+               .attr("class","arcs-group");
+  labelsGroup = g.append("g")
+                 .attr("class","labels-group");
+
+  color = d3.scaleOrdinal()
+            .domain(MEALS)
+            .range(d3.schemeTableau10);
+
+  const radius = Math.min(width, height)/2 - margin;
+
+  pie = d3.pie().value(d => d.total).sort(null);
+
+  arc = d3.arc()
+          .innerRadius(0)
+          .outerRadius(radius);
+  outerArc = d3.arc()
+               .innerRadius(radius - 10)
+               .outerRadius(radius);
+
+  // 建立可重複使用的tooltip
+  tooltipEl = createTooltip(containerRef.value);
+
+  // 初始繪製
+  loadAndUpdate(selectedMonth.value);
+});
+
+onBeforeUnmount(() => {
+  // 中斷過度動畫並移除tooltip
+  d3.select(svgRef.value).selectAll("*").interrupt();
+  d3.select(containerRef.value).selectAll(".d3-tooltip").remove();
+});
+</script>
+
+<style scoped>
+.btn-container {
+  display: flex;
+  gap: 6px;
+  justify-content: center;
+  margin-top: 8px;
+}
+
+.month-btn {
+  padding: 6px 12px;
+  font-size: 14px;
+  border: 1px solid #dc3545;
+  background: #fff;
+  color: #dc3545;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.month-btn:hover {
+  background:#dc3545;
+  color:#fff;
+}
+
+.active-month-btn {
+  background:#e09500;
+  color:#fff;
+  border-color: #e09500;
+}
+
+.slice {
+  transition: transform 0.12s ease;
+  transform-origin: center;
+  transform-box: fill-box;
+}
+
+.d3-tooltip {
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.12);
+}
+</style>`
             }
           }
         ]

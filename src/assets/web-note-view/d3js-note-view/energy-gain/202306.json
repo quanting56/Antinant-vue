@@ -1,0 +1,281 @@
+[
+  {
+    "date": "2023/6/1",
+    "week": "Thursday",
+    "breakfast": 246,
+    "lunch": 1120,
+    "dinner": 1052,
+    "snack": 245,
+    "total": 2663
+  },
+  {
+    "date": "2023/6/2",
+    "week": "Friday",
+    "breakfast": 450,
+    "lunch": 969,
+    "dinner": 1258,
+    "snack": 266,
+    "total": 2943
+  },
+  {
+    "date": "2023/6/3",
+    "week": "Saturday",
+    "breakfast": 348,
+    "lunch": 804,
+    "dinner": 634,
+    "snack": 369,
+    "total": 2155
+  },
+  {
+    "date": "2023/6/4",
+    "week": "Sunday",
+    "breakfast": 499,
+    "lunch": 845,
+    "dinner": 1137,
+    "snack": 658,
+    "total": 3139
+  },
+  {
+    "date": "2023/6/5",
+    "week": "Monday",
+    "breakfast": 484,
+    "lunch": 546,
+    "dinner": 897,
+    "snack": 254,
+    "total": 2181
+  },
+  {
+    "date": "2023/6/6",
+    "week": "Tuesday",
+    "breakfast": 661,
+    "lunch": 1024,
+    "dinner": 794,
+    "snack": 144,
+    "total": 2623
+  },
+  {
+    "date": "2023/6/7",
+    "week": "Wednesday",
+    "breakfast": 325,
+    "lunch": 532,
+    "dinner": 692,
+    "snack": 821,
+    "total": 2370
+  },
+  {
+    "date": "2023/6/8",
+    "week": "Thursday",
+    "breakfast": 832,
+    "lunch": 914,
+    "dinner": 361,
+    "snack": 563,
+    "total": 2670
+  },
+  {
+    "date": "2023/6/9",
+    "week": "Friday",
+    "breakfast": 364,
+    "lunch": 682,
+    "dinner": 377,
+    "snack": 907,
+    "total": 2330
+  },
+  {
+    "date": "2023/6/10",
+    "week": "Saturday",
+    "breakfast": 653,
+    "lunch": 1286,
+    "dinner": 924,
+    "snack": 615,
+    "total": 3478
+  },
+  {
+    "date": "2023/6/11",
+    "week": "Sunday",
+    "breakfast": 727,
+    "lunch": 725,
+    "dinner": 1436,
+    "snack": 371,
+    "total": 3259
+  },
+  {
+    "date": "2023/6/12",
+    "week": "Monday",
+    "breakfast": 552,
+    "lunch": 998,
+    "dinner": 1137,
+    "snack": 325,
+    "total": 3012
+  },
+  {
+    "date": "2023/6/13",
+    "week": "Tuesday",
+    "breakfast": 581,
+    "lunch": 1090,
+    "dinner": 613,
+    "snack": 558,
+    "total": 2842
+  },
+  {
+    "date": "2023/6/14",
+    "week": "Wednesday",
+    "breakfast": 844,
+    "lunch": 944,
+    "dinner": 577,
+    "snack": 0,
+    "total": 2365
+  },
+  {
+    "date": "2023/6/15",
+    "week": "Thursday",
+    "breakfast": 510,
+    "lunch": 1019,
+    "dinner": 1057,
+    "snack": 0,
+    "total": 2586
+  },
+  {
+    "date": "2023/6/16",
+    "week": "Friday",
+    "breakfast": 461,
+    "lunch": 851,
+    "dinner": 868,
+    "snack": 116,
+    "total": 2296
+  },
+  {
+    "date": "2023/6/17",
+    "week": "Saturday",
+    "breakfast": 722,
+    "lunch": 1088,
+    "dinner": 432,
+    "snack": 56,
+    "total": 2298
+  },
+  {
+    "date": "2023/6/18",
+    "week": "Sunday",
+    "breakfast": 570,
+    "lunch": 406,
+    "dinner": 605,
+    "snack": 549,
+    "total": 2130
+  },
+  {
+    "date": "2023/6/19",
+    "week": "Monday",
+    "breakfast": 623,
+    "lunch": 529,
+    "dinner": 898,
+    "snack": 168,
+    "total": 2218
+  },
+  {
+    "date": "2023/6/20",
+    "week": "Tuesday",
+    "breakfast": 612,
+    "lunch": 788,
+    "dinner": 1194,
+    "snack": 486,
+    "total": 3080
+  },
+  {
+    "date": "2023/6/21",
+    "week": "Wednesday",
+    "breakfast": 284,
+    "lunch": 1202,
+    "dinner": 683,
+    "snack": 164,
+    "total": 2333
+  },
+  {
+    "date": "2023/6/22",
+    "week": "Thursday",
+    "breakfast": 663,
+    "lunch": 634,
+    "dinner": 499,
+    "snack": 232,
+    "total": 2028
+  },
+  {
+    "date": "2023/6/23",
+    "week": "Friday",
+    "breakfast": 423,
+    "lunch": 1015,
+    "dinner": 832,
+    "snack": 293,
+    "total": 2563
+  },
+  {
+    "date": "2023/6/24",
+    "week": "Saturday",
+    "breakfast": 724,
+    "lunch": 428,
+    "dinner": 1048,
+    "snack": 682,
+    "total": 2882
+  },
+  {
+    "date": "2023/6/25",
+    "week": "Sunday",
+    "breakfast": 430,
+    "lunch": 986,
+    "dinner": 1645,
+    "snack": 132,
+    "total": 3193
+  },
+  {
+    "date": "2023/6/26",
+    "week": "Monday",
+    "breakfast": 164,
+    "lunch": 407,
+    "dinner": 1230,
+    "snack": 664,
+    "total": 2465
+  },
+  {
+    "date": "2023/6/27",
+    "week": "Tuesday",
+    "breakfast": 430,
+    "lunch": 704,
+    "dinner": 1286,
+    "snack": 430,
+    "total": 2850
+  },
+  {
+    "date": "2023/6/28",
+    "week": "Wednesday",
+    "breakfast": 509,
+    "lunch": 632,
+    "dinner": 556,
+    "snack": 588,
+    "total": 2285
+  },
+  {
+    "date": "2023/6/29",
+    "week": "Thursday",
+    "breakfast": 37,
+    "lunch": 439,
+    "dinner": 927,
+    "snack": 593,
+    "total": 1996
+  },
+  {
+    "date": "2023/6/30",
+    "week": "Friday",
+    "breakfast": 419,
+    "lunch": 278,
+    "dinner": 795,
+    "snack": 151,
+    "total": 1643
+  },
+  {
+    "date": "total",
+    "week": "",
+    "breakfast": 15147,
+    "lunch": 23885,
+    "dinner": 26444,
+    "snack": 11400,
+    "total": 76876
+  }
+]

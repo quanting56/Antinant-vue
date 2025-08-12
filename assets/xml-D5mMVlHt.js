@@ -1,0 +1,1 @@
+import{t as m}from"./text-5Xu4kz8q.js";function t(r){return(a,s)=>m(a,s).then(e=>new DOMParser().parseFromString(e,r))}const o=t("application/xml");var x=t("text/html"),i=t("image/svg+xml");export{x as h,i as s,o as x};

@@ -12,7 +12,7 @@
 import { ref, onMounted } from "vue";
 import * as d3 from "d3";
 
-import csvData from "../../../../assets/web-note-view/d3js-note-view/vote-share/第11屆全國不分區及僑居國外國民立法委員選舉各政黨在北北基桃各投開票所得票數一覽表.csv?url"
+import csvData from "../../../../assets/web-note-view/d3js-note-view/vote-share/第11屆全國不分區及僑居國外國民立法委員選舉各政黨在北北基桃各投開票所得票數一覽表.csv?url";
 
 const svgContainerRef = ref(null);
 

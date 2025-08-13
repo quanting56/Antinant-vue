@@ -5962,7 +5962,7 @@ onMounted(() => {
   <li><code>zoom.scaleExtent(<i>[k0, k1]</i>)</code>：設定縮放係數的大小範圍，預設是 [0, &infin;]。</li>
   <li><code>zoom.duration()</code>：滑鼠雙擊或觸控雙擊時 zoom 縮放的變換時長。</li>
   <li><code>d3.zoomIdentity()</code>：設定 transform 物件的狀態，可以藉下面的 code，讓縮放後的物件回復到原本大小。</li>
-<pre style="padding: 8px;"><code class="javascript">d3.select("#resetBtn")
+<pre style="padding: 16px;"><code class="javascript">d3.select("#resetBtn")
   .on("click", () => {
     const transformFunction = d3.zoomIdendity.scale(1);
     svg.call(zoomFunction.transform, transformFunction);
@@ -8654,8 +8654,8 @@ const bubbleChartPracticeAll = async () => {
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
-        listSubtitle: null,
+        listTitle: "長條圖（Bar Chart）",
+        listSubtitle: "（一般長條圖、複數長條圖、堆疊長條圖）",
         listComponent: null,
         listCode: {
           htmlCode: null,
@@ -8664,11 +8664,399 @@ const bubbleChartPracticeAll = async () => {
         },
         listDetails: [
           {
-            detailTitle: null,
+            detailTitle: "基礎長條圖",
+            detailSubtitle: "書本範例。橫軸為縣市，縱軸為各縣市合計售電量（單位：度）。",
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsBarChartNote/D3jsBarChartDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="barChartExample"></div>
+<div id="barChartExampleBtnWrap">
+  <button id="barChartExampleApril2024Btn" class="btn btn-outline-warning" onclick="updataElectricChart('../data/taipowerData/202404.csv')">2024 4月</button>
+  <button id="barChartExampleMay2024Btn" class="btn btn-outline-warning" onclick="updataElectricChart('../data/taipowerData/202405.csv')">2024 5月</button>
+  <button id="barChartExampleJune2024Btn" class="btn btn-outline-warning" onclick="updataElectricChart('../data/taipowerData/202406.csv')">2024 6月</button>
+</div>
+
+<script>
+  // 建立svg
+  const width = 750;
+  const height = 500;
+  const margin = {top: 40, right: 40, bottom: 40, left: 80};
+  const svg = d3.select("#barChartExample")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+  // 建立初始X軸
+  const xScale = d3.scaleBand()
+                   .range([margin.left, width - margin.right])
+                   .padding(0.2);
+  const xAxisGenerator = d3.axisBottom(xScale);
+  const xAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(0, ${height - margin.bottom})`);' + "\n" +
+`
+  // 建立初始Y軸
+  const yScale = d3.scaleLinear()
+                   .range([height - margin.bottom, margin.top]);
+  const yAxisGenerator = d3.axisLeft(yScale)
+                           .ticks(5)
+                           .tickSize(3);
+  const yAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(${margin.left}, 0)`);' + "\n" +
+`
+  // 取得資料
+  const updataElectricChart = async (url) => {
+    const data = await d3.csv(url);
+    // map資料集
+    const xData = data.map((i) => i["縣市"]);
+    const yData = data.map((i) => parseInt(i["合計售電量_度"].split(",").join("")));  // 用'parseInt(目標.split(",").join(""))'消去數字裡三位的逗號，並轉成數值
+
+    // 設定X軸Domain、建立X軸
+    xScale.domain(xData);
+    xAxis.transition().duration(1000).call(xAxisGenerator);
+
+    // 調整X軸刻度文字標籤傾斜
+    xAxis.selectAll("text")
+         .attr("transform", "translate(-10, 0) rotate(-45)")
+         .style("text-anchor", "end");
+
+    // 設定Y軸Domain、建立Y軸
+    yScale.domain([0, d3.max(yData)]).nice();
+    yAxis.transition().duration(1000).call(yAxisGenerator);
+
+    // 開始建立長條圖
+    const bar = svg.selectAll("rect")
+                   .data(data)
+                   .join("rect")
+                   .attr("x", d => xScale(d["縣市"]))
+                   .attr("width", xScale.bandwidth())
+                   .attr("fill", "#69b3a2");
+
+    // 加上漸增動畫
+    // 注意：如果要加動畫，事件要分開寫
+    bar.transition()
+       .duration(1000)
+       .attr("y", d => yScale(parseInt(d["合計售電量_度"].split(",").join(""))))
+       .attr("height", d => ( height - margin.bottom) - yScale(parseInt(d["合計售電量_度"].split(",").join(""))));
+
+    // 加上滑鼠事件
+    bar.style("cursor", "pointer")
+       .on("mouseover", handleMouseOver)
+       .on("mouseleave", handleMouseLeave);
+
+    function handleMouseOver(e) {
+      d3.select(this).attr("fill", "#f68b47");
+
+      // 加上文字標籤
+      svg.append("text")
+         .attr("class", "d3jsBarChartInfoText")
+         .attr("x", xScale(e.target.__data__["縣市"]))
+         .attr("y", yScale(parseInt(e.target.__data__["合計售電量_度"].split(",").join(""))))
+         .style("fill", "#121212")
+         .style("font-size", "18px")
+         .style("font-weight", "bold")
+         .style("text-anchor", "middle")
+         .text(e.target.__data__["合計售電量_度"] + "度");
+    };
+
+    function handleMouseLeave() {
+      d3.select(this).attr("fill", "#69b3a2");
+      svg.select(".d3jsBarChartInfoText").remove();
+    };
+  };
+  updataElectricChart("../data/taipowerData/202404.csv");
+</script>`,
+              jsCode: null,
+              vueCode: null
+            }
+          },
+          {
+            detailTitle: "複數長條圖",
+            detailSubtitle: "書本範例。橫軸為年份，縱軸為勞動人口。",
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<div id="multiBarChartExample"></div>
+
+<script>
+  const width = 750;
+  const height = 500;
+  const margin = {top: 20, right: 20, bottom: 100, left: 40};
+  const data = [
+    {"年度": 2017, "15~24歲(千人)": 80, "25~44歲(千人)": 506, "45~64歲(千人)": 381, "65歲及以上(千人)": 35},
+    {"年度": 2018, "15~24歲(千人)": 80, "25~44歲(千人)": 508, "45~64歲(千人)": 392, "65歲及以上(千人)": 38},
+    {"年度": 2019, "15~24歲(千人)": 82, "25~44歲(千人)": 511, "45~64歲(千人)": 398, "65歲及以上(千人)": 39},
+    {"年度": 2020, "15~24歲(千人)": 79, "25~44歲(千人)": 504, "45~64歲(千人)": 387, "65歲及以上(千人)": 42}
+  ];
+  const svg = d3.select("#multiBarChartExample")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+  // 設定要給X軸用的scale和axis（年份xScale）
+  const xData = data.map((d) => d["年度"]);
+  const xScale = d3.scaleBand()
+                   .domain(xData)  // '.scaleBand()'的'.domain()'需要一組data，而不是數對[,]
+                   .range([margin.left, width - margin.right])
+                   .padding(0.2);
+  const xAxisGenerator = d3.axisBottom(xScale);
+
+  // 呼叫繪製X軸、調整X軸位置
+  const xAxisGroup = svg.append("g")` + "\n" +
+'                        .attr("transform", `translate(0, ${height - margin.bottom})`)' + "\n" +
+`                        .call(xAxisGenerator);
+                                                                      
+  // 設定要給Y軸用的scale和axis
+  const yScale = d3.scaleLinear()
+                   .domain([0, 600])
+                   .range([height - margin.bottom, margin.top])
+                   .nice();
+
+  const yAxisGenerator = d3.axisLeft(yScale).ticks(5).tickSize(3);
+
+  // 呼叫繪製Y軸、調整Y軸位置
+  const yAxisGroup = svg.append("g")` + "\n" +
+'                        .attr("transform", `translate(${margin.left}, 0)`)' + "\n" +
+`                        .call(yAxisGenerator);
+
+  // 設定第2條X軸資料、比例尺（本例為不同年齡層的xScale）
+  // 用來設定「多條長條圖」的位置
+  const xSubGroups = Object.keys(data[0]).slice(1);  // 取出data中，非年份的key，並返回一個新的陣列
+  const xSubGroupsScale = d3.scaleBand()
+                            .domain(xSubGroups)
+                            .range([0, xScale.bandwidth()])
+                            .padding(0.05);
+
+  // 設定不同subgroup bar的顏色
+  const color = d3.scaleOrdinal()
+                  .domain(xSubGroups)
+                  .range(["#d4be92", "#c2cccd", "#b2c2e3", "#ead0d1"]);
+
+  // 開始建立長條圖
+  const bar = svg.append("g")
+                 .selectAll("g")
+                 .data(data)
+                 .join("g")` + "\n" +
+'                 .attr("transform", d => `translate(${xScale(d["年度"])}, 0)`)' + "\n" +
+`                 .selectAll("rect")
+                 .data((d) => xSubGroups.map(key => {return {key: key, value: d[key]}}))
+                 .join("rect")
+                 .attr("x", (d) => xSubGroupsScale(d.key))
+                 .attr("y", (d) => yScale(d.value))
+                 .attr("width", xSubGroupsScale.bandwidth())
+                 .attr("height", (d) => ( height - margin.bottom ) - yScale(d.value))
+                 .attr("fill", (d) => color(d.key))
+                 .style("cursor", "pointer")
+                 .on("mouseover", multiBarChartMouseover)
+                 .on("mousemove", multiBarChartMousemove)
+                 .on("mouseleave", multiBarChartMouseleave);
+
+  function multiBarChartMouseover(e) {
+    const pt = d3.pointer(e, svg.node());
+
+    // 加上文字標籤
+    svg.append("text")
+       .attr("class", "multiBarChartExampleInfoText")
+       .attr("x", margin.left)
+       .attr("y", yScale(e.target.__data__["value"]))
+       .attr("fill", "#121212")
+       .style("font-size", "18px")
+       .style("font-weight", "bold")
+       .style("text-anchor", "middle")
+       .text(e.target.__data__["value"] + "千人");
+
+    // 加上標示用輔助虛線
+    svg.append("line")
+       .attr("class", "multiBarChartExampleDashedY")
+       .attr("x1", margin.left)
+       .attr("y1", yScale(e.target.__data__["value"]))
+       .attr("x2", pt[0])
+       .attr("y2", yScale(e.target.__data__["value"]))
+       .style("stroke", "black")
+       .style("stroke-dasharray", 3);
+  };
+
+  function multiBarChartMousemove(e) {
+    const pt = d3.pointer(e, svg.node());
+    svg.selectAll(".multiBarChartExampleDashedY")
+                               .attr("x2", pt[0]);
+  };
+
+  function multiBarChartMouseleave() {
+    svg.select(".multiBarChartExampleInfoText").remove();
+    svg.select(".multiBarChartExampleDashedY").remove();
+  }
+
+  // 加上辨識標籤
+  const tagsWrap = svg.append("g")
+                      .selectAll("g")
+                      .data(xSubGroups)
+                      .join("g")
+                      .attr("class", "multiBarChartExampleTags");
+
+  tagsWrap.append("rect")
+          .attr("x", (d, i) => (i + 1) * margin.bottom * 1.3)
+          .attr("y", height - margin.bottom / 2)
+          .attr("width", 20)
+          .attr("height", 20)
+          .attr("fill", (d) => color(d));
+
+  tagsWrap.append("text")
+          .attr("x", (d, i) => (i + 1) * margin.bottom * 1.3)
+          .attr("y", height - margin.bottom / 2 + 40)
+          .style("fill", "#121212")
+          .style("font-size", "12px")
+          .style("font-weight", "bold")
+          .style("text-anchor", "middle")
+          .text(d => d);
+</script>`,
+              jsCode: null,
+              vueCode: null
+            }
+          },
+          {
+            detailTitle: `堆疊長條圖
+<ol type="A" style="margin-top: 16px;">
+  <li style="line-height: 1.6;">
+    堆疊長條圖使用 <code>d3.stack()</code>，會生成一個新的陣列結構，每個堆疊部分（即每個子群組）的資料會被轉換成一個陣列，這個陣列中的每個元素都包含以下幾個部分：
+    <ul>
+      <li><code>d[0]</code>：該堆疊部分的起始值（即堆疊長條的底部）。</li>
+      <li><code>d[1]</code>：該堆疊部分的結束值（即堆疊長條的頂部）。</li>
+      <li><code>d.data</code>：這部分對應的原始資料。</li>
+    </ul>
+  </li>
+  <li style="margin-top: 16px;">
+    以下為堆疊長條圖的例子：
+    <p style="color: rgba(33, 37, 41, 0.75); font-size: 12px; font-style: italic; margin-bottom: 8px;">
+      - 書本範例。橫軸為年份，縱軸為勞動人口。
+    </p>
+  </li>
+</ol>`,
             detailSubtitle: null,
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="stackedBarChart"></div>
+
+<script>
+  const width = 750;
+  const height = 500;
+  const margin = {top: 20, right: 20, bottom: 100, left: 40};
+  const data = [
+    {"年度": 2017, "15~24歲(千人)": 80, "25~44歲(千人)": 506, "45~64歲(千人)": 381, "65歲及以上(千人)": 35},
+    {"年度": 2018, "15~24歲(千人)": 80, "25~44歲(千人)": 508, "45~64歲(千人)": 392, "65歲及以上(千人)": 38},
+    {"年度": 2019, "15~24歲(千人)": 82, "25~44歲(千人)": 511, "45~64歲(千人)": 398, "65歲及以上(千人)": 39},
+    {"年度": 2020, "15~24歲(千人)": 79, "25~44歲(千人)": 504, "45~64歲(千人)": 387, "65歲及以上(千人)": 42}
+  ];
+  const svg = d3.select("#stackedBarChart")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+  // 設定要給X軸用的scale和axis
+  const xData = data.map((d) => d["年度"])
+  const xScale = d3.scaleBand()
+                   .domain(xData)
+                   .range([margin.left, width - margin.right])
+                   .padding(0.2);
+  const xAxisGenerator = d3.axisBottom(xScale);
+
+  // 呼叫繪製X軸、調整X軸位置
+  const xAxisGroup = svg.append("g")` + "\n" +
+'                        .attr("transform", `translate(0, ${height - margin.bottom})`)' + "\n" +
+`                        .call(xAxisGenerator);
+
+  // 設定要給Y軸用的scale和axis
+  const yScale = d3.scaleLinear()
+                   .domain([0, 1200])
+                   .range([height - margin.bottom, margin.top])
+                   .nice();
+  const yAxisGenerator = d3.axisLeft(yScale).ticks(5).tickSize(3);
+
+  // 呼叫繪製Y軸、調整Y軸位置
+  const yAxisGroup = svg.append("g")` + "\n" +
+'                        .attr("transform", `translate(${margin.left}, 0)`)' + "\n" +
+`                        .call(yAxisGenerator);
+
+  // 設定分組，用d3.stack()把資料堆疊起來
+  const xSubGroups = Object.keys(data[0]).slice(1);
+  const stackedData = d3.stack().keys(xSubGroups)(data);
+
+  // 設定不同subgroup bar的顏色
+  const color = d3.scaleOrdinal()
+                  .domain(xSubGroups)
+                  .range(["#97a9bf", "#d6dbbb", "#d4e6e8", "#dcd2d0"]);
+
+  // 開始建立長條圖
+  const bar = svg.append("g")
+                 .selectAll("g")
+                 .data(stackedData)
+                 .join("g")
+                 .attr("fill", (d) => color(d.key))  // 顏色放在<g>的屬性中，所以這行要放在這裡
+                 .selectAll("rect")
+                 .data(d => d)
+                 .join("rect")
+                 .attr("x", (d) => xScale(d.data["年度"]))  // 此處的'd.data'是'd3.stack()'生成之新陣列中，對應原始資料的部分，非我們自己設的'data'變數
+                 .attr("y", (d) => yScale(d[1]))
+                 .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
+                 .attr("width", xScale.bandwidth())
+                 .style("cursor", "pointer")  // 未完成
+                 .on("mouseover", stackedBarChartHandleMouseover)
+                 .on("mousemove", stackedBarChartHandleMousemove)
+                 .on("mouseleave", stackedBarChartHandleMouseleave);
+
+  function stackedBarChartHandleMouseover(e) {
+    const pt = d3.pointer(e, svg.node());
+    d3.select(this).style("opacity", 0.5);
+
+    // 加上文字標籤
+    svg.append("text")
+       .attr("class", "stackedBarChartInfoText")
+       .attr("fill", "#121212")
+       .style("font-size", "18px")
+       .style("font-weight", "bold")
+       .style("text-anchor", "start")
+       .attr("x", pt[0])
+       .attr("y", pt[1] - 20)
+       .text((e.target.__data__[1] - e.target.__data__[0]) + " 千人");
+  };
+
+  function stackedBarChartHandleMousemove(e) {
+    const pt = d3.pointer(e, svg.node());
+    svg.select(".stackedBarChartInfoText")
+       .attr("x", pt[0] + 10)
+       .attr("y", pt[1] - 15);
+  };
+
+  function stackedBarChartHandleMouseleave() {
+    d3.select(this).style("opacity", "1");
+    svg.select(".stackedBarChartInfoText").remove();
+  };
+
+  // 加上辨識標籤
+  const tagsWrap = svg.append("g")
+                      .selectAll("g")
+                      .data(xSubGroups)
+                      .join("g")
+                      .attr("class", "stackedBarChartTags");
+
+  tagsWrap.append("rect")
+          .attr("x", (d, i) => ( i + 1 ) * margin.bottom * 1.3)
+          .attr("y", height - margin.bottom / 2)
+          .attr("width", 20)
+          .attr("height", 20)
+          .attr("fill", (d) => color(d));
+
+  tagsWrap.append("text")
+          .attr("x", (d, i) => ( i + 1 ) * margin.bottom * 1.3)
+          .attr("y", height - margin.bottom / 2 + 40)
+          .style("fill", "#121212")
+          .style("font-size", "12px")
+          .style("font-weight", "bold")
+          .style("text-anchor", "middle")
+          .text(d => d);
+</script>`,
               jsCode: null,
               vueCode: null
             }
@@ -8685,8 +9073,8 @@ const bubbleChartPracticeAll = async () => {
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
-        listSubtitle: null,
+        listTitle: "折線圖（Line Chart）",
+        listSubtitle: "（一般折線圖、缺少資料的折線圖、多線折線圖）",
         listComponent: null,
         listCode: {
           htmlCode: null,
@@ -8700,6 +9088,729 @@ const bubbleChartPracticeAll = async () => {
             detailComponent: null,
             detailCode: {
               htmlCode: null,
+              jsCode: null,
+              vueCode: null
+            }
+          },
+        ]
+      },
+      {
+        listTitle: "一般折線圖",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "基礎折線圖",
+            detailSubtitle: "書本範例改編。橫軸為年份，縱軸為南港買賣契約價格平均總價。",
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<div id="d3jsLineChartExample" class="mt-1"></div>
+
+<!-- 引用Day.js函式庫 -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/dayjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/dayjs/1.11.7/locale/zh-tw.min.js"></script>
+
+<script>
+  // 先設一個函式轉換日期格式
+  // 中華民國年份改成西元
+  const ROCDateToADDate = (date) => {
+    // 年份轉換
+    date = date.replace(/\d{3}/, ((match) => String(+match + 1911)));
+
+    // 季度換成每季第一天
+    // 定義一個對應表，用於將季度表示（如Q1, Q2）轉換成對應的日期
+    const seasonDates = {
+      Q1: "-01-01",
+      Q2: "-04-01",
+      Q3: "-07-01",
+      Q4: "-10-01"
+    };
+
+    const season = date.match(/Q\d/)[0];  // 找到季度表示（如Q1, Q2），因為'.match()'會返回一個陣列（此處為單元素陣列），所以需要用[0]取出該元素
+    date = date.replace(season, seasonDates[season]);  // 用對應的日期替換季度表示
+    return new Date(date);  // 將處理後的字串轉換成Date物件，並回傳
+  };
+
+  // 折線圖繪圖函式
+  const housePriceLineChart = async () => {
+    // 設定svg
+    const width = 600;
+    const height = 400;
+    const margin = {top: 20, bottom: 60, right: 20, left: 60};
+    const svg = d3.select("#d3jsLineChartExample")
+                  .append("svg")
+                  .attr("width", width)
+                  .attr("height", height);
+
+    // 取資料
+    const res = await d3.csv("data/housePrice/南港96Q3至113Q1買賣契約價格平均總價.csv");
+    const data = res.map((i) => {
+      i["date"] = ROCDateToADDate(i["date"]);
+      return i;
+    });  // 日期格式轉換
+
+    // map資料集
+    const xData = data.map((i) => i["date"]);
+    const yData = data.map((i) => +i["price"]);
+
+    // Time Axis
+    const xScale = d3.scaleTime()
+                     .domain(d3.extent(xData))
+                     .range([margin.left, width - margin.right])
+                     .nice();
+    let tickNumber = window.innerWidth > 900 ? (xData.length / 3) : 10 ;  // 根據視窗不同寬來調整tick數量
+    const xAxisGenerator = d3.axisBottom(xScale)
+                             .ticks(tickNumber)
+                             .tickFormat((d) => dayjs(d).format("YYYY/MM/DD"));
+    const xAxis = svg.append("g")` + "\n" +
+'                     .attr("transform", `translate(0, ${height - margin.bottom})`)' + "\n" +
+`                     .call(xAxisGenerator)
+                     .style("font-size", "12px");
+    xAxis.selectAll(".tick text")
+         .attr("transform", "rotate(-45)")
+         .attr("x", "-35")
+         .attr("y", "6");
+
+    // Price Axis
+    const yScale = d3.scaleLinear()
+                     .domain(d3.extent(yData))
+                     .range([height - margin.bottom, margin.top])
+                     .nice();
+    const yAxisGenerator = d3.axisLeft(yScale).tickFormat((d) => d + "萬");` + "\n" +
+'    // 上行也可以寫成"const yAxisGenerator = d3.axisLeft(yScale).tickFormat((d) => `${d}萬`);"' + "\n" +
+`    const yAxis = svg.append("g")` + "\n" +
+'                     .attr("transform", `translate(${margin.left}, 0)`)' + "\n" +
+`                     .call(yAxisGenerator);
+
+    // 設定path的d
+    const lineChart = d3.line()
+                        .x((d) => xScale(d["date"]))
+                        .y((d) => yScale(+d["price"]));
+    
+    // 建立折線圖
+    svg.append("path")
+       .data(data)
+       .attr("d", lineChart(data))
+       .attr("fill", "none")
+       .attr("stroke", "#f68b47")
+       .attr("stroke-width", 1.5);
+  };
+  housePriceLineChart();
+</script>`,
+              jsCode: null,
+              vueCode: null
+            }
+          },
+          {
+            detailTitle: 
+`有滑鼠互動效果的折線圖
+<ol type="A" style="margin-top: 16px; margin-bottom: 40px;">
+  <li style="line-height: 1.6;">
+    使用 CSS 中的 <code>pointer-event</code> 來觸發滑鼠事件，常見有以下三種：
+    <ul>
+      <li><code>auto</code>：預設值。</li>
+      <li><code>none</code>：穿越該元素，可以點擊到下方的元素。</li>
+      <li><code>all</code>：能讓滑鼠在元素內部或邊界時才會觸發。</li>
+    </ul>
+  </li>
+  <li style="line-height: 1.6; margin-top: 16px;">
+    <code>d3.bisect(array, value, [start, end])</code>：可用來尋找某數值對應一個資料陣列中的正確位置／最接近的位置。
+    <ul>
+      <li><code>data</code>：要對應的資料陣列。</li>
+      <li><code>value</code>：要尋找位置的數值。</li>
+      <li><code>start</code>：尋找的起始範圍，可以不設定。</li>
+      <li><code>end</code>：尋找的終點範圍，可以不設定。</li>
+    </ul>
+<pre style="padding: 16px;"><code class="javascript">const data = [0, 1, 2, 3, 4];
+d3.bisect(data, 1.25);  // return 2</code></pre>
+  </li>
+  <li style="line-height: 1.6; margin-top: 16px;">
+    <code>d3.bisector()</code>：與 <code>d3.bisect()</code> 功能類似，但 <code>d3.bisect()</code> 是帶入一個方法作為參數，能用來搜尋整個物件資料。有 <code>bisector.left</code>、<code>bisector.right</code>、<code>bisector.center</code> 三種方法，來設定要插入的資料是從左邊或右邊尋找。
+<pre style="padding: 16px;"><code class="javascript">const data = [
+  {date: new Date(2023, 1, 1), value: 0.5},
+  {date: new Date(2023, 2, 1), value: 0.6},
+  {date: new Date(2023, 3, 1), value: 0.7},
+  {date: new Date(2023, 4, 1), value: 0.8}
+];
+const bisectDate = d3.bisector(d => d.date).right;</code></pre>
+  </li>
+</ol>`,
+            detailSubtitle: "書本範例改編。橫軸為 2023 的週份，縱軸為每週後天免疫缺乏症候群確診數。",
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<div id="interactLineChartExample" class="mt-1"></div>
+
+<script>
+  const interactLineChart = async () => {
+    const width = 600;
+    const height = 400;
+    const margin = 50;
+    const svg = d3.select("#interactLineChartExample")
+                  .append("svg")
+                  .attr("width", width)
+                  .attr("height", height)
+
+    const res = await d3.csv("data/disease/後天免疫缺乏症候群趨勢.csv");
+    const data = res.filter(i => i["診斷年週"] < "202401");
+    // map資料集
+    const xData = data.map((i) => +i["診斷年週"].substring(4, 6));
+    const yData = data.map((i) => +i["確定病例數"]);
+
+    // Time Axis
+    const xScale = d3.scaleLinear()
+                     .domain(d3.extent(xData))
+                     .range([margin, width - margin])
+                     .nice();
+    const xAxisGenerator = d3.axisBottom(xScale)
+                             .tickFormat(d => "第" + d + "週");
+    const xAxis = svg.append("g")` + "\n" +
+'                     .attr("transform", `translate(0, ${height - margin})`)' + "\n" +
+`                     .call(xAxisGenerator);
+
+    // Number_of_cases Axis
+    const yScale = d3.scaleLinear()
+                     .domain([0, d3.max(yData)])
+                     .range([height - margin, margin])
+                     .nice();
+    const yAxisGenerator = d3.axisLeft(yScale).ticks(5);
+    const yAxis = svg.append("g")` + "\n" +
+'                     .attr("transform", `translate(${margin}, 0)`)' + "\n" +
+`                     .call(yAxisGenerator);
+
+    // 開始建立折線圖，設定折線圖相關資料
+    const lineChart = d3.line()
+                        .x((d) => xScale(+d["診斷年週"].substring(4, 6)))
+                        .y((d) => yScale(+d["確定病例數"]));
+    svg.append("path")
+       .data(data)
+       .attr("d", lineChart(data))
+       .attr("fill", "none")
+       .attr("stroke", "#f68b47")
+       .attr("stroke-width", 1.5);
+
+    // 建立一個覆蓋SVG的方形
+    svg.append("rect")
+       .style("fill", "transparent")
+       .style("pointer-events", "all")
+       .style("cursor", "pointer")
+       .attr("width", width - margin)
+       .attr("height", height - margin)
+       .on("mouseover", mouseover)
+       .on("mousemove", mousemove)
+       .on("mouseout", mouseout);
+
+    // 建立沿著折線移動的圓點點
+    const focusDot = svg.append("g")
+                        .append("circle")
+                        .style("fill", "black")
+                        .attr("stroke", "black")
+                        .attr("r", 3)
+                        .style("opacity", 0);
+
+    // 建立移動的資料標籤
+    const focusText = svg.append("text")
+                         .style("opacity", 0)
+                         .attr("text-anchor", "start")
+                         .attr("alignment-baseline", "middle");
+
+    // 使用d3.bisector()找到根據資料的"診斷年週"對應的資料點
+    const bisect = d3.bisector((d) => d["診斷年週"]).left;
+
+    // 設定滑鼠事件
+    function mouseover() {
+      focusDot.style("opacity", 1);
+      focusText.style("opacity", 1);
+    };
+
+    function mousemove(e) {
+      // 把目前X的位置用xScale去換算
+      const x0 = xScale.invert(d3.pointer(e, this)[0]);
+      // 由於X軸資料是擷取過的，這裡要整理並補零（整數部分先轉換為字串，並補足兩位數（如 01, 02, ...））
+      const fixedX0 = parseInt(x0).toString().padStart(2, "0");
+      // 接者把擷取掉的2023補回來，因為data是帶入原本的資料
+      let i = bisect(data, "2023" + fixedX0);
+      let selectedData = data[i];
+
+      // 圓點
+      focusDot.attr("cx", xScale(selectedData["診斷年週"].substring(4, 6)))
+              .attr("cy", yScale(selectedData["確定病例數"]));
+
+      focusText.html("確定病例數：" + selectedData["確定病例數"])
+               .attr("x", xScale(selectedData["診斷年週"].substring(4, 6)) + 15)
+               .attr("y", yScale(selectedData["確定病例數"]));
+    };
+
+    function mouseout() {
+      focusDot.style("opacity", 0);
+      focusText.style("opacity", 0);
+    }
+  };
+  interactLineChart();
+</script>`,
+              jsCode: null,
+              vueCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "缺少資料的折線圖",
+        listSubtitle: 
+`<ol type="A" style="margin-top: 16px; margin-bottom: 40px;">
+  <li style="line-height: 1.6;">
+    此類折線圖是透過組合「實線折線圖」與「虛線折線圖」而成的。
+  </li>
+  <li style="line-height: 1.6; margin-top: 16px;">
+    <code>line.defined()</code>：<code>d3.line()</code> 旗下的方法，只有 <code>d3.line()</code> 可以使用，會回傳 <code>true</code> 或 <code>false</code> 來決定資料是否存在。
+<pre style="padding: 16px;"><code class="javascript">const data = [
+  {x: 1, y: 120},
+  {x: 2, y: 355},
+  {x: 3, y: 0},
+  {x: 4, y: 470},
+  {x: 5, y: 19},
+  {x: 6, y: 90},
+  {x: 7, y: 0},
+  {x: 8, y: 220},
+];
+
+// 用line.defined過濾掉是零的數值，設定只回傳y大於0的數值
+// 用來繪製原始資料含有部分缺失數據（可能是0、NaN、undifined）的折線圖
+const lineChart = d3.line()
+                    .x((d) => xScale(d.x))
+                    .y((d) => yScale(d.y))
+                    .defined((d) => d.y > 0);</code></pre>
+  </li>
+  <li style="line-height: 1.6; margin-top: 16px;">
+    用實線折線圖與虛線折線圖重疊組合，將兩者折線路徑重疊，繪製出缺少部分的折線圖。
+    <p style="color: #248666;"><i>（此處待補圖（用SFC畫出四個折線圖））</i></p>
+  </li>
+</ol>`,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "缺少資料的折線圖",
+            detailSubtitle: "書本範例改編。資料為無意義測試用數據。",
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<div id="definedLineChartExample" class="mt-1"></div>
+
+<script>
+  const definedLineChart = () => {
+    const width = 600;
+    const height = 400;
+    const margin = 50;
+    const data = [
+      {x: 1, y: 120},
+      {x: 2, y: 355},
+      {x: 3, y: 0},
+      {x: 4, y: 470},
+      {x: 5, y: 19},
+      {x: 6, y: 90},
+      {x: 7, y: 0},
+      {x: 8, y: 220},
+    ];
+    const svg = d3.select("#definedLineChartExample")
+                  .append("svg")
+                  .attr("width", width)
+                  .attr("height", height);
+    const xData = data.map((d) => d.x);
+    const yData = data.map((d) => d.y);
+
+    const xScale = d3.scaleLinear()
+                     .domain([0, d3.max(xData)])
+                     .range([margin, width - margin])
+                     .nice();
+    const xAxisGenerator = d3.axisBottom(xScale)
+    const xAxis = svg.append("g")` + "\n" +
+'                     .attr("transform", `translate(0, ${height - margin})`)' + "\n" +
+`                     .call(xAxisGenerator);
+
+    const yScale = d3.scaleLinear()
+                     .domain([0, d3.max(yData)])
+                     .range([height - margin, margin])
+                     .nice();
+    const yAxisGenerator = d3.axisLeft(yScale)
+    const yAxis = svg.append("g")` + "\n" +
+'                     .attr("transform", `translate(${margin}, 0)`)' + "\n" +
+`                     .call(yAxisGenerator);
+
+    // 用用line.defined過濾掉是零的數值，設定只回傳y大於0的數值
+    const lineChart = d3.line()
+                        .x((d) => xScale(d.x))
+                        .y((d) => yScale(d.y))
+                        .defined((d) => d.y > 0);
+
+    svg.append("path")
+       .data(data)
+       .attr("d", lineChart(data))
+       .attr("fill", "none")
+       .attr("stroke", "#f68b47")
+       .attr("stroke-width", 2.5);
+
+    // 把d.y大於零的資料拉掉，再用剩下的這些資料去建立連線（虛線）
+    let filteredData = data.filter(d => d.y > 0);  // 也可以用lineChart.defined()
+
+    // 建立dashed折線
+    svg.append("path")
+       .data(data)
+       .attr("d", lineChart(filteredData))
+       .attr("fill", "none")
+       .attr("stroke", "#f68b47")
+       .attr("stroke-width", "2.5")
+       .attr("stroke-dasharray", "4, 4");
+
+    // 加上tooltip
+    const tooltip = d3.select("#definedLineChartExample")
+                      .style("position", "relative")
+                      .append("div")
+                      .style("position", "absolute")
+                      .style("opacity", "0")
+                      .style("background-color", "white")
+                      .style("border", "1px solid black")
+                      .style("border-radius", "5px")
+                      .style("padding", "5px");
+
+    // 加上圓點點
+    svg.append("g")
+       .selectAll("circle")
+       .data(filteredData)
+       .join("circle")
+       .attr("cx", (d) => xScale(d.x))
+       .attr("cy", (d) => yScale(d.y))
+       .attr("r", "5")
+       .attr("fill", "white")
+       .attr("stroke", "#f68b47")
+       .attr("stroke-width", "2")
+       .style("cursor", "pointer")
+       .on("mouseover", dotsMouseover)
+       .on("mouseleave", dotsMouseleave);
+
+    function dotsMouseover(e) {
+      let pt = d3.pointer(e, e.target);
+      tooltip.style("opacity", "1")
+             .style("left", pt[0] + 20 + "px")
+             .style("top", pt[1] + "px")` + "\n" +
+'             .html(`x值：${e.target.__data__.x}<br>` + ' + "\n" +
+'                   `y值：${e.target.__data__.y}`' + "\n" +
+`             );
+
+      // 加上X-dashed線
+      svg.append("line")
+         .attr("class", "definedLineChartDashedX")
+         .attr("x1", xScale(e.target.__data__.x))
+         .attr("y1", height - margin)
+         .attr("x2", xScale(e.target.__data__.x))
+         .attr("y2", margin)
+         .attr("stroke", "#f68b46")
+         .attr("stroke-dasharray", "4");
+
+      // 加上Y-dashed線
+      svg.append("line")
+         .attr("class", "definedLineChartDashedY")
+         .attr("x1", margin)
+         .attr("y1", yScale(e.target.__data__.y))
+         .attr("x2", width - margin)
+         .attr("y2", yScale(e.target.__data__.y))
+         .style("stroke", "#f68b47")
+         .style("stroke-dasharray", "4");
+    };
+
+    function dotsMouseleave(d) {
+      tooltip.style("opacity", 0)
+      svg.selectAll(".definedLineChartDashedX").remove();
+      svg.selectAll(".definedLineChartDashedY").remove();
+    };
+  };
+  definedLineChart();
+</script>`,
+              jsCode: null,
+              vueCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "多線折線圖",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "基礎多線折線圖",
+            detailSubtitle: "書本範例改編。資料為 2023 年各觀測站降雨量。",
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<div id="multiLineChartExample"></div>
+
+<script>
+  const multiLineChart = async () => {
+    // svg
+    const width = 600;
+    const height = 400;
+    const margin = 50;
+    const svg = d3.select("#multiLineChartExample")
+                  .append("svg")
+                  .attr("width", width)
+                  .attr("height", height);
+
+    // 取資料集
+    const res = await d3.json("https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=5n9c3AlEJ2DH&IsTransData=1");
+    const data = res.filter(d => d.observeDate.substring(0, 4) === "2023");  // 只取2023年的資料
+    const xData = data.map((i) => i.observeDate.substring(4, 6));
+    const yData = data.map((i) => {
+      let rainfall = parseFloat(i.rainfall);
+      return rainfall = rainfall || 0;  // 如果rainfall的值是NaN、null、undefined、0或""（空字串），那麼rainfall會被設定為0，否則保持原來的值
+    });
+
+    // X軸
+    const xScale = d3.scaleLinear()
+                     .domain(d3.extent(xData))
+                     .range([margin, width - margin])
+                     .nice();
+    const xAxisGenerator = d3.axisBottom(xScale)
+                             .ticks(8)
+                             .tickFormat(d => d + "月");
+    const xAxis = svg.append("g")` + "\n" +
+'                     .attr("transform", `translate(0, ${height - margin})`)' + "\n" +
+`                     .call(xAxisGenerator);
+
+    // Y軸
+    const yScale = d3.scaleLinear()
+                     .domain(d3.extent(yData))
+                     .range([height - margin, margin])
+                     .nice();
+    const yAxisGenerator = d3.axisLeft(yScale).tickFormat(d => d + "mm");
+    const yAxis = svg.append("g")` + "\n" +
+'                     .attr("transform", `translate(${margin}, 0)`)' + "\n" +
+`                     .call(yAxisGenerator);
+
+    // 把資料按照name分組
+    const sumName = d3.group(data, d => d.observatory);
+    const color = d3.scaleOrdinal()
+                    .domain(data.map(d => d.item))  // 此資料沒有item項，因此此同'.domain()'，即domain是空的
+                    .range(d3.schemeCategory10);
+
+    // 建立tooltip
+    const nameTag = d3.select("#multiLineChartExample")
+                      .style("position", "relative")
+                      .append("div")
+                      .attr("class", "multiLineChartNameTag")
+                      .style("position", "absolute")
+                      .style("background-color", "#121212")
+                      .style("color", "#f2f2f2")
+                      .style("border-radius", "5px")
+                      .style("padding", "10px")
+                      .style("display", "none");
+
+    // 開始建立折線圖
+    svg.append("g")
+       .selectAll("path")
+       .data(sumName)
+       .join("path")
+       .attr("d", d => {
+         return d3.line()
+                  .x((d) => xScale(d.observeDate.substr(4, 6)))
+                  .y((d) => {
+                    let rainfall = parseFloat(d.rainfall);
+                    rainfall = rainfall || 0;
+                    return yScale(rainfall);
+                  })(d[1])  // 因為是從sumName裡面取資料，除了觀測站（observatory）以外的資料都在d[1]裡
+       })
+       .attr("fill", "none")
+       .attr("stroke", d => color(d))
+       .attr("stroke-width", 1.5)
+       .style("cursor", "pointer")
+       .on("mouseover", handleMouseover)
+       .on("mouseleave", handleMouseleave);
+
+    function handleMouseover(e) {
+      let pt = d3.pointer(e, e.target);
+      d3.select(this).style("stroke-width", "5");
+
+      nameTag.style("display", "block")
+             .html(e.target.__data__[0])  // 因為已用"d3.group()"分組，所以此處"e.target.__data__[0]"代表觀測站名稱
+             .style("left", pt[0] + 10 + "px")
+             .style("top", pt[1] + "px");
+    };
+
+    function handleMouseleave() {
+      d3.select(this).style("stroke-width", "1.5");
+      nameTag.style("display", "none");
+    };
+  };
+  multiLineChart();
+</script>`,
+              jsCode: null,
+              vueCode: null
+            }
+          },
+          {
+            detailTitle: "多線折線圖搭配選取刷",
+            detailSubtitle: "書本範例改編。資料為 2010 年 1 月以來各觀測站之降雨量。",
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<div id="multiLineChartExampleWithBrush"></div>
+
+<script>
+  const multiLineChartWithBrush = async () => {
+    // svg
+    const width = 600;
+    const height = 400;
+    const margin = 50;
+    const svg = d3.select("#multiLineChartExampleWithBrush")
+                  .append("svg")
+                  .attr("width", width)
+                  .attr("height", height);
+
+    // 取資料集
+    const data = await d3.json("https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=5n9c3AlEJ2DH&IsTransData=1");
+    const xData = data.map((d) => d3.timeParse("%Y%m")(d.observeDate));
+    const yData = data.map((d) => {
+      let rainfall = parseFloat(d.rainfall);
+      return rainfall = rainfall || 0;  // 如果rainfall的值是NaN、null、undefined、0或""（空字串），那麼rainfall會被設定為0，否則保持原來的值
+    });
+
+    // X軸
+    const xScale = d3.scaleTime()
+                     .domain(d3.extent(xData))
+                     .range([margin, width - margin])
+                     .nice();
+    const xAxisGenerator = d3.axisBottom(xScale).tickFormat(d => d3.timeFormat("%Y/%m")(d)).ticks(6);
+    const xAxis = svg.append("g")` + "\n" +
+'                     .attr("transform", `translate(0, ${height - margin})`)' + "\n" +
+`                     .call(xAxisGenerator);
+
+    // Y軸
+    const yScale = d3.scaleLinear()
+                     .domain(d3.extent(yData))
+                     .range([height - margin, margin])
+                     .nice();
+    const yAxisGenerator = d3.axisLeft(yScale).tickFormat(d => d + "mm");
+    const yAxis = svg.append("g")` + "\n" +
+'                     .attr("transform", `translate(${margin}, 0)`)' + "\n" +
+`                     .call(yAxisGenerator);
+
+    // 把資料按照name分組
+    const sumName = d3.group(data, d => d.observatory);
+    const color = d3.scaleOrdinal()
+                    .domain(data.map(d => d.item))  // 此資料沒有item項，因此此同'.domain()'，即domain是空的
+                    .range(d3.schemeCategory10);
+
+    // 建立一個畫布範圍，超過此畫布的畫面都不會被渲染，這樣才能控制縮放的大小
+    const clip = svg.append("defs")
+                    .append("clipPath")
+                    .attr("id", "multiLineChartWithBrushClip")
+                    .append("rect")
+                    .attr("x", margin)
+                    .attr("y", margin)
+                    .attr("width", width - margin * 2)
+                    .attr("height", height - margin * 2);
+
+    // 設定brush
+    const brush = d3.brushX()
+                    .extent([[margin, margin], [width - margin, height - margin]])
+                    .on("end", updateChart);
+
+    // 開始建立折線圖
+    const line = svg.append("g");
+
+    // 畫上折線
+    line.selectAll("path")
+        .data(sumName)
+        .join("path")
+        .attr("class", "multiLineChartWithBrusLine")
+        .attr("d", d => {
+          return d3.line()
+                   .x((d) => xScale(d3.timeParse("%Y%m")(d.observeDate)))
+                   .y((d) => {
+                    let rainfall = parseFloat(d.rainfall);
+                    rainfall = rainfall || 0;
+                    return yScale(rainfall);
+                   })(d[1])  // 因為是從sumName裡面取資料，除了觀測站（observatory）以外的資料都在d[1]裡
+        })
+        .attr("fill", "none")
+        .attr("stroke", d => color(d))
+        .attr("stroke-width", 1.5)
+        .style("cursor", "pointer");
+
+    // 加上brush
+    line.attr("clip-path", "url(#multiLineChartWithBrushClip)")
+        .append("g")
+        .attr("class", "multiLineChartWithBrushBrush")
+        .call(brush);
+
+    // 設定brush後的動作
+    function updateChart(e, d) {
+      // xBrush的範圍，會回傳一個[x0, x1]的陣列
+      const brushExtent = e.selection;
+      if (brushExtent) {
+        // xScale.invert是把回傳的x0和x1變成xScale接受的數值
+        xScale.domain([xScale.invert(brushExtent[0]), xScale.invert(brushExtent[1])]);
+        // 移除brush的灰色區域
+        // 'brush.move'是用來改變或移動brush的選取範圍，將第二個參數設定為'null'，可以清除目前的選取區域
+        line.select(".multiLineChartWithBrushBrush").call(brush.move, null);
+      };
+
+      // 按照更新的domain範圍值重新選染圖表
+      xAxis.transition().duration(1000).call(xAxisGenerator);
+      line.selectAll(".multiLineChartWithBrusLine")
+          .transition()
+          .duration(1000)
+          .attr("d", d => {
+            return d3.line()
+                     .x((d) => xScale(d3.timeParse("%Y%m")(d.observeDate)))
+                     .y((d) => {
+                       let rainfall = parseFloat(d.rainfall);
+                       rainfall = rainfall || 0;
+                       return yScale(rainfall);
+                     })(d[1]);
+          });
+    };
+
+    // 雙極svg縮回原本大小
+    svg.on("dblclick", reset);
+
+    function reset() {
+      // 回到原本的大小
+      xScale.domain(d3.extent(xData));
+
+      // 重新呼叫渲染軸線和折線
+      xAxis.transition().duration(1000).call(xAxisGenerator);
+      line.selectAll(".multiLineChartWithBrusLine")
+          .transition()
+          .duration(1000)
+          .attr("d", d => {
+            return d3.line()
+                     .x((d) => xScale(d3.timeParse("%Y%m")(d.observeDate)))
+                     .y((d) => {
+                       let rainfall = parseFloat(d.rainfall);
+                       rainfall = rainfall || 0;
+                       return yScale(rainfall);
+                     })(d[1])
+          });
+    };
+  };
+  multiLineChartWithBrush();
+</script>`,
               jsCode: null,
               vueCode: null
             }

@@ -1,0 +1,1 @@
+import"./transform-DNQUPihx.js";import{r as e,c as t,f as a}from"./index-DSNd-s9O.js";const f={__name:"D3jsBarChartDemo",setup(o){const r=e(null);return(n,s)=>(a(),t("div",{ref_key:"barChartContainerRef",ref:r,style:{border:"1px solid lightgray"}},null,512))}};export{f as default};

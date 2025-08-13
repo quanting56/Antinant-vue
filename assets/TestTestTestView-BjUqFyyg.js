@@ -1,0 +1,1 @@
+import"./transform-DNQUPihx.js";import{r as s,c as r,b as o,f as l}from"./index-DSNd-s9O.js";const c=300,i=200,_={__name:"TestTestTestView",setup(n){const t=s(null);return(a,e)=>(l(),r("svg",{ref_key:"TEst",ref:t,width:c,height:i,style:{border:"1px solid lightgray"}},e[0]||(e[0]=[o("circle",{cx:"60",cy:"50",r:"30",fill:"#567866"},null,-1)]),512))}};export{_ as default};

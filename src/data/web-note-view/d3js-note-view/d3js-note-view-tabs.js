@@ -7760,7 +7760,9 @@ onMounted(() => {
           {
             detailTitle: "氣泡圖（Bubble Chart）",
             detailSubtitle: "書本範例。橫軸為人均 GDP，縱軸為平均壽命，氣泡大小為人口數。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsBubbleChartNote/D3jsBubbleChartDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="bubbleChartExample"></div>
@@ -7875,6 +7877,7 @@ onMounted(() => {
 '             .style("left", `${pt[0] + 10}px`)' + "\n" +
 '             .style("top", `${pt[1] + 10}px`);' + "\n" +
 `    };
+
     function hideTooltip(e, d) {
       tooltip.style("display", "none");
 
@@ -7887,13 +7890,147 @@ onMounted(() => {
   drawBubbleChart();
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div ref="bubbleChartRef"></div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const bubbleChartRef = ref(null);
+
+// 圖表尺寸與內邊距設定
+const width = 600;
+const height = 400;
+const margin = {top: 20, right: 20, bottom: 30, left: 25};
+const chartWidth = width - margin.left - margin.right;
+const chartHeight = height - margin.top - margin.bottom;
+
+onMounted(async () => {
+  // 建立svg
+  const svg = d3.select(bubbleChartRef.value)
+                .style("position", "relative")
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+  // 匯入資料
+  const url = "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/4_ThreeNum.csv";` + "\n" +
+'  const data = await d3.csv(`${url}`);' + "\n" +
+`
+  // 整理X軸資料、Y軸資料、Z的人口數量資料
+  const xData = data.map((d) => +d.gdpPercap);
+  const yData = data.map((d) => +d.lifeExp);
+  const zData = data.map((d) => +d.pop);
+
+  // 建立X軸
+  const xScale = d3.scaleLinear()
+                   .domain([0, d3.max(xData)])
+                   .range([margin.left, chartWidth])
+                   .nice();
+  const xAxisGenerator = d3.axisBottom(xScale);
+
+  svg.append("g")` + "\n" +
+'     .attr("transform", `translate(0, ${margin.top + chartHeight})`)' + "\n" +
+`     .call(xAxisGenerator);
+
+  // 建立Y軸
+  const yScale = d3.scaleLinear()
+                   .domain([0, d3.max(yData)])
+                   .range([margin.top + chartHeight, margin.top])
+                   .nice();
+  const yAxisGenerator = d3.axisLeft(yScale);
+
+  svg.append("g")` + "\n" +
+'     .attr("transform", `translate(${margin.left}, 0)`)' + "\n" +
+`     .call(yAxisGenerator);
+
+  // 氣泡(Z)的部分
+  // 按照人口去設定氣泡大小的比例尺
+  const radiusScale = d3.scaleLinear()
+                        .domain([d3.min(zData), d3.max(zData)])
+                        .range([4, 30]);
+
+  // 設定氣泡顏色，本例根據不同洲來設定
+  const bubbleColor = d3.scaleOrdinal()
+                        .domain(["Asia", "Europe", "Americas", "Africa", "Oceania"])
+                        .range(d3.schemeSet2);
+
+  // 建立tooltip
+  const tooltip = d3.select(bubbleChartRef.value)
+                    .append("div")
+                    .style("position", "absolute")
+                    .style("display", "none")
+                    .attr("class", "dotsTooltip")
+                    .style("background-color", "#121212")
+                    .style("border-radius", "5px")
+                    .style("padding", "10px")
+                    .style("color", "#f2f2f2");
+
+  // 綁定氣泡
+  const bubble = svg.append("g")
+                    .selectAll("circle")
+                    .data(data)
+                    .join("circle")
+                    .attr("cx", (d) => xScale(d.gdpPercap))
+                    .attr("cy", (d) => yScale(d.lifeExp))
+                    .attr("r", (d) => radiusScale(d.pop))
+                    .attr("fill", (d) => bubbleColor(d.continent))
+                    .attr("opacity", 0.85)
+                    .style("cursor", "pointer")
+                    .on("mouseover", showTooltip)
+                    .on("mousemove", moveTooltip)
+                    .on("mouseleave", hideTooltip);
+
+  // 設定顯示、移動、隱藏tooltips
+  function showTooltip(e, d) {
+    const pt = d3.pointer(e, e.target);
+
+    // 設定tooltip樣式與呈現文字
+    tooltip.style("display", "block")` + "\n" +
+'           .html(`<p>國家：${d.country}</p>' + "\n" +
+'                  <p>所屬洲：${d.continent}</p>' + "\n" +
+'                  <p>人口數：${(+d.pop).toLocaleString()}</p>' + "\n" +
+'                  <p>平均壽命：${d.lifeExp}</p>' + "\n" +
+'                  <p>人均GDP：${d.gdpPercap}</p>`)' + "\n" +
+'           .style("left", `${pt[0] + 10}px`)' + "\n" +
+'           .style("top", `${pt[1] + 10}px`);' + "\n" +
+`
+    // 圓點強調
+    d3.select(e.target)
+      .attr("r", radiusScale(d.pop) + 5)
+      .style("opacity", 0.7);
+  };
+
+  function moveTooltip(e) {
+    const pt = d3.pointer(e, e.target);
+    tooltip.style("display", "block")` + "\n" +
+'           .style("left", `${pt[0] + 10}px`)' + "\n" +
+'           .style("top", `${pt[1] + 10}px`);' + "\n" +
+`  };
+
+  function hideTooltip(e, d) {
+    tooltip.style("display", "none");
+
+    // 圓點復原
+    d3.select(e.target)
+      .attr("r", radiusScale(d.pop))
+      .style("opacity", 0.85);
+  };
+});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "有按鈕可以切換的氣泡圖",
             detailSubtitle: "此為散佈圖練習，內容為「北北基桃區 112 年底人口數、三大黨的得票率、111 年底老年人口比例」的散佈圖。<br />- 註：基隆老年人口使用 110 年底資料、桃園老年人口使用 113 七月資料。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsBubbleChartNote/D3jsSwitchBubbleChartsDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="bubbleChartPractice" class="mt-1"></div>
@@ -8026,6 +8163,7 @@ onMounted(() => {
 '             .style("left", `${((pt[0] + 10) < width) ? (pt[0] + 10) : (pt[0] - margin.right * 40)}px`)' + "\n" +
 '             .style("top", `${pt[1]}px`);' + "\n" +
 `    };
+
     function handleMouseOut() {
       d3.select(this)
         .attr("r", (d) => parseFloat(zScale(+d["一一一年底老年人口數"])/(+d["人口數"])))
@@ -8138,7 +8276,370 @@ onMounted(() => {
   };
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div ref="svgContainerRef"></div>
+  <div class="btn-container" :style="{ 'width': width + 'px'}">
+    <button type="button" @click="bubbleChartPractice('該行政區國民黨得票率', '#000095')" class="kmt-btn">國民黨</button>
+    <button type="button" @click="bubbleChartPractice('該行政區民進黨得票率', '#1b9431')" class="dpp-btn">民進黨</button>
+    <button type="button" @click="bubbleChartPractice('該行政區民眾黨得票率', '#28c8c8')" class="tpp-btn">民眾黨</button>
+    <button type="button" @click="bubbleChartPracticeAll" class="all-btn">一起看</button>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+import csvData from "../../../../assets/web-note-view/d3js-note-view/vote-share/第11屆全國不分區及僑居國外國民立法委員選舉各政黨在北北基桃各投開票所得票數一覽表.csv?url";
+
+const svgContainerRef = ref(null);
+
+// 圖表尺寸與內邊距設定
+const width = 600;
+const height = 400;
+const margin = {top: 20, right: 20, bottom: 50, left: 63};
+
+let svg, xScale, yScale;
+
+onMounted(() => {
+  svg = d3.select(svgContainerRef.value)
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+  // X軸
+  xScale = d3.scaleLinear()
+             .domain([0, 600000])
+             .range([margin.left, width - margin.right])
+             .nice();
+  const xAxisGenerator = d3.axisBottom(xScale);
+  svg.append("g")` + "\n" +
+'     .attr("transform", `translate(0, ${height - margin.bottom})`)' + "\n" +
+`     .call(xAxisGenerator);
+
+  // Y軸
+  yScale = d3.scaleLinear()
+             .domain([0, 0.5])
+             .range([height - margin.bottom, margin.top])
+             .nice();
+  const yAxisGenerator = d3.axisLeft(yScale);
+  svg.append("g")` + "\n" +
+'     .attr("transform", `translate(${margin.left}, 0)`)' + "\n" +
+`     .call(yAxisGenerator);
+
+  // X軸標題（由於X軸標題與政黨無關，不需重繪，所以放在'bubbleChartPractice()'外）
+  svg.append("text")
+     .attr("class", "bubbleChartXTitle")
+     .attr("fill", "#000000")` + "\n" +
+'     .attr("x", `${width - margin.right * 6}`)' + "\n" +
+'     .attr("y", `${height - margin.bottom / 6}`)' + "\n" +
+`     .text("人口數")
+     .style("font-family", "sans-serif")
+     .style("font-size", "14px");
+
+  // 預設顯示國民黨
+  bubbleChartPractice("該行政區國民黨得票率", "#000095");
+});
+
+// 畫單一政黨圖
+const bubbleChartPractice = async (voteShareKey, colorKey) => {
+  // 先移除舊的圖形內容
+  svg.selectAll(".bubbleChartYTitle").transition().duration(300).style("opacity", "0").remove();
+  svg.selectAll("circle").transition().duration(1000).attr("r", 0).remove();
+
+  // 整理數據
+  const res = await d3.csv(csvData);
+  const data = res.filter((_, index) => index !== 61)  // 過濾掉第62橫列的數據;
+  const xData = res.map((d) => +d["人口數"]);
+  const yData = res.map((d) => d3.format(".4f")(+d[voteShareKey]));
+  const zData = res.map((d) => ( +d["一一一年底老年人口數"] / +d["人口數"] ));
+
+  // z比例尺
+  const zScale = d3.scaleLinear()
+                   .domain(d3.extent(zData))
+                   .range([1, 25]);
+
+  // Y軸標題
+  svg.append("text")
+     .attr("class", "bubbleChartYTitle")
+     .attr("fill", "#000000")` + "\n" +
+'     .attr("x", `${margin.left / 4}`)' + "\n" +
+'     .attr("y", `${margin.top * 4}`)' + "\n" +
+`     .style("font-family", "sans-serif")
+     .style("font-size", "14px")
+     .selectAll("tspan")
+     .data(("該行政區" + voteShareKey.substring(4, 7) + "得票率").split(""))  // 將文字轉換成一個個字
+     .join("tspan")` + "\n" +
+'     .attr("x", `${margin.left / 6}`)  // 確保每行的x座標都相同' + "\n" +
+`     .attr("dy", "1.1em")  // 控制每行的間距
+     .text(d => d)
+     .style("opacity", 0)
+     .transition()
+     .duration(200)
+     .style("opacity", 1);
+
+  // 加上點點
+  const dots = svg.append("g")
+                  .selectAll("circle")
+                  .data(data)
+                  .join("circle")
+                  .attr("cx", (d) => xScale(d["人口數"]))
+                  .attr("cy", (d) => yScale(d[voteShareKey]))
+                  .attr("fill", colorKey)
+                  .style("cursor", "pointer")
+                  .style("opacity", 0.8)
+                  .on("mouseover", handleMouseOver)
+                  .on("mouseout", handleMouseOut)
+                  .transition()
+                  .duration(1000)
+                  .attr("r", (d) => parseFloat(zScale( +d["一一一年底老年人口數"] / +d["人口數"] )));
+
+  const tooltip = d3.select(svgContainerRef.value)
+                    .style("position", "relative")
+                    .append("div")
+                    .style("position", "absolute")
+                    .style("display", "none")
+                    .style("background-color", "#121212")
+                    .style("color", "#f2f2f2")
+                    .style("border", "#f2f2f2")
+                    .style("border-radius", "8px")
+                    .style("padding", "6px")
+                    .style("font-family", "sans-serif")
+                    .style("font-size", "12px")
+                    .style("white-space", "nowrap")
+                    .style("opacity", "0.85");
+
+  function handleMouseOver(e) {
+    // 點點變色
+    d3.select(this)
+      .attr("r", (d) => parseFloat(zScale( +d["一一一年底老年人口數"] / +d["人口數"] )) + 8)
+      .attr("fill", "black")
+      .style("opacity", 0.8);
+  
+    let pt = d3.pointer(e, e.target);
+    tooltip.style("display", "block")` + "\n" +
+'           .html(`<p style="margin: 0;">' + "\n" +
+'             <strong>${e.target.__data__["縣市"] + e.target.__data__["行政區"]}</strong><br>' + "\n" +
+'             2024一月人口數：${d3.format(",")(e.target.__data__["人口數"])} 人<br>' + "\n" +
+'             老年人口比例：${d3.format(".4f")(+e.target.__data__["一一一年底老年人口數"] / +e.target.__data__["人口數"] * 100)}%<br>' + "\n" +
+'             ${voteShareKey}：${d3.format(".2f")(e.target.__data__[voteShareKey] * 100)}%' + "\n" +
+'           </p>`)' + "\n" +
+'           .style("left", `${((pt[0] + 10) < width) ? (pt[0] + 10) : (pt[0] - margin.right * 40)}px`)' + "\n" +
+'           .style("top", `${pt[1]}px`);' + "\n" +
+`  };
+
+  function handleMouseOut() {
+    d3.select(this)
+      .attr("r", (d) => parseFloat(zScale( +d["一一一年底老年人口數"] / +d["人口數"] )))
+      .attr("fill", colorKey)
+    tooltip.style("display", "none");
+  };
+};
+
+const bubbleChartPracticeAll = async () => {
+  // 移除舊的圖形內容
+  svg.selectAll(".bubbleChartYTitle").transition().duration(300).style("opacity", "0").remove();
+  svg.selectAll("circle").transition().duration(1000).attr("r", 0).remove();
+
+  // 讀取並整理數據
+  const res = await d3.csv(csvData);
+  const data = res.filter((d, index) => index !== 61);  // 過濾掉第62橫列的數據;
+  const zData = res.map((d) => ( +d["一一一年底老年人口數"] / +d["人口數"] ));
+  const zScale = d3.scaleLinear()
+                   .domain(d3.extent(zData))
+                   .range([1, 25]);
+
+  // 定義顏色
+  const colors = {
+    "該行政區國民黨得票率": "#000095",
+    "該行政區民進黨得票率": "#1B9431",
+    "該行政區民眾黨得票率": "#28C8C8"
+  };
+
+  // Y軸標題
+  svg.append("text")
+     .attr("class", "bubbleChartYTitle")
+     .attr("fill", "#000000")` + "\n" +
+'     .attr("x", `${margin.left / 4}`)' + "\n" +
+'     .attr("y", `${margin.top * 4}`)' + "\n" +
+`     .style("font-family", "sans-serif")
+     .style("font-size", "14px")
+     .selectAll("tspan")
+     .data(("該行政區三大黨得票率").split(""))  // 將文字轉換成一個個字
+     .join("tspan")` + "\n" +
+'     .attr("x", `${margin.left / 6}`)  // 確保每行的x座標都相同' + "\n" +
+`     .attr("dy", "1.1em")  // 控制每行的間距
+     .text(d => d)
+     .style("opacity", 0)
+     .transition()
+     .duration(200)
+     .style("opacity", 1);
+
+  // 加上點點
+  Object.keys(colors).forEach((voteShareKey) => {
+    svg.append("g")
+       .selectAll("circle")
+       .data(data)
+       .join("circle")
+       .attr("cx", (d) => xScale(d["人口數"]))
+       .attr("cy", (d) => yScale(d[voteShareKey]))
+       .attr("fill", colors[voteShareKey])
+       .attr("data-vote-key", voteShareKey)  // 存儲與該圓圈相關的投票率鍵
+       .style("cursor", "pointer")
+       .style("opacity", 0.8)
+       .on("mouseover", handleMouseOver)
+       .on("mouseout", handleMouseOut)
+       .transition()
+       .duration(1000)
+       .attr("r", (d) => parseFloat(zScale( +d["一一一年底老年人口數"] / +d["人口數"] )));
+  });
+
+  const tooltip = d3.select(svgContainerRef.value)
+                    .style("position", "relative")
+                    .append("div")
+                    .style("position", "absolute")
+                    .style("display", "none")
+                    .style("background-color", "#121212")
+                    .style("color", "#f2f2f2")
+                    .style("border", "#f2f2f2")
+                    .style("border-radius", "8px")
+                    .style("padding", "6px")
+                    .style("font-family", "sans-serif")
+                    .style("font-size", "12px")
+                    .style("white-space", "nowrap")
+                    .style("opacity", "0.85");
+
+  function handleMouseOver(e) {
+    const voteShareKey = d3.select(this).attr("data-vote-key");  // 從data-*屬性中取出voteShareKey
+  
+    d3.select(this)
+      .attr("r", (d) => parseFloat(zScale(+d["一一一年底老年人口數"] / +d["人口數"])) + 8)
+      .attr("fill", "black")
+      .style("opacity", 0.8);
+
+    let pt = d3.pointer(e, e.target);
+    tooltip.style("display", "block")` + "\n" +
+'           .html(`<p style="margin: 0;">' + "\n" +
+'              <strong>${e.target.__data__["縣市"] + e.target.__data__["行政區"]}</strong><br>' + "\n" +
+'              2024一月人口數：${d3.format(",")(e.target.__data__["人口數"])}<br>' + "\n" +
+'              老年人口比例：${d3.format(".4f")(+e.target.__data__["一一一年底老年人口數"] / +e.target.__data__["人口數"] * 100)}%<br>' + "\n" +
+'              ${voteShareKey}：${d3.format(".2f")(e.target.__data__[voteShareKey] * 100)}%' + "\n" +
+'            </p>`)' + "\n" +
+'           .style("left", `${((pt[0] + 10) < width) ? (pt[0] + 10) : (pt[0] - margin.right * 40)}px`)' + "\n" +
+'           .style("top", `${pt[1]}px`);' + "\n" +
+`  };
+
+  function handleMouseOut() {
+    const voteShareKey = d3.select(this).attr("data-vote-key");  // 從data-*屬性中取出voteShareKey
+  
+    d3.select(this)
+      .attr("r", (d) => parseFloat(zScale( +d["一一一年底老年人口數"] / +d["人口數"] )))
+      .attr("fill", colors[voteShareKey]);
+    tooltip.style("display", "none");
+  };
+};
+</script>
+
+<style scoped>
+.btn-container {
+  display: flex;
+  gap: 5px;
+  justify-content: center;
+}
+
+.kmt-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #000095;
+  background-color: #ffffff;
+  border: 1px solid #000095;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.kmt-btn:hover {
+  color: #ffffff;
+  background-color: #000095;
+  border-color: #000095;
+}
+
+.dpp-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #1b9431;
+  background-color: #ffffff;
+  border: 1px solid #1b9431;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.dpp-btn:hover {
+  color: #ffffff;
+  background-color: #1b9431;
+  border-color: #1b9431;
+}
+
+.tpp-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #28c8c8;
+  background-color: #ffffff;
+  border: 1px solid #28c8c8;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.tpp-btn:hover {
+  color: #ffffff;
+  background-color: #28c8c8;
+  border-color: #28c8c8;
+}
+
+.all-btn {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #dc3535;
+  background-color: #ffffff;
+  border: 1px solid #dc3535;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.all-btn:hover {
+  color: #ffffff;
+  background-color: #dc3535;
+  border-color: #dc3535;
+}
+</style>`
             }
           }
         ]

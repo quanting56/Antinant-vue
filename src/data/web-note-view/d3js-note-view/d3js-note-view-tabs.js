@@ -8768,13 +8768,174 @@ const bubbleChartPracticeAll = async () => {
   updataElectricChart("../data/taipowerData/202404.csv");
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div ref="barChartContainerRef"></div>
+  <div class="btn-container">
+    <button
+      type="button"
+      v-for="(btn, index) in buttons"
+      :key="index"
+      @click="updateElectricChart(btn.file)"
+      class="month-button"
+    >
+      {{ btn.label }}
+    </button>
+  </div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+import file202404 from "../../../../assets/web-note-view/d3js-note-view/taipower-data/202404.csv?url";
+import file202405 from "../../../../assets/web-note-view/d3js-note-view/taipower-data/202405.csv?url";
+import file202406 from "../../../../assets/web-note-view/d3js-note-view/taipower-data/202406.csv?url";
+
+const barChartContainerRef = ref(null);
+
+// 圖表尺寸與內邊距設定
+const width = 600;
+const height = 400;
+const margin = {top: 40, right: 40, bottom: 40, left: 80};
+
+const buttons = [
+  { label: "2024 4月", file: file202404 },
+  { label: "2024 5月", file: file202405 },
+  { label: "2024 6月", file: file202406 },
+];
+
+let svg, xScale, yScale, xAxisGenerator, yAxisGenerator, xAxis, yAxis;
+
+const initChart = () => {
+  svg = d3.select(barChartContainerRef.value)
+          .append("svg")
+          .attr("width", width)
+          .attr("height", height);
+
+  // 建立初始X軸
+  xScale = d3.scaleBand()
+             .range([margin.left, width - margin.right])
+             .padding(0.2);
+  xAxisGenerator = d3.axisBottom(xScale)
+                     .tickSizeOuter(0);
+  xAxis = svg.append("g")` + "\n" +
+'             .attr("transform", `translate(0, ${height - margin.bottom})`);' + "\n" +
+`
+  // 建立初始Y軸
+  yScale = d3.scaleLinear()
+             .range([height - margin.bottom, margin.top]);
+  yAxisGenerator = d3.axisLeft(yScale)
+                     .ticks(5)
+                     .tickSize(3)
+                     .tickSizeOuter(0);
+  yAxis = svg.append("g")` + "\n" +
+'             .attr("transform", `translate(${margin.left}, 0)`);' + "\n" +
+`};
+
+const updateElectricChart = async (csvData) => {
+  const data = await d3.csv(csvData);
+  // map資料集
+  const xData = data.map((i) => i["縣市"]);
+  const yData = data.map((i) => parseInt(i["合計售電量_度"].split(",").join("")));  // 用'parseInt(目標.split(",").join(""))'消去數字裡三位的逗號，並轉成數值
+
+  // 設定X軸Domain、建立X軸
+  xScale.domain(xData);
+  xAxis.transition().duration(1000).call(xAxisGenerator);
+
+  // 調整X軸刻度文字標籤傾斜
+  xAxis.selectAll("text")
+       .attr("transform", "translate(-10, 0) rotate(-45)")
+       .style("text-anchor", "end");
+
+  // 設定Y軸Domain、建立Y軸
+  yScale.domain([0, d3.max(yData)]).nice();
+  yAxis.transition().duration(1000).call(yAxisGenerator);
+
+  // 開始建立長條圖
+  const bar = svg.selectAll("rect")
+                 .data(data)
+                 .join("rect")
+                 .attr("x", d => xScale(d["縣市"]))
+                 .attr("width", xScale.bandwidth())
+                 .attr("fill", "#69b3a2");
+
+  // 加上漸增動畫
+  // 注意：如果要加動畫，事件要分開寫
+  bar.transition()
+     .duration(1000)
+     .attr("y", d => yScale(parseInt(d["合計售電量_度"].split(",").join(""))))
+     .attr("height", d => ( height - margin.bottom) - yScale(parseInt(d["合計售電量_度"].split(",").join(""))));
+
+  // 加上滑鼠事件
+  bar.style("cursor", "pointer")
+     .on("mouseover", handleMouseOver)
+     .on("mouseleave", handleMouseLeave);
+};
+
+function handleMouseOver(e) {
+  d3.select(this).attr("fill", "#f68b47");
+
+  // 加上文字標籤
+  svg.append("text")
+     .attr("class", "d3jsBarChartInfoText")
+     .attr("x", xScale(e.target.__data__["縣市"]))
+     .attr("y", yScale(parseInt(e.target.__data__["合計售電量_度"].split(",").join(""))))
+     .style("fill", "#121212")
+     .style("font-size", "18px")
+     .style("font-weight", "bold")
+     .style("text-anchor", "middle")
+     .text(e.target.__data__["合計售電量_度"] + "度");
+};
+
+function handleMouseLeave() {
+  d3.select(this).attr("fill", "#69b3a2");
+  svg.select(".d3jsBarChartInfoText").remove();
+};
+
+onMounted(() => {
+  initChart();
+  updateElectricChart(buttons[0].file);
+});
+</script>
+
+<style scoped>
+.btn-container {
+  display: flex;
+  gap: 5px;
+}
+
+.month-button {
+  padding: 6px 12px 6px 12px;
+  font-size: 16px;
+  font-weight: 400;
+  font-family: inherit;
+  line-height: 1.5;
+  color: #ffc107;
+  background-color: #ffffff;
+  border: 1px solid #ffc107;
+  border-radius: 6px;
+  cursor: pointer;
+  transition:
+    color 0.15s ease-in-out,
+    background-color 0.15s ease-in-out,
+    border-color 0.15s ease-in-out;
+}
+
+.month-button:hover {
+  color: #ffffff;
+  background-color: #ffc107;
+  border-color: #ffc107;
+}
+</style>`
             }
           },
           {
             detailTitle: "複數長條圖",
             detailSubtitle: "書本範例。橫軸為年份，縱軸為勞動人口。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsBarChartNote/D3jsMultiBarChartDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="multiBarChartExample"></div>
@@ -8912,7 +9073,155 @@ const bubbleChartPracticeAll = async () => {
           .text(d => d);
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div ref="multiBarChartContainerRef"></div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const multiBarChartContainerRef = ref(null);
+
+// 圖表尺寸與內邊距設定
+const width = 600;
+const height = 400;
+const margin = {top: 20, right: 20, bottom: 100, left: 40};
+
+const data = [
+  {"年度": 2017, "15~24歲(千人)": 80, "25~44歲(千人)": 506, "45~64歲(千人)": 381, "65歲及以上(千人)": 35},
+  {"年度": 2018, "15~24歲(千人)": 80, "25~44歲(千人)": 508, "45~64歲(千人)": 392, "65歲及以上(千人)": 38},
+  {"年度": 2019, "15~24歲(千人)": 82, "25~44歲(千人)": 511, "45~64歲(千人)": 398, "65歲及以上(千人)": 39},
+  {"年度": 2020, "15~24歲(千人)": 79, "25~44歲(千人)": 504, "45~64歲(千人)": 387, "65歲及以上(千人)": 42}
+];
+
+onMounted(() => {
+  const svg = d3.select(multiBarChartContainerRef.value)
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+  // 設定要給X軸用的scale和axis（年份xScale）
+  const xData = data.map((d) => d["年度"]);
+  const xScale = d3.scaleBand()
+                   .domain(xData)  // '.scaleBand()'的'.domain()'需要一組data，而不是數對[,]
+                   .range([margin.left, width - margin.right])
+                   .padding(0.2);
+  const xAxisGenerator = d3.axisBottom(xScale);
+
+  // 呼叫繪製X軸、調整X軸位置
+  const xAxisGroup = svg.append("g")` + "\n" +
+'                        .attr("transform", `translate(0, ${height - margin.bottom})`)' + "\n" +
+`                        .call(xAxisGenerator);
+                                                                      
+  // 設定要給Y軸用的scale和axis
+  const yScale = d3.scaleLinear()
+                   .domain([0, 600])
+                   .range([height - margin.bottom, margin.top])
+                   .nice();
+
+  const yAxisGenerator = d3.axisLeft(yScale).ticks(5).tickSize(3);
+
+  // 呼叫繪製Y軸、調整Y軸位置
+  const yAxisGroup = svg.append("g")` + "\n" +
+'                        .attr("transform", `translate(${margin.left}, 0)`)' + "\n" +
+`                        .call(yAxisGenerator);
+
+  // 設定第2條X軸資料、比例尺（本例為不同年齡層的xScale）
+  // 用來設定「多條長條圖」的位置
+  const xSubGroups = Object.keys(data[0]).slice(1);  // 取出data中，非年份的key，並返回一個新的陣列
+  const xSubGroupsScale = d3.scaleBand()
+                            .domain(xSubGroups)
+                            .range([0, xScale.bandwidth()])
+                            .padding(0.05);
+
+  // 設定不同subgroup bar的顏色
+  const color = d3.scaleOrdinal()
+                  .domain(xSubGroups)
+                  .range(["#d4be92", "#c2cccd", "#b2c2e3", "#ead0d1"]);
+
+  // 開始建立長條圖
+  const bar = svg.append("g")
+                 .selectAll("g")
+                 .data(data)
+                 .join("g")` + "\n" +
+'                 .attr("transform", d => `translate(${xScale(d["年度"])}, 0)`)' + "\n" +
+`                 .selectAll("rect")
+                 .data((d) => xSubGroups.map(key => {return {key: key, value: d[key]}}))
+                 .join("rect")
+                 .attr("x", (d) => xSubGroupsScale(d.key))
+                 .attr("y", (d) => yScale(d.value))
+                 .attr("width", xSubGroupsScale.bandwidth())
+                 .attr("height", (d) => ( height - margin.bottom ) - yScale(d.value))
+                 .attr("fill", (d) => color(d.key))
+                 .style("cursor", "pointer")
+                 .on("mouseover", multiBarChartMouseover)
+                 .on("mousemove", multiBarChartMousemove)
+                 .on("mouseleave", multiBarChartMouseleave);
+
+  function multiBarChartMouseover(e) {
+    const pt = d3.pointer(e, svg.node());
+
+    // 加上文字標籤
+    svg.append("text")
+       .attr("class", "multiBarChartExampleInfoText")
+       .attr("x", margin.left)
+       .attr("y", yScale(e.target.__data__["value"]))
+       .attr("fill", "#121212")
+       .style("font-size", "18px")
+       .style("font-weight", "bold")
+       .style("text-anchor", "middle")
+       .text(e.target.__data__["value"] + "千人");
+
+    // 加上標示用輔助虛線
+    svg.append("line")
+       .attr("class", "multiBarChartExampleDashedY")
+       .attr("x1", margin.left)
+       .attr("y1", yScale(e.target.__data__["value"]))
+       .attr("x2", pt[0])
+       .attr("y2", yScale(e.target.__data__["value"]))
+       .style("stroke", "black")
+       .style("stroke-dasharray", 3);
+  };
+
+  function multiBarChartMousemove(e) {
+    const pt = d3.pointer(e, svg.node());
+    svg.selectAll(".multiBarChartExampleDashedY")
+                               .attr("x2", pt[0]);
+  };
+
+  function multiBarChartMouseleave() {
+    svg.select(".multiBarChartExampleInfoText").remove();
+    svg.select(".multiBarChartExampleDashedY").remove();
+  }
+
+  // 加上辨識標籤
+  const tagsWrap = svg.append("g")
+                      .selectAll("g")
+                      .data(xSubGroups)
+                      .join("g")
+                      .attr("class", "multiBarChartExampleTags");
+
+  tagsWrap.append("rect")
+          .attr("x", (d, i) => (i + 1) * margin.bottom * 1.3)
+          .attr("y", height - margin.bottom / 2)
+          .attr("width", 20)
+          .attr("height", 20)
+          .attr("fill", (d) => color(d));
+
+  tagsWrap.append("text")
+          .attr("x", (d, i) => (i + 1) * margin.bottom * 1.3)
+          .attr("y", height - margin.bottom / 2 + 40)
+          .style("fill", "#121212")
+          .style("font-size", "12px")
+          .style("font-weight", "bold")
+          .style("text-anchor", "middle")
+          .text(d => d);
+});
+</script>
+
+<style scoped></style>`
             }
           },
           {
@@ -8934,7 +9243,9 @@ const bubbleChartPracticeAll = async () => {
   </li>
 </ol>`,
             detailSubtitle: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsBarChartNote/D3jsStackedBarChartDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="stackedBarChart"></div>
@@ -9058,7 +9369,141 @@ const bubbleChartPracticeAll = async () => {
           .text(d => d);
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div ref="stackedBarChartContainerRef"></div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const stackedBarChartContainerRef = ref(null);
+
+// 圖表尺寸與內邊距設定
+const width = 600;
+const height = 400;
+const margin = {top: 20, right: 20, bottom: 100, left: 40};
+
+const data = [
+  {"年度": 2017, "15~24歲(千人)": 80, "25~44歲(千人)": 506, "45~64歲(千人)": 381, "65歲及以上(千人)": 35},
+  {"年度": 2018, "15~24歲(千人)": 80, "25~44歲(千人)": 508, "45~64歲(千人)": 392, "65歲及以上(千人)": 38},
+  {"年度": 2019, "15~24歲(千人)": 82, "25~44歲(千人)": 511, "45~64歲(千人)": 398, "65歲及以上(千人)": 39},
+  {"年度": 2020, "15~24歲(千人)": 79, "25~44歲(千人)": 504, "45~64歲(千人)": 387, "65歲及以上(千人)": 42}
+];
+
+onMounted(() => {
+  const svg = d3.select(stackedBarChartContainerRef.value)
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+  // 設定要給X軸用的scale和axis
+  const xData = data.map((d) => d["年度"])
+  const xScale = d3.scaleBand()
+                   .domain(xData)
+                   .range([margin.left, width - margin.right])
+                   .padding(0.2);
+  const xAxisGenerator = d3.axisBottom(xScale);
+
+  // 呼叫繪製X軸、調整X軸位置
+  const xAxisGroup = svg.append("g")` + "\n" +
+'                        .attr("transform", `translate(0, ${height - margin.bottom})`)' + "\n" +
+`                        .call(xAxisGenerator);
+
+  // 設定要給Y軸用的scale和axis
+  const yScale = d3.scaleLinear()
+                   .domain([0, 1200])
+                   .range([height - margin.bottom, margin.top])
+                   .nice();
+  const yAxisGenerator = d3.axisLeft(yScale).ticks(5).tickSize(3);
+
+  // 呼叫繪製Y軸、調整Y軸位置
+  const yAxisGroup = svg.append("g")` + "\n" +
+'                        .attr("transform", `translate(${margin.left}, 0)`)' + "\n" +
+`                        .call(yAxisGenerator);
+
+  // 設定分組，用d3.stack()把資料堆疊起來
+  const xSubGroups = Object.keys(data[0]).slice(1);
+  const stackedData = d3.stack().keys(xSubGroups)(data);
+
+  // 設定不同subgroup bar的顏色
+  const color = d3.scaleOrdinal()
+                  .domain(xSubGroups)
+                  .range(["#97a9bf", "#d6dbbb", "#d4e6e8", "#dcd2d0"]);
+
+  // 開始建立長條圖
+  const bar = svg.append("g")
+                 .selectAll("g")
+                 .data(stackedData)
+                 .join("g")
+                 .attr("fill", (d) => color(d.key))  // 顏色放在<g>的屬性中，所以這行要放在這裡
+                 .selectAll("rect")
+                 .data(d => d)
+                 .join("rect")
+                 .attr("x", (d) => xScale(d.data["年度"]))  // 此處的'd.data'是'd3.stack()'生成之新陣列中，對應原始資料的部分，非我們自己設的'data'變數
+                 .attr("y", (d) => yScale(d[1]))
+                 .attr("height", (d) => yScale(d[0]) - yScale(d[1]))
+                 .attr("width", xScale.bandwidth())
+                 .style("cursor", "pointer")  // 未完成
+                 .on("mouseover", handleMouseover)
+                 .on("mousemove", handleMousemove)
+                 .on("mouseleave", handleMouseleave);
+
+  function handleMouseover(e) {
+    const pt = d3.pointer(e, svg.node());
+    d3.select(this).style("opacity", 0.5);
+
+    // 加上文字標籤
+    svg.append("text")
+       .attr("class", "stackedBarChartInfoText")
+       .attr("fill", "#121212")
+       .style("font-size", "18px")
+       .style("font-weight", "bold")
+       .style("text-anchor", "start")
+       .attr("x", pt[0])
+       .attr("y", pt[1] - 20)
+       .text((e.target.__data__[1] - e.target.__data__[0]) + " 千人");
+  };
+
+  function handleMousemove(e) {
+    const pt = d3.pointer(e, svg.node());
+    svg.select(".stackedBarChartInfoText")
+       .attr("x", pt[0] + 10)
+       .attr("y", pt[1] - 15);
+  };
+
+  function handleMouseleave() {
+    d3.select(this).style("opacity", "1");
+    svg.select(".stackedBarChartInfoText").remove();
+  };
+
+  // 加上辨識標籤
+  const tagsWrap = svg.append("g")
+                      .selectAll("g")
+                      .data(xSubGroups)
+                      .join("g")
+                      .attr("class", "stackedBarChartTags");
+
+  tagsWrap.append("rect")
+          .attr("x", (d, i) => ( i + 1 ) * margin.bottom * 1.3)
+          .attr("y", height - margin.bottom / 2)
+          .attr("width", 20)
+          .attr("height", 20)
+          .attr("fill", (d) => color(d));
+
+  tagsWrap.append("text")
+          .attr("x", (d, i) => ( i + 1 ) * margin.bottom * 1.3)
+          .attr("y", height - margin.bottom / 2 + 40)
+          .style("fill", "#121212")
+          .style("font-size", "12px")
+          .style("font-weight", "bold")
+          .style("text-anchor", "middle")
+          .text(d => d);
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]

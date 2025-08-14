@@ -9552,7 +9552,9 @@ onMounted(() => {
           {
             detailTitle: "基礎折線圖",
             detailSubtitle: "書本範例改編。橫軸為年份，縱軸為南港買賣契約價格平均總價。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsLineChartNote/D3jsLineChartDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="d3jsLineChartExample" class="mt-1"></div>
@@ -9566,7 +9568,7 @@ onMounted(() => {
   // 中華民國年份改成西元
   const ROCDateToADDate = (date) => {
     // 年份轉換
-    date = date.replace(/\d{3}/, ((match) => String(+match + 1911)));
+    date = date.replace(/\\d{3}/, ((match) => String(+match + 1911)));
 
     // 季度換成每季第一天
     // 定義一個對應表，用於將季度表示（如Q1, Q2）轉換成對應的日期
@@ -9577,7 +9579,7 @@ onMounted(() => {
       Q4: "-10-01"
     };
 
-    const season = date.match(/Q\d/)[0];  // 找到季度表示（如Q1, Q2），因為'.match()'會返回一個陣列（此處為單元素陣列），所以需要用[0]取出該元素
+    const season = date.match(/Q\\d/)[0];  // 找到季度表示（如Q1, Q2），因為'.match()'會返回一個陣列（此處為單元素陣列），所以需要用[0]取出該元素
     date = date.replace(season, seasonDates[season]);  // 用對應的日期替換季度表示
     return new Date(date);  // 將處理後的字串轉換成Date物件，並回傳
   };
@@ -9649,7 +9651,109 @@ onMounted(() => {
   housePriceLineChart();
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <svg
+    ref="lineChartSvgRef"
+    :width="width"
+    :height="height"
+  ></svg>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+import dayjs from "dayjs";
+import "dayjs/locale/zh-tw";
+
+import nangangHousePriceData from "../../../../assets/web-note-view/d3js-note-view/nangang-house-price/南港96Q3至113Q1買賣契約價格平均總價.csv?url";
+
+// 圖表尺寸與內邊距設定
+const width = 600;
+const height = 400;
+const margin = {top: 20, bottom: 60, right: 20, left: 60};
+
+const lineChartSvgRef = ref(null);
+
+// 先設一個函式轉換日期格式
+// 中華民國年份改成西元
+const ROCDateToADDate = (date) => {
+  // 年份轉換
+  date = date.replace(/\\d{3}/, (match) => String(+match + 1911));
+
+  // 季度換成每季第一天
+  // 定義一個對應表，用於將季度表示（如Q1, Q2）轉換成對應的日期
+  const seasonDates = {
+    Q1: "-01-01",
+    Q2: "-04-01",
+    Q3: "-07-01",
+    Q4: "-10-01"
+  };
+
+  const season = date.match(/Q\\d/)[0];  // 找到季度表示（如Q1, Q2），因為'.match()'會返回一個陣列（此處為單元素陣列），所以需要用[0]取出該元素
+  date = date.replace(season, seasonDates[season]);  // 用對應的日期替換季度表示
+  return new Date(date);  // 將處理後的字串轉換成Date物件，並回傳
+};
+
+onMounted(async () => {
+  const svg = d3.select(lineChartSvgRef.value)
+
+  // 取資料
+  const res = await d3.csv(nangangHousePriceData);
+  const data = res.map((i) => {
+    i["date"] = ROCDateToADDate(i["date"]);
+    return i;
+  });  // 日期格式轉換
+
+  // map資料集
+  const xData = data.map((i) => i["date"]);
+  const yData = data.map((i) => +i["price"]);
+
+  // Time Axis
+  const xScale = d3.scaleTime()
+                   .domain(d3.extent(xData))
+                   .range([margin.left, width - margin.right])
+                   .nice();
+  let tickNumber = window.innerWidth > 900 ? (xData.length / 3) : 10 ;  // 根據視窗不同寬來調整tick數量
+  const xAxisGenerator = d3.axisBottom(xScale)
+                           .ticks(tickNumber)
+                           .tickFormat((d) => dayjs(d).format("YYYY/MM/DD"));  // 此行亦可改用'.tickFormat(d3.timeFormat("%Y/%m/%d"))'
+  const xAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(0, ${height - margin.bottom})`)' + "\n" +
+`                   .call(xAxisGenerator)
+                   .style("font-size", "12px");
+  xAxis.selectAll(".tick text")
+       .attr("transform", "rotate(-45)")
+       .attr("x", "-35")
+       .attr("y", "6");
+
+  // Price Axis
+  const yScale = d3.scaleLinear()
+                   .domain(d3.extent(yData))
+                   .range([height - margin.bottom, margin.top])
+                   .nice();
+  const yAxisGenerator = d3.axisLeft(yScale).tickFormat((d) => d + "萬");` + "\n" +
+'  // 上行也可以寫成"const yAxisGenerator = d3.axisLeft(yScale).tickFormat((d) => `${d}萬`);"' + "\n" +
+`  const yAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(${margin.left}, 0)`)' + "\n" +
+`                   .call(yAxisGenerator);
+
+  // 設定path的d
+  const lineChart = d3.line()
+                      .x((d) => xScale(d["date"]))
+                      .y((d) => yScale(+d["price"]));
+    
+  // 建立折線圖
+  svg.append("path")
+     .datum(data)  // ".datum()"是直接綁定「一整份資料」到單一DOM元素（path就是一條線）；".data()"則是做data join，會嘗試為每個資料元素綁定一個DOM元素
+     .attr("d", lineChart(data))
+     .attr("fill", "none")
+     .attr("stroke", "#f68b47")
+     .attr("stroke-width", 1.5);
+});
+</script>
+
+<style scoped></style>`
             }
           },
           {
@@ -9687,7 +9791,9 @@ const bisectDate = d3.bisector(d => d.date).right;</code></pre>
   </li>
 </ol>`,
             detailSubtitle: "書本範例改編。橫軸為 2023 的週份，縱軸為每週後天免疫缺乏症候群確診數。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsLineChartNote/D3jsInteractLineChartDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="interactLineChartExample" class="mt-1"></div>
@@ -9800,7 +9906,130 @@ const bisectDate = d3.bisector(d => d.date).right;</code></pre>
   interactLineChart();
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div ref="interactLineChartContainerRef"></div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+import hivDiseaseTrend from "../../../../assets/web-note-view/d3js-note-view/hiv-disease/後天免疫缺乏症候群趨勢.csv?url";
+
+const interactLineChartContainerRef = ref(null);
+
+// 圖表尺寸與內邊距設定
+const width = 600;
+const height = 400;
+const margin = 50;
+
+onMounted(async () => {
+  const svg = d3.select(interactLineChartContainerRef.value)
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+  const res = await d3.csv(hivDiseaseTrend);
+  const data = res.filter(i => i["診斷年週"] < "202401");
+  // map資料集
+  const xData = data.map((i) => +i["診斷年週"].substring(4, 6));
+  const yData = data.map((i) => +i["確定病例數"]);
+
+  // Time Axis（x軸）
+  const xScale = d3.scaleLinear()
+                   .domain(d3.extent(xData))
+                   .range([margin, width - margin])
+                   .nice();
+  const xAxisGenerator = d3.axisBottom(xScale)
+                           .tickFormat(d => "第" + d + "週");
+  const xAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(0, ${height - margin})`)' + "\n" +
+`                   .call(xAxisGenerator);
+
+  // Number_of_cases Axis（y軸）
+  const yScale = d3.scaleLinear()
+                   .domain([0, d3.max(yData)])
+                   .range([height - margin, margin])
+                   .nice();
+  const yAxisGenerator = d3.axisLeft(yScale)
+                           .ticks(5)
+                           .tickSizeOuter(0);
+  const yAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(${margin}, 0)`)' + "\n" +
+`                   .call(yAxisGenerator);
+
+  // 開始建立折線圖，設定折線圖相關資料
+  const lineChart = d3.line()
+                      .x((d) => xScale(+d["診斷年週"].substring(4, 6)))
+                      .y((d) => yScale(+d["確定病例數"]));
+  svg.append("path")
+     .datum(data)
+     .attr("d", lineChart(data))
+     .attr("fill", "none")
+     .attr("stroke", "#f68b47")
+     .attr("stroke-width", 1.5);
+
+  // 建立一個覆蓋SVG的方形
+  svg.append("rect")
+     .style("fill", "transparent")
+     .style("pointer-events", "all")
+     .style("cursor", "pointer")
+     .attr("width", width - margin)
+     .attr("height", height - margin)
+     .on("mouseover", mouseover)
+     .on("mousemove", mousemove)
+     .on("mouseout", mouseout);
+
+  // 建立沿著折線移動的圓點點
+  const focusDot = svg.append("g")
+                      .append("circle")
+                      .style("fill", "black")
+                      .attr("stroke", "black")
+                      .attr("r", 3)
+                      .style("opacity", 0);
+
+  // 建立移動的資料標籤
+  const focusText = svg.append("text")
+                       .style("opacity", 0)
+                       .attr("text-anchor", "start")
+                       .attr("alignment-baseline", "middle");
+
+  // 使用d3.bisector()找到根據資料的"診斷年週"對應的資料點
+  const bisect = d3.bisector((d) => d["診斷年週"]).left;
+
+  // 設定滑鼠事件
+  function mouseover() {
+    focusDot.style("opacity", 1);
+    focusText.style("opacity", 1);
+  };
+
+  function mousemove(e) {
+    // 把目前X的位置用xScale去換算
+    const x0 = xScale.invert(d3.pointer(e, this)[0]);
+    // 由於X軸資料是擷取過的，這裡要整理並補零（整數部分先轉換為字串，並補足兩位數（如 01, 02, ...））
+    const fixedX0 = parseInt(x0).toString().padStart(2, "0");
+    // 接者把擷取掉的2023補回來，因為data是帶入原本的資料
+    let i = bisect(data, "2023" + fixedX0);
+    let selectedData = data[i];
+
+    // 圓點
+    focusDot.attr("cx", xScale(selectedData["診斷年週"].substring(4, 6)))
+            .attr("cy", yScale(selectedData["確定病例數"]));
+
+    focusText.html("確定病例數：" + selectedData["確定病例數"])
+             .attr("x", xScale(selectedData["診斷年週"].substring(4, 6)) + 15)
+             .attr("y", yScale(selectedData["確定病例數"]));
+  };
+
+  function mouseout() {
+    focusDot.style("opacity", 0);
+    focusText.style("opacity", 0);
+  }
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]
@@ -9808,7 +10037,7 @@ const bisectDate = d3.bisector(d => d.date).right;</code></pre>
       {
         listTitle: "缺少資料的折線圖",
         listSubtitle: 
-`<ol type="A" style="margin-top: 16px; margin-bottom: 40px;">
+`<ol type="A" style="margin-top: 16px;">
   <li style="line-height: 1.6;">
     此類折線圖是透過組合「實線折線圖」與「虛線折線圖」而成的。
   </li>
@@ -9832,12 +10061,13 @@ const lineChart = d3.line()
                     .y((d) => yScale(d.y))
                     .defined((d) => d.y > 0);</code></pre>
   </li>
-  <li style="line-height: 1.6; margin-top: 16px;">
+  <li style="line-height: 1.6; margin-top: 28px;">
     用實線折線圖與虛線折線圖重疊組合，將兩者折線路徑重疊，繪製出缺少部分的折線圖。
-    <p style="color: #248666;"><i>（此處待補圖（用SFC畫出四個折線圖））</i></p>
   </li>
 </ol>`,
-        listComponent: null,
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/D3jsNoteView/D3jsLineChartNote/D3jsDefinedLineChartGraphExplanation.vue")
+        ),
         listCode: {
           htmlCode: null,
           jsCode: null,
@@ -9847,7 +10077,9 @@ const lineChart = d3.line()
           {
             detailTitle: "缺少資料的折線圖",
             detailSubtitle: "書本範例改編。資料為無意義測試用數據。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsLineChartNote/D3jsDefinedLineChartDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="definedLineChartExample" class="mt-1"></div>

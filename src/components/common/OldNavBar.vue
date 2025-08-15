@@ -1,66 +1,37 @@
 <template>
-  <nav class="navbar" ref="navRef" role="navigation" aria-label="主選單">
+  <nav class="navbar">
     <!-- Logo + Title -->
     <router-link to="/" class="navbar-brand">
-      <img :src="brandImg" class="brand-img" alt="品牌" />
+      <img src="../../assets/IMG_2073.jpg" class="brand-img" />
       <span class="brand-text"> 阿蛤ㄉ窩</span>
     </router-link>
 
-    <!-- Hamburger Button (手機用) -->
-    <button
-      class="hamburger"
-      type="button"
-      @click="menuOpen = !menuOpen"
-      :aria-expanded="menuOpen"
-      aria-label="切換選單"
-    >
-      <span :class="['bar', 'bar1', { open: menuOpen }]"></span>
-      <span :class="['bar', 'bar2', { open: menuOpen }]"></span>
-      <span :class="['bar', 'bar3', { open: menuOpen }]"></span>
-    </button>
+    <!-- Hamburger Button -->
+    <div class="hamburger" @click="menuOpen = !menuOpen">
+      <div :class="{ 'bar1': true, 'open': menuOpen }"></div>
+      <div :class="{ 'bar2': true, 'open': menuOpen }"></div>
+      <div :class="{ 'bar3': true, 'open': menuOpen }"></div>
+    </div>
 
     <!-- Main Nav -->
     <ul class="nav-list" :class="{ open: menuOpen }">
-      <li
-        v-for="(item, index) in navItems"
-        :key="item.id"
-        class="nav-item"
-        @mouseleave="handleMouseLeave(item)"
-      >
-        <!-- 單一連結（沒有 children） -->
+      <li v-for="item in navItems" :key="item.title" class="nav-item" @mouseleave="closeDropdown(item)">
         <router-link
           v-if="!item.children"
           :to="item.to"
           class="nav-link"
-        >
-          {{ item.title }}
-        </router-link>
+        >{{ item.title }}</router-link>
 
-        <!-- Dropdown -->
         <div v-else class="dropdown">
-          <div
-            class="nav-link dropdown-toggle"
-            role="button"
-            tabindex="0"
-            @click="toggleDropdown(item)"
-            @keydown.enter.prevent="toggleDropdown(item)"
-            @keydown.space.prevent="toggleDropdown(item)"
-            :aria-expanded="!!item.open"
-            :aria-haspopup="true"
-          >
+          <div class="nav-link dropdown-toggle" @click="toggleDropdown(item)">
             {{ item.title }}
           </div>
-
-          <ul v-show="item.open" class="dropdown-menu" role="menu">
-            <template v-for="(child, ci) in item.children" :key="`${item.id}-child-${ci}`">
-              <li v-if="child.divider" class="dropdown-divider" role="separator"></li>
-
-              <li v-else-if="child.header" class="dropdown-header" role="presentation">
-                {{ child.header }}
-              </li>
-
-              <li v-else role="menuitem">
-                <!-- 以 '/' 開頭視為內部路由 (可依需求調整判斷條件) -->
+          <ul v-show="item.open" class="dropdown-menu">
+            <template v-for="child in item.children">
+              <li v-if="child.divider" class="dropdown-divider"></li>
+              <li v-else-if="child.header" class="dropdown-header">{{ child.header }}</li>
+              <li v-else>
+                <!-- 使用 router-link 邏輯：若 href 是以 '/' 開頭的內部路由 -->
                 <router-link
                   v-if="child.href && child.href.startsWith('/')"
                   :to="child.href"
@@ -70,6 +41,7 @@
                   {{ child.label }}
                 </router-link>
 
+                <!-- 傳統連結：.html 或其他非 Vue router 連結 -->
                 <a
                   v-else
                   :href="child.href"
@@ -88,28 +60,29 @@
 </template>
 
 <script setup>
-import { ref, onMounted, onUnmounted } from 'vue';
-import brandImg from '../../assets/IMG_2073.jpg'; // 用相對路徑 import logo
+import { ref } from 'vue';
 
-// UI state
 const menuOpen = ref(false);
-const navRef = ref(null);
 
-// 依螢幕尺寸判斷 desktop / mobile（可根據你的斷點微調）
-const isDesktop = ref(window.innerWidth > 992);
-const handleResize = () => {
-  isDesktop.value = window.innerWidth > 992;
-  if (isDesktop.value === true) {
-    // 手機切換到桌機時確保主選單顯示正常（關閉 hamburger 隱藏狀態）
-    menuOpen.value = false;
-  }
+// const mobileMenuOpen = ref(false);
+
+// const toggleMobileMenu = () => {
+//   mobileMenuOpen.value = !mobileMenuOpen.value
+// };
+
+const toggleDropdown = (item) => {
+  item.open = !item.open;
 };
 
-// 幫 navItems 每個 item 指定唯一 id，並確保 children item 有 open 屬性
-const rawItems = [
+const closeDropdown = (item) => {
+  item.open = false;
+};
+
+const navItems = ref([
   { title: '關於我', to: '/about-me' },
   {
     title: '一些文章',
+    open: false,
     children: [
       { label: '攝影', href: '/photo-portfolio' },
       { label: '公路', href: 'road.html' },
@@ -119,6 +92,7 @@ const rawItems = [
   },
   {
     title: '旅遊',
+    open: false,
     children: [
       { label: '旅遊總覽', href: 'trip.html' },
       { divider: true },
@@ -130,6 +104,7 @@ const rawItems = [
   },
   {
     title: '網頁練習/筆記',
+    open: false,
     children: [
       { label: '試驗場', href: '/web-note/test-test-test' },
       { divider: true },
@@ -149,6 +124,7 @@ const rawItems = [
   },
   {
     title: '投資相關',
+    open: false,
     children: [
       { label: '投資總覽', href: '#', target: '_blank' },
       { divider: true },
@@ -162,6 +138,7 @@ const rawItems = [
   },
   {
     title: '其他網頁',
+    open: false,
     children: [
       { label: '舊版網頁（20240508版本）', href: 'old_index_20240508.html', target: '_blank' },
       { label: '舊版網頁（20240620版本）', href: 'old_index_20240620.html', target: '_blank' },
@@ -173,156 +150,102 @@ const rawItems = [
     ]
   },
   { title: '聯絡我', to: '#' }
-];
-
-// 產生 navItems（帶 id 與 open）
-const navItems = ref(
-  rawItems.map((it, i) => {
-    const item = { ...it, id: `nav-item-${i}` };
-    if (item.children) item.open = false; // 明確初始化 open 屬性（reactive）
-    return item;
-  })
-);
-
-// Toggle dropdown (desktop: close others; mobile: 不強制關閉其他)
-const toggleDropdown = (item) => {
-  if (!item.children) return;
-  if (isDesktop.value) {
-    // 桌機行為：展開同時收合其他 siblings
-    navItems.value.forEach((it) => {
-      if (it.id !== item.id && it.children) it.open = false;
-    });
-    item.open = !item.open;
-  } else {
-    // 手機：切換該項就好（你也可以改成只允許單一展開）
-    item.open = !item.open;
-  }
-};
-
-// 明確關閉單一 dropdown
-const closeDropdown = (item) => {
-  if (item && item.children) item.open = false;
-};
-
-// mouseleave handler 只在 desktop 有效果
-const handleMouseLeave = (item) => {
-  if (isDesktop.value) closeDropdown(item);
-};
-
-// 關閉所有 dropdown
-const closeAllDropdowns = () => {
-  navItems.value.forEach((it) => {
-    if (it.children) it.open = false;
-  });
-  menuOpen.value = false;
-};
-
-// 點擊外部關閉（點在 nav 外面時）
-const handleDocClick = (e) => {
-  const navEl = navRef.value;
-  if (!navEl) return;
-  if (!navEl.contains(e.target)) {
-    closeAllDropdowns();
-  }
-};
-
-onMounted(() => {
-  window.addEventListener('resize', handleResize);
-  document.addEventListener('click', handleDocClick);
-  // 初始判斷
-  handleResize();
-});
-
-onUnmounted(() => {
-  window.removeEventListener('resize', handleResize);
-  document.removeEventListener('click', handleDocClick);
-});
+])
 </script>
 
 <style scoped>
 .navbar {
   display: flex;
   flex-wrap: wrap;
-  align-items: center;
   background-color: #333333;
   position: sticky;
   top: 0;
   z-index: 999;
   opacity: 0.9;
-  padding: 8px 12px;
-  gap: 12px;
+  padding: 8px 0px;
+  height: 38px;
 }
 
-/* Brand */
 .navbar-brand {
   display: flex;
   align-items: center;
-  gap: 8px;
-  text-decoration: none;
+  margin-left: 12px;
 }
+
+.navbar-brand:hover {
+  background-color: #555555;
+  transition: background-color 0.5s;
+}
+
 .brand-img {
   width: 30px;
   height: 30px;
   border-radius: 50%;
+  margin-right: 6px;
+  margin-top: 1px;
 }
+
 .brand-text {
-  color: #e7e7e7;
+  color: white;
   font-size: 20px;
 }
-.brand-text:hover {
-  color: #ffffff;
-}
 
-/* Hamburger (button) */
-.hamburger {
+/* Hamburger */
+/* .hamburger {
   display: none;
-  background: transparent;
+  background: none;
   border: none;
-  padding: 6px;
+  color: white;
+  font-size: 28px;
   cursor: pointer;
 }
-.hamburger:focus {
-  outline: 2px solid #aaaaaa;
+
+.hamburger:hover {
+  background-color: #5a5a5a;
+} */
+
+.hamburger {
+  display: none;
+  cursor: pointer;
 }
 
-/* 三條線 */
 .bar {
-  display: block;
   width: 25px;
   height: 3px;
-  background: #cccccc;
-  border-radius: 2px;
-  transition: transform 0.25s ease, opacity 0.25s ease;
+  background-color: #cccccc;
+  transition: transform 0.3s ease;
 }
-.bar + .bar { margin-top: 5px; }
 
-/* 變成 X 動畫 */
-.bar1.open { transform: translateY(8px) rotate(45deg); }
-.bar2.open { opacity: 0; transform: scaleX(0); }
-.bar3.open { transform: translateY(-8px) rotate(-45deg); }
+.hamburger .bar + .bar {
+  margin-top: 5px;
+}
 
-/* Nav list */
+.bar.open {
+  transform: rotate(90deg);
+}
+
+/* Nav List */
 .nav-list {
   display: flex;
   list-style: none;
+  min-width: 180px;
   margin: 0;
-  padding-left: 8px;
-  gap: 8px;
-  align-items: center;
+  padding-left: 16px;
+  gap: 3px;
 }
+
 .nav-item {
   position: relative;
 }
 
-/* Links */
 .nav-link {
   color: rgba(255, 255, 255, 0.55);
   font-size: 16px;
   padding: 6px 10px;
   display: block;
   text-decoration: none;
-  cursor: pointer;
 }
+
 .nav-link:hover {
   background-color: #555555;
   color: rgba(255, 255, 255, 0.95);
@@ -341,56 +264,70 @@ onUnmounted(() => {
   z-index: 1000;
   list-style: none;
 }
+
 .dropdown-toggle {
   cursor: pointer;
 }
+
 .dropdown-toggle::after {
   content: " ▼";
   font-size: 10px;
   opacity: 0.85;
 }
-.dropdown-item,
-.dropdown-header {
+
+.dropdown-item {
   display: block;
   padding: 8px 12px;
-  color: #ffffff;
+  color: white;
   text-decoration: none;
-  text-align: left;
-  white-space: nowrap;
+  text-align: center;
 }
+
 .dropdown-item:hover {
-  background:#666666;
-  white-space: nowrap;
+  background-color: #666666;
+  transition: background-color 0.3s;
 }
+
 .dropdown-header {
-  color: #d0d0d0;
   font-size: 12px;
+  color: #d0d0d0;
   padding: 6px 12px;
+  text-align: center;
 }
+
+.dropdown-header::before {
+  content: "# ";
+}
+
 .dropdown-divider {
   height: 1px;
-  background: #666666;
+  background-color: #666666;
   margin: 4px 0;
 }
 
-/* Responsive: 手機樣式 */
+/* Responsive */
 @media (max-width: 992px) {
+  .navbar {
+    justify-content: space-between;
+  }
+
   .hamburger {
     display: block;
-    margin-left: auto;
+    margin-right: 12px;
   }
+
   .nav-list {
     display: none;
     flex-direction: column;
-    background-color: #333;
+    background-color: #333333;
+    margin: 5px;
     position: absolute;
     top: 100%;
-    right: 12px;
+    right: 0;
     padding: 10px;
-    border: 1px solid #222;
-    width: calc(100% - 24px);
-    box-sizing: border-box;
+    border: 1px solid #222222;
   }
+
   .nav-list.open {
     display: flex;
   }
@@ -398,7 +335,6 @@ onUnmounted(() => {
   .dropdown-menu {
     position: static;
     border: none;
-    margin: 6px 0;
   }
 }
 </style>

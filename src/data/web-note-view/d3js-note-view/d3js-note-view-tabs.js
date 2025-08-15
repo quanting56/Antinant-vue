@@ -10137,7 +10137,7 @@ const lineChart = d3.line()
        .attr("stroke", "#f68b47")
        .attr("stroke-width", 2.5);
 
-    // 把d.y大於零的資料拉掉，再用剩下的這些資料去建立連線（虛線）
+    // 保留d.y大於零的資料（不要d.y等於0的資料），用這些資料去建立連線（虛線）
     let filteredData = data.filter(d => d.y > 0);  // 也可以用lineChart.defined()
 
     // 建立dashed折線
@@ -10214,7 +10214,150 @@ const lineChart = d3.line()
   definedLineChart();
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div ref="definedLineChartContainerRef"></div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+// 圖表尺寸與內邊距設定
+const width = 600;
+const height = 400;
+const margin = 50;
+
+const definedLineChartContainerRef = ref(null);
+
+const data = [
+  {x: 1, y: 120},
+  {x: 2, y: 355},
+  {x: 3, y: 0},
+  {x: 4, y: 470},
+  {x: 5, y: 19},
+  {x: 6, y: 90},
+  {x: 7, y: 0},
+  {x: 8, y: 220},
+];
+
+onMounted(() => {
+  const svg = d3.select(definedLineChartContainerRef.value)
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+  const xData = data.map((d) => d.x);
+  const yData = data.map((d) => d.y);
+
+  const xScale = d3.scaleLinear()
+                   .domain([0, d3.max(xData)])
+                   .range([margin, width - margin])
+                   .nice();
+  const xAxisGenerator = d3.axisBottom(xScale)
+  const xAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(0, ${height - margin})`)' + "\n" +
+`                   .call(xAxisGenerator);
+
+  const yScale = d3.scaleLinear()
+                   .domain([0, d3.max(yData)])
+                   .range([height - margin, margin])
+                   .nice();
+  const yAxisGenerator = d3.axisLeft(yScale)
+  const yAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(${margin}, 0)`)' + "\n" +
+`                   .call(yAxisGenerator);
+
+  // 用用line.defined過濾掉是零的數值，設定只回傳y大於0的數值
+  const lineChart = d3.line()
+                      .x((d) => xScale(d.x))
+                      .y((d) => yScale(d.y))
+                      .defined((d) => d.y > 0);
+                      
+  // 保留d.y大於零的資料（不要d.y等於0的資料），用這些資料去建立連線（虛線）
+  let filteredData = data.filter(d => d.y > 0);  // 也可以用lineChart.defined()
+                      
+  // 先建立虛線（dashed折線）
+  svg.append("path")
+     .datum(data)
+     .attr("d", lineChart(filteredData))  // 因為已經沒有d.y等於0的資料，所以不會有斷點
+     .attr("fill", "none")
+     .attr("stroke", "#f68b47")
+     .attr("stroke-width", "2.5")
+     .attr("stroke-dasharray", "4, 4");
+
+  // 再畫實線
+  svg.append("path")
+     .datum(data)
+     .attr("d", lineChart(data))  // 原始資料含有d.y等於0的資料，所以會有斷點
+     .attr("fill", "none")
+     .attr("stroke", "#f68b47")
+     .attr("stroke-width", 2.5);
+
+  // 加上tooltip
+  const tooltip = d3.select(definedLineChartContainerRef.value)
+                    .style("position", "relative")
+                    .append("div")
+                    .style("position", "absolute")
+                    .style("opacity", "0")
+                    .style("background-color", "white")
+                    .style("border", "1px solid black")
+                    .style("border-radius", "5px")
+                    .style("padding", "5px");
+
+  // 加上圓點點
+  svg.append("g")
+     .selectAll("circle")
+     .data(filteredData)
+     .join("circle")
+     .attr("cx", (d) => xScale(d.x))
+     .attr("cy", (d) => yScale(d.y))
+     .attr("r", "5")
+     .attr("fill", "white")
+     .attr("stroke", "#f68b47")
+     .attr("stroke-width", "2")
+     .style("cursor", "pointer")
+     .on("mouseover", dotsMouseover)
+     .on("mouseleave", dotsMouseleave);
+
+  function dotsMouseover(e) {
+    let pt = d3.pointer(e, e.target);
+    tooltip.style("opacity", "1")
+           .style("left", pt[0] + 20 + "px")
+           .style("top", pt[1] + "px")` + "\n" +
+'           .html(`x值：${e.target.__data__.x}<br>` + ' + "\n" +
+'                 `y值：${e.target.__data__.y}`' + "\n" +
+`           );
+
+    // 加上X-dashed線
+    svg.append("line")
+       .attr("class", "definedLineChartDashedX")
+       .attr("x1", xScale(e.target.__data__.x))
+       .attr("y1", height - margin)
+       .attr("x2", xScale(e.target.__data__.x))
+       .attr("y2", margin)
+       .attr("stroke", "#f68b46")
+       .attr("stroke-dasharray", "4");
+
+    // 加上Y-dashed線
+    svg.append("line")
+       .attr("class", "definedLineChartDashedY")
+       .attr("x1", margin)
+       .attr("y1", yScale(e.target.__data__.y))
+       .attr("x2", width - margin)
+       .attr("y2", yScale(e.target.__data__.y))
+       .style("stroke", "#f68b47")
+       .style("stroke-dasharray", "4");
+  };
+
+  function dotsMouseleave(d) {
+    tooltip.style("opacity", 0)
+    svg.selectAll(".definedLineChartDashedX").remove();
+    svg.selectAll(".definedLineChartDashedY").remove();
+  };
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]
@@ -10232,7 +10375,9 @@ const lineChart = d3.line()
           {
             detailTitle: "基礎多線折線圖",
             detailSubtitle: "書本範例改編。資料為 2023 年各觀測站降雨量。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsLineChartNote/D3jsMultiLineChartDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="multiLineChartExample"></div>
@@ -10336,13 +10481,124 @@ const lineChart = d3.line()
   multiLineChart();
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div ref="multiLineChartContainerRef"></div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const multiLineChartContainerRef = ref(null);
+
+// 圖表尺寸與內邊距設定
+const width = 600;
+const height = 400;
+const margin = 50;
+
+onMounted(async () => {
+  const svg = d3.select(multiLineChartContainerRef.value)
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+  // 取資料集
+  const res = await d3.json("https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=5n9c3AlEJ2DH&IsTransData=1");
+  const data = res.filter(d => d.observeDate.substring(0, 4) === "2023");  // 只取2023年的資料
+  const xData = data.map((i) => i.observeDate.substring(4, 6));
+  const yData = data.map((i) => {
+    let rainfall = parseFloat(i.rainfall);
+    return rainfall = rainfall || 0;  // 如果rainfall的值是NaN、null、undefined、0或""（空字串），那麼rainfall會被設定為0，否則保持原來的值
+  });
+
+  // X軸
+  const xScale = d3.scaleLinear()
+                   .domain(d3.extent(xData))
+                   .range([margin, width - margin])
+                   .nice();
+  const xAxisGenerator = d3.axisBottom(xScale)
+                           .ticks(8)
+                           .tickFormat(d => d + "月");
+  const xAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(0, ${height - margin})`)' + "\n" +
+`                   .call(xAxisGenerator);
+
+  // Y軸
+  const yScale = d3.scaleLinear()
+                   .domain(d3.extent(yData))
+                   .range([height - margin, margin])
+                   .nice();
+  const yAxisGenerator = d3.axisLeft(yScale).tickFormat(d => d + "mm");
+  const yAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(${margin}, 0)`)' + "\n" +
+`                   .call(yAxisGenerator);
+
+  // 把資料按照name分組
+  const sumName = d3.group(data, d => d.observatory);
+  const color = d3.scaleOrdinal()
+                  .domain(data.map(d => d.item))  // 此資料沒有item項，因此此同'.domain()'，即domain是空的
+                  .range(d3.schemeCategory10);
+
+  // 建立tooltip
+  const nameTag = d3.select(multiLineChartContainerRef.value)
+                    .style("position", "relative")
+                    .append("div")
+                    .attr("class", "multiLineChartNameTag")
+                    .style("position", "absolute")
+                    .style("background-color", "#121212")
+                    .style("color", "#f2f2f2")
+                    .style("border-radius", "5px")
+                    .style("padding", "10px")
+                    .style("display", "none");
+
+  // 開始建立折線圖
+  svg.append("g")
+     .selectAll("path")
+     .data(sumName)
+     .join("path")
+     .attr("d", d => {
+       return d3.line()
+                .x((d) => xScale(d.observeDate.substr(4, 6)))
+                .y((d) => {
+                  let rainfall = parseFloat(d.rainfall);
+                  rainfall = rainfall || 0;
+                  return yScale(rainfall);
+                })(d[1])  // 因為是從sumName裡面取資料，除了觀測站（observatory）以外的資料都在d[1]裡
+     })
+     .attr("fill", "none")
+     .attr("stroke", d => color(d))
+     .attr("stroke-width", 1.5)
+     .style("cursor", "pointer")
+     .on("mouseover", handleMouseover)
+     .on("mouseleave", handleMouseleave);
+
+  function handleMouseover(e) {
+    let pt = d3.pointer(e, e.target);
+    d3.select(this).style("stroke-width", "5");
+
+    nameTag.style("display", "block")
+           .html(e.target.__data__[0])  // 因為已用"d3.group()"分組，所以此處"e.target.__data__[0]"代表觀測站名稱
+           .style("left", pt[0] + 10 + "px")
+           .style("top", pt[1] + "px");
+  };
+
+  function handleMouseleave() {
+    d3.select(this).style("stroke-width", "1.5");
+    nameTag.style("display", "none");
+  };
+});
+</script>
+
+<style scoped></style>`
             }
           },
           {
             detailTitle: "多線折線圖搭配選取刷",
             detailSubtitle: "書本範例改編。資料為 2010 年 1 月以來各觀測站之降雨量。",
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/D3jsNoteView/D3jsLineChartNote/D3jsMultiLineChartWithBrushDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="multiLineChartExampleWithBrush"></div>
@@ -10414,7 +10670,7 @@ const lineChart = d3.line()
     line.selectAll("path")
         .data(sumName)
         .join("path")
-        .attr("class", "multiLineChartWithBrusLine")
+        .attr("class", "multiLineChartWithBrushLine")
         .attr("d", d => {
           return d3.line()
                    .x((d) => xScale(d3.timeParse("%Y%m")(d.observeDate)))
@@ -10449,7 +10705,7 @@ const lineChart = d3.line()
 
       // 按照更新的domain範圍值重新選染圖表
       xAxis.transition().duration(1000).call(xAxisGenerator);
-      line.selectAll(".multiLineChartWithBrusLine")
+      line.selectAll(".multiLineChartWithBrushLine")
           .transition()
           .duration(1000)
           .attr("d", d => {
@@ -10472,7 +10728,7 @@ const lineChart = d3.line()
 
       // 重新呼叫渲染軸線和折線
       xAxis.transition().duration(1000).call(xAxisGenerator);
-      line.selectAll(".multiLineChartWithBrusLine")
+      line.selectAll(".multiLineChartWithBrushLine")
           .transition()
           .duration(1000)
           .attr("d", d => {
@@ -10489,7 +10745,161 @@ const lineChart = d3.line()
   multiLineChartWithBrush();
 </script>`,
               jsCode: null,
-              vueCode: null
+              vueCode: 
+`<template>
+  <div ref="multiLineChartWithBrushRef"></div>
+</template>
+
+<script setup>
+import { ref, onMounted } from "vue";
+import * as d3 from "d3";
+
+const multiLineChartWithBrushRef = ref(null);
+
+// 圖表尺寸與內邊距設定
+const width = 600;
+const height = 400;
+const margin = 50;
+
+onMounted(async () => {
+  const svg = d3.select(multiLineChartWithBrushRef.value)
+                .append("svg")
+                .attr("width", width)
+                .attr("height", height);
+
+  // 取資料集
+  const data = await d3.json("https://data.moa.gov.tw/Service/OpenData/TransService.aspx?UnitId=5n9c3AlEJ2DH&IsTransData=1");
+  const xData = data.map((d) => d3.timeParse("%Y%m")(d.observeDate));
+  const yData = data.map((d) => {
+    let rainfall = parseFloat(d.rainfall);
+    return rainfall = rainfall || 0;  // 如果rainfall的值是NaN、null、undefined、0或""（空字串），那麼rainfall會被設定為0，否則保持原來的值
+  });
+
+  // X軸
+  const xScale = d3.scaleTime()
+                   .domain(d3.extent(xData))
+                   .range([margin, width - margin])
+                   .nice();
+  const xAxisGenerator = d3.axisBottom(xScale).tickFormat(d => d3.timeFormat("%Y/%m")(d)).ticks(6);
+  const xAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(0, ${height - margin})`)' + "\n" +
+`                   .call(xAxisGenerator);
+
+  // Y軸
+  const yScale = d3.scaleLinear()
+                   .domain(d3.extent(yData))
+                   .range([height - margin, margin])
+                   .nice();
+  const yAxisGenerator = d3.axisLeft(yScale).tickFormat(d => d + "mm");
+  const yAxis = svg.append("g")` + "\n" +
+'                   .attr("transform", `translate(${margin}, 0)`)' + "\n" +
+`                   .call(yAxisGenerator);
+
+  // 把資料按照name分組
+  const sumName = d3.group(data, d => d.observatory);
+  const color = d3.scaleOrdinal()
+                  .domain(data.map(d => d.item))  // 此資料沒有item項，因此此同'.domain()'，即domain是空的
+                  .range(d3.schemeCategory10);
+
+  // 用有隨機字串的id，避免變數全域污染` + "\n" +
+'  const clipId = `multiLineChartWithBrushClip-${Math.random().toString(36).slice(2)}`;' + "\n" +
+`  // 建立一個畫布範圍，超過此畫布的畫面都不會被渲染，這樣才能控制縮放的大小
+  const clip = svg.append("defs")
+                  .append("clipPath")
+                  .attr("id", clipId)
+                  .append("rect")
+                  .attr("x", margin)
+                  .attr("y", margin)
+                  .attr("width", width - margin * 2)
+                  .attr("height", height - margin * 2);
+
+  // 設定brush
+  const brush = d3.brushX()
+                  .extent([[margin, margin], [width - margin, height - margin]])
+                  .on("end", updateChart);
+
+  // 開始建立折線圖
+  const line = svg.append("g");
+
+  // 畫上折線
+  line.selectAll("path")
+      .data(sumName)
+      .join("path")
+      .attr("class", "multiLineChartWithBrushLine")
+      .attr("d", d => {
+        return d3.line()
+                 .x((d) => xScale(d3.timeParse("%Y%m")(d.observeDate)))
+                 .y((d) => {
+                  let rainfall = parseFloat(d.rainfall);
+                  rainfall = rainfall || 0;
+                  return yScale(rainfall);
+                 })(d[1])  // 因為是從sumName裡面取資料，除了觀測站（observatory）以外的資料都在d[1]裡
+      })
+      .attr("fill", "none")
+      .attr("stroke", d => color(d))
+      .attr("stroke-width", 1.5)
+      .style("cursor", "pointer");
+
+  // 加上brush` + "\n" +
+'  line.attr("clip-path", `url(#${clipId})`)' + "\n" +
+`      .append("g")
+      .attr("class", "multiLineChartWithBrushBrush")
+      .call(brush);
+
+  // 設定brush後的動作
+  function updateChart(e, d) {
+    // xBrush的範圍，會回傳一個[x0, x1]的陣列
+    const brushExtent = e.selection;
+    if (brushExtent) {
+      // xScale.invert是把回傳的x0和x1變成xScale接受的數值
+      xScale.domain([xScale.invert(brushExtent[0]), xScale.invert(brushExtent[1])]);
+      // 移除brush的灰色區域
+      // 'brush.move'是用來改變或移動brush的選取範圍，將第二個參數設定為'null'，可以清除目前的選取區域
+      line.select(".multiLineChartWithBrushBrush").call(brush.move, null);
+    };
+
+    // 按照更新的domain範圍值重新選染圖表
+    xAxis.transition().duration(1000).call(xAxisGenerator);
+    line.selectAll(".multiLineChartWithBrushLine")
+        .transition()
+        .duration(1000)
+        .attr("d", d => {
+          return d3.line()
+                   .x((d) => xScale(d3.timeParse("%Y%m")(d.observeDate)))
+                   .y((d) => {
+                     let rainfall = parseFloat(d.rainfall);
+                     rainfall = rainfall || 0;
+                     return yScale(rainfall);
+                   })(d[1]);
+        });
+  };
+
+  // 雙極svg縮回原本大小
+  svg.on("dblclick", reset);
+
+  function reset() {
+    // 回到原本的大小
+    xScale.domain(d3.extent(xData));
+
+    // 重新呼叫渲染軸線和折線
+    xAxis.transition().duration(1000).call(xAxisGenerator);
+    line.selectAll(".multiLineChartWithBrushLine")
+        .transition()
+        .duration(1000)
+        .attr("d", d => {
+          return d3.line()
+                   .x((d) => xScale(d3.timeParse("%Y%m")(d.observeDate)))
+                   .y((d) => {
+                     let rainfall = parseFloat(d.rainfall);
+                     rainfall = rainfall || 0;
+                     return yScale(rainfall);
+                   })(d[1])
+        });
+  };
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]

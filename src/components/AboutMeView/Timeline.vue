@@ -40,6 +40,12 @@
                   <div class="timeline-record-content">
                     <h4 class="timeline-record-title">{{ unit.title }}</h4>
                     <p class="timeline-record-text" v-html="unit.text"></p>
+                    <p
+                      class="timeline-record-hashtag"
+                      v-if="unit.hashtag"
+                    >
+                      <span v-for="(ht, index) in unit.hashtag" :key="index">#{{ ht }}</span>
+                    </p>
                   </div>
                   <figure
                     v-if="unit.image"
@@ -253,6 +259,15 @@ const props = defineProps({
 
 ::v-deep(.timeline-record-text a:hover) {
   border-bottom: 1px solid #a67a44;
+}
+
+.timeline-record-hashtag {
+  display: flex;
+  gap: 6px;
+  font-style: italic;
+  font-weight: 800;
+  font-size: smaller;
+  color: #1a1a1a;
 }
 
 .timeline-record-image {

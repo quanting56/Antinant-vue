@@ -117,11 +117,25 @@
 
     <!-- 個人時間軸 -->
     <section class="section timeline-section">
-      <h2>阿蛤的時間軸</h2>
+      <div class="timeline-header">
+        <h2>阿蛤的時間軸</h2>
+        <div class="button-container">
+          <button
+            type="button"
+            v-for="timelineBtn in timelineButtons"
+            :key="timelineBtn.title"
+            @click="changeTimeline(timelineBtn)"
+            class="timeline-btn"
+            :class="{ active: timelineBtn.title === activeTimelineTitle }"
+          >
+            {{ timelineBtn.title }}
+          </button>
+        </div>
+      </div>
       <hr />
       <div class="timeline-container">
         <!-- TODO: 動態生成時間軸 -->
-        <Timeline :items="timelineData"></Timeline>
+        <Timeline :items="activeTimelineData"></Timeline>
       </div>
     </section>
   </div>
@@ -136,9 +150,28 @@
 </template>
 
 <script setup>
+import { ref } from "vue";
+
 // 時間軸的部分
 import Timeline from "../components/AboutMeView/Timeline.vue";
-import timelineData from "../data/about-me-view/about-me-view-timeline.json";
+import generalTimelineData from "../data/about-me-view/general-timeline.json";
+import programLearningTimelineData from "../data/about-me-view/program-learning-timeline.json";
+import tripTimelineData from "../data/about-me-view/trip-timeline.json";
+
+const timelineButtons = [
+  { title: "一般時間軸", data: generalTimelineData },
+  { title: "程式語言學習時間軸", data: programLearningTimelineData },
+  { title: "旅行時間軸", data: tripTimelineData }
+]
+
+const activeTimelineTitle = ref(timelineButtons[1].title);
+const activeTimelineData = ref(timelineButtons[1].data);
+
+// 切換時間軸的函式
+const changeTimeline = (newBtn) => {
+  activeTimelineTitle.value = newBtn.title;
+  activeTimelineData.value = newBtn.data;
+};
 
 // Vite 的批次導入工具（batch import），適合用來載入靜態資源
 const images = import.meta.glob("../assets/about-me-view/*", { eager: true, as: "url"});
@@ -413,5 +446,39 @@ hr { opacity: 0.5; }
   font-style: italic;
   margin-left: 4px;
   font-size: 12px;
+}
+
+/* 時間軸 */
+.timeline-header {
+  display: flex;
+  gap: 30px;
+  align-items: baseline;
+}
+
+.timeline-header h2 { margin-bottom: 4px;}
+
+.button-container {
+  display: flex;
+  gap: 5px;
+}
+
+.timeline-btn {
+  padding: 4px 8px;
+  border-radius: 4px;
+  border: 1px solid #cccccc;
+  text-decoration: none;
+  color: #333333;
+  background-color: #ffffff;
+  cursor: pointer;
+}
+
+.timeline-btn:hover {
+  border-color: #a9a9a9;
+}
+
+.timeline-btn.active {
+  border: 1px solid #a67a44;
+  font-weight: 700;
+  color: #a67a44;
 }
 </style>

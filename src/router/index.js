@@ -75,6 +75,11 @@ const routes = [
         name: "vuejs-note",
         component: () => import("../views/WebNote/VuejsNoteView.vue")
       },
+      {
+        path: "python-note",
+        name: "python-note",
+        component: () => import("../views/WebNote/PythonNoteView.vue")
+      },
     ]
   },
   {

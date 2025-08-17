@@ -133,14 +133,14 @@
 </template>
 
 <script setup>
-import { onMounted, ref, computed, nextTick, defineAsyncComponent } from "vue";
+import { onMounted, ref, computed, nextTick } from "vue";
 
 // import 資料進來渲染
 import { d3jsNoteViewTabs } from "../../data/web-note-view/d3js-note-view/d3js-note-view-tabs";
 const tabs = d3jsNoteViewTabs;
 
 // 處理 tab 切換
-const activeTab = ref(tabs[13].id);
+const activeTab = ref(tabs[0].id);
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];
 });

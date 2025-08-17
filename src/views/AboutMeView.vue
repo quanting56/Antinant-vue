@@ -156,16 +156,14 @@ import { ref } from "vue";
 import Timeline from "../components/AboutMeView/Timeline.vue";
 import { generalTimelineData } from "../data/about-me-view/general-timeline.js";
 import { programLearningTimelineData } from "../data/about-me-view/program-learning-timeline.js";
-import { tripTimelineData } from "../data/about-me-view/trip-timeline.js";
 
 const timelineButtons = [
   { title: "一般時間軸", data: generalTimelineData },
-  { title: "程式語言學習時間軸", data: programLearningTimelineData },
-  { title: "旅行時間軸", data: tripTimelineData }
+  { title: "程式語言學習時間軸", data: programLearningTimelineData }
 ]
 
-const activeTimelineTitle = ref(timelineButtons[1].title);
-const activeTimelineData = ref(timelineButtons[1].data);
+const activeTimelineTitle = ref(timelineButtons[0].title);
+const activeTimelineData = ref(timelineButtons[0].data);
 
 // 切換時間軸的函式
 const changeTimeline = (newBtn) => {

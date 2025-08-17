@@ -53,6 +53,10 @@ const webNoteWebsites = [
     websiteTitle: "Vue.js（Vue 3）筆記"
   },
   {
+    websiteName: "python-note",
+    websiteTitle: "Python筆記"
+  },
+  {
     websiteName: "test-test-test",
     websiteTitle: "測試場"
   }

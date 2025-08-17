@@ -154,9 +154,9 @@ import { ref } from "vue";
 
 // 時間軸的部分
 import Timeline from "../components/AboutMeView/Timeline.vue";
-import generalTimelineData from "../data/about-me-view/general-timeline.json";
-import programLearningTimelineData from "../data/about-me-view/program-learning-timeline.json";
-import tripTimelineData from "../data/about-me-view/trip-timeline.json";
+import { generalTimelineData } from "../data/about-me-view/general-timeline.js";
+import { programLearningTimelineData } from "../data/about-me-view/program-learning-timeline.js";
+import { tripTimelineData } from "../data/about-me-view/trip-timeline.js";
 
 const timelineButtons = [
   { title: "一般時間軸", data: generalTimelineData },

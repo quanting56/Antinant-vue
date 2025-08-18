@@ -153,7 +153,7 @@ const rawItems = [
       { label: '投資總覽', href: '#', target: '_blank' },
       { divider: true },
       { header: '個人投資' },
-      { label: '我的投資', href: 'investment/myInvestment.html' },
+      { label: '我的投資', href: '/my-investment' },
       { divider: true },
       { header: '投資工具（待整理）' },
       { label: '滾動報酬率動圖測試', href: 'investment/d3RollingReturnTest.html', target: '_blank' },

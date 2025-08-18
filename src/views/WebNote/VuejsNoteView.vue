@@ -78,14 +78,9 @@
                   <pre><code class="javascript">{{ list.listCode.jsCode }}</code></pre>
                 </template>
 
-                <template v-if="list.listCode.vueOptionApiCode">
-                  Vue 3 - Option API 這樣寫：
-                  <pre><code class="html">{{ list.listCode.vueOptionApiCode }}</code></pre>
-                </template>
-
-                <template v-if="list.listCode.vueCompositionApiCode">
-                  Vue 3 - Composition API 這樣寫：
-                  <pre><code class="html">{{ list.listCode.vueCompositionApiCode }}</code></pre>
+                <template v-if="list.listCode.vueSFCCode">
+                  Vue 3 SFC（使用Composition API）這樣寫：
+                  <pre><code class="html">{{ list.listCode.vueSFCCode }}</code></pre>
                 </template>
               </div>
 
@@ -102,6 +97,11 @@
                     v-if="detail.detailSubtitle"
                     class="detail-subtitle"
                     v-html="detail.detailSubtitle"
+                  ></div>
+                  <div
+                    v-if="detail.detailContent"
+                    class="detail-content"
+                    v-html="detail.detailContent"
                   ></div>
                   <div v-if="detail.detailComponent" class="details-demo">
                     <component :is="detail.detailComponent"></component>
@@ -122,14 +122,9 @@
                       <pre><code class="javascript">{{ detail.detailCode.jsCode }}</code></pre>
                     </template>
 
-                    <template v-if="detail.detailCode.vueOptionApiCode">
-                      Vue 3 - Option API 這樣寫：
-                      <pre><code class="html">{{ detail.detailCode.vueOptionApiCode }}</code></pre>
-                    </template>
-
-                    <template v-if="detail.detailCode.vueCompositionApiCode">
-                      Vue 3 - Composition API 這樣寫：
-                      <pre><code class="html">{{ detail.detailCode.vueCompositionApiCode }}</code></pre>
+                    <template v-if="detail.detailCode.vueSFCCode">
+                      Vue 3 SFC（使用Composition API）這樣寫：
+                      <pre><code class="html">{{ detail.detailCode.vueSFCCode }}</code></pre>
                     </template>
                   </div>
                 </li>
@@ -150,7 +145,7 @@ import { vuejsNoteViewTabs } from "../../data/web-note-view/vuejs-note-view/vuej
 const tabs = vuejsNoteViewTabs;
 
 // 處理 tab 切換
-const activeTab = ref(tabs[0].id);
+const activeTab = ref(tabs[3].id);
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];
 });
@@ -288,6 +283,11 @@ function handleHighlight() {
 
 .detail-subtitle::before {
   content: "- ";
+}
+
+.detail-content {
+  margin-top: 16px;
+  line-height: 1.6;
 }
 
 /* Demo 區塊樣式 */

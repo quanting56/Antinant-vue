@@ -26,21 +26,20 @@ export const vuejsNoteViewTabs = [
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       },
       {
@@ -67,21 +66,20 @@ export const vuejsNoteViewTabs = [
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       },
       {
@@ -131,21 +129,20 @@ app.mount("#app");</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       },
       {
@@ -175,21 +172,20 @@ npm run serve</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       },
       {
@@ -220,21 +216,20 @@ npm install</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       },
       {
@@ -276,21 +271,20 @@ npm install</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       },
       {
@@ -344,54 +338,86 @@ npm install</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       }
     ]
   },
   {
     id: "vuejsInstanceNote",
-    title: "Vue.js的實體",
+    title: "Vue 實體",
     description: null,
-    descriptionComponent: null,
+    descriptionComponent: defineAsyncComponent(() =>
+      import("../../../components/WebNoteView/VuejsNoteView/VuejsInstanceNote/VuejsInstanceExplanation.vue")
+    ),
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
+        listTitle: "template 模板屬性",
         listSubtitle: null,
-        listComponent: null,
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsInstanceNote/VuejsTemplateDemo.vue")
+        ),
         listCode: {
-          htmlCode: null,
+          htmlCode: 
+`<div id="VuejsTemplate">
+  <p>這行字會被模板字取代</p>
+</div>
+
+<script>
+  const vmVuejsTemplate = Vue.createApp({` + "\n" +
+'    template: `<p><b>{{ greeting }}</b> 好棒棒！</p><input v-model="greeting" placeholder="可輸入文字">`,' + "\n" +
+`    data() {
+      return {
+        greeting: ""
+      }
+    }
+  }).mount("#VuejsTemplate");
+</script>`,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: 
+`<template>
+  <p><b>{{ greeting }}</b> 好棒棒！</p>
+  <input v-model="greeting" placeholder="可輸入文字" />
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const greeting = ref("");
+</script>
+
+<style scoped>
+p {
+  margin-top: 0;
+}
+</style>`
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       }
     ]
@@ -399,43 +425,680 @@ npm install</code></pre>
   {
     id: "vuejsDataProcessingNote",
     title: "資料加工與邏輯整合",
-    description: null,
+    description: "包含 <code>methods</code> 與 <code>computed</code>。",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
+        listTitle: "methods 方法",
         listSubtitle: null,
-        listComponent: null,
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsDataProcessingNote/VuejsMethodsDemo.vue")
+        ),
         listCode: {
-          htmlCode: null,
+          htmlCode: 
+`<div id="VuejsMethods">
+  <p>
+    <input v-model="price" placeholder="0"> 元/顆蘋果
+     * <input v-model="quantity" placeholder="0"> 顆蘋果
+     = {{ subtotal() }} 元
+  </p>
+</div>
+
+<script>
+  const vmVuejsMethods = Vue.createApp({
+    data() {
+      return {
+        price: "",
+        quantity: ""
+      }
+    },
+    methods: {
+      subtotal() {
+        return this.price * this.quantity;
+      }
+    }
+  }).mount("#VuejsMethods");
+</script>`,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: 
+`<template>
+  <p>
+    <input v-model="price" placeholder="0"> 元/顆蘋果
+     * <input v-model="quantity" placeholder="0"> 顆蘋果
+     = {{ subtotal() }} 元
+  </p>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const price = ref("");
+const quantity = ref("");
+
+// methods可以直接寫成函數
+function subtotal() {
+  return price.value * quantity.value;
+}
+</script>
+
+<style scoped>
+p {
+  margin-top: 0;
+}
+</style>`
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "computed 計算屬性",
+        listSubtitle: `<div style="color: rgba(33, 37, 41, 0.75); font-size: 12px; font-style: italic; margin-bottom: 8px;">- 在這個例子，跟上面只有差在模板裡的 subtotal 有沒有加 <code>()</code></div>`,
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsDataProcessingNote/VuejsComputedDemo.vue")
+        ),
+        listCode: {
+          htmlCode: 
+`<div id="VuejsComputed">
+  <p>
+    <input v-model="price" placeholder="0"> 元/顆蘋果
+     * <input v-model="quantity" placeholder="0"> 顆蘋果
+     = {{ subtotal }} 元
+  </p>
+</div>
+
+<script>
+  const vmVuejsComputed = Vue.createApp({
+    data() {
+      return {
+        price: "",
+        quantity: "",
+      }
+    },
+    computed: {
+      subtotal() {
+        return this.price * this.quantity;
+      }
+    }
+  }).mount("#VuejsComputed");
+</script>`,
+          jsCode: null,
+          vueSFCCode: 
+`<template>
+  <p>
+    <input v-model="price" placeholder="0"> 元/顆蘋果
+     * <input v-model="quantity" placeholder="0"> 顆蘋果
+     = {{ subtotal }} 元
+  </p>
+</template>
+
+<script setup>
+import { ref, computed } from "vue";
+
+const price = ref("");
+const quantity = ref("");
+
+// subtotal會隨著price, quantity自動計算
+const subtotal = computed(() => price.value * quantity.value);
+</script>
+
+<style scoped></style>`
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "methods 與 computed 比較",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "<code>methods</code> 方法",
+            detailSubtitle: null,
+            detailContent: 
+`<ul style="margin-top: 16px; line-height: 1.6;">
+  <li><code>methods</code> 內的函式 <strong>每次呼叫時都會執行，不會快取</strong> 結果。</li>
+  <li>適用於 <strong>需要即時執行的操作</strong>，例如事件處理（按鈕點擊）、非同步請求（AJAX）、DOM 操作等。</li>
+  <li><strong>不適合用來依賴數據計算值</strong>，因為每次呼叫時都會重新執行，即使數據沒有變更，可能會造成效能浪費。</li>
+</ul>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
             }
           },
+          {
+            detailTitle: "<code>computed</code> 計算屬性",
+            detailSubtitle: null,
+            detailContent: 
+`<ul style="margin-top: 16px; line-height: 1.6;">
+  <li><code>computed</code> 屬性會 <strong>基於它所依賴的響應式數據</strong> 來自動計算結果，並且 <strong>有快取機制（Cache）</strong>。</li>
+  <li>當 <strong>依賴的數據沒有變化</strong> 時，<code>computed</code> <strong>不會重新執行</strong>，而是直接返回上一次的計算結果，提升效能。</li>
+  <li>適用於 <strong>根據既有數據計算新數據的情境</strong>，例如格式化數據、過濾數據、簡單運算等。</li>
+</ul>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "兩者對比",
+            detailSubtitle: null,
+            detailContent: 
+`<table border="1" cellpadding="5" cellspacing="0">
+  <thead>
+    <tr>
+      <th></th>
+      <th><code>computed</code></th>
+      <th><code>methods</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><b>是否快取</b></td>
+      <td>✅ 會快取結果</td>
+      <td>❌ 不會快取，每次都執行</td>
+    </tr>
+    <tr>
+      <td><b>何時執行</b></td>
+      <td>只有當 <strong>依賴的數據變更</strong> 時才會重新計算</td>
+      <td>每次呼叫時都會執行</td>
+    </tr>
+    <tr>
+      <td><b>適用情境</b></td>
+      <td><strong>基於現有數據計算新值</strong>，如：計算屬性、過濾數據、格式化日期</td>
+      <td><strong>執行操作或處理事件</strong>，如：按鈕點擊、發送 API 請求、DOM 操作</td>
+    </tr>
+    <tr>
+      <td><b>呼叫方式</b></td>
+      <td><code>{{ computedProperty }}</code> 或 <code>this.computedProperty</code> <strong>像變數一樣使用</strong></td>
+      <td><code>{{ method() }}</code> 或 <code>this.method()</code> <strong>像函式一樣調用</strong>
+      </td>
+    </tr>
+  </tbody>
+</table>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: '何時應該用 <code>computed</code>，何時用 <code>methods</code>？</h5>',
+            detailSubtitle: null,
+            detailContent: 
+`<ul>
+  <li>如果是依賴數據的計算，並且希望有快取機制，應該使用 <code>computed</code>。</li>
+  <li>如果是純函式運算，每次都需要執行（例如事件處理、非同步請求），應該使用 <code>methods</code>。</li>
+</ul>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
         ]
       }
     ]
   },
   {
     id: "vuejsDirectiveNote",
-    title: "Vue.js指令",
-    description: null,
+    title: "Vue 指令",
+    description: "包含 <code>v-bind</code>、<code>v-model</code> 與其修飾子、<code>v-text</code>、<code>v-html</code>、<code>v-once</code>、<code>v-pre</code>。",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
+      {
+        listTitle: "屬性綁定：v-bind",
+        listSubtitle: '<div style="color: rgba(33, 37, 41, 0.75); font-size: 12px; font-style: italic; margin-bottom: 8px;">- <code>v-bind:id="customId"</code> 也可以寫成 <code>:id="customId"</code></div>',
+        listComponent: null,
+        listCode: {
+          htmlCode: 
+`<div id="vBindId">
+  <p v-bind:id="customId">我是vBindId</p>
+</div>
+
+<script>
+  const vm = Vue.createApp({
+    data() {
+      return {
+        customId: "item-id-1"
+      }
+    }
+  }).mount("#vBindId");
+</script>`,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "表單綁定：v-model",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "input 文字框",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVModelInput.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="VuejsVModelInput">
+  <input type="text" v-model="message" placeholder="edit me">
+  <p>Message is: <b class="ms-2">{{ message }}</b></p>
+</div>
+
+<script>
+  const VuejsVModelInputVM = Vue.createApp({
+    data() {
+      return {
+        message: ""
+      }
+    }
+  }).mount("#VuejsVModelInput");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <input type="text" v-model="message" placeholder="edit me">
+  <p>Message is: <b>{{ message }}</b></p>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const message = ref("");
+</script>
+
+<style scoped>
+p {
+  margin-bottom: 0;
+}
+</style>`
+            }
+          },
+          {
+            detailTitle: "textarea 文字方塊",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVModelTextareaDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="VuejsVModelTextarea">
+  <textarea v-model="message" placeholder="add multiline lines"></textarea>
+  <p>Multiline message is: <b class="ms-2">{{ message }}</b></p>
+</div>
+
+<script>
+  const VuejsVModelTextareaVM = Vue.createApp({
+    data() {
+      return {
+        message: ""
+      }
+    }
+  }).mount("#VuejsVModelTextarea");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <textarea v-model="message" placeholder="add multiline lines"></textarea>
+  <p>Multiline message is: <b>{{ message }}</b></p>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const message = ref("");
+</script>
+
+<style scoped>
+p {
+  margin: 0;
+}
+</style>`
+            }
+          },
+          {
+            detailTitle: "radio 選擇框",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVModelRadioDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="VuejsVModelRadio">
+  <!-- 要注意下面兩組input對應的都是v-model="picked" -->
+  <div>
+    <input type="radio" id="one" value="1" v-model="picked">
+    <label for="one" class="ms-1">One</label>
+  </div>
+  <div>
+    <input type="radio" id="two" value="2" v-model="picked">
+    <label for="two" class="ms-1">Two</label>
+  </div>
+  <span>Picked: {{ picked }}</span>
+</div>
+
+<script>
+  const VuejsVModelRadioVM = Vue.createApp({
+    data() {
+      return {
+        picked: ""
+      }
+    }
+  }).mount("#VuejsVModelRadio");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <!-- 要注意下面兩組input對應的都是v-model="picked" -->
+  <!-- 另外，把<input>包在<label>裡面的寫法，可以避免使用id+for造成的全域污染問題 -->
+  <div>
+    <label>
+      <input type="radio" value="1" v-model="picked">
+      <label>One</label>
+    </label>
+  </div>
+  <div>
+    <label>
+      <input type="radio" value="2" v-model="picked">
+      <label>Two</label>
+    </label>
+  </div>
+  <span>Picked: {{ picked }}</span>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const picked = ref("");
+</script>
+
+<style scoped></style>`
+            }
+          },
+          {
+            detailTitle: "checkbox 選擇框（多個選項）",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVModelCheckboxMultipleDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="VuejsVModelCheckbox">
+  <!-- 注意下面input對應的都是v-model="checkedNames" -->
+  <input type="checkbox" id="jack" value="Jack" v-model="checkedNames">
+  <label for="jack">Jack</label>
+  <input type="checkbox" id="john" value="John" v-model="checkedNames">
+  <label for="john">John</label>
+  <input type="checkbox" id="mike" value="Mike" v-model="checkedNames">
+  <label for="mike">Mike</label>
+  <input type="checkbox" id="mary" value="Mary" v-model="checkedNames">
+  <label for="mary">Mary</label>
+  <br>
+  <p>Checked names: {{ checkedNames }}</p>
+</div>
+
+<script>
+  const VuejsVModelCheckbox = Vue.createApp({
+    data() {
+      return {
+        // 因為是複選的關係，這裡的checkedNames是陣列
+        checkedNames: []
+      }
+    }
+  }).mount("#VuejsVModelCheckbox");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <!-- 注意下面input對應的都是v-model="checkedNames" -->
+  <!-- 另外，把<input>包在<label>裡面的寫法，可以避免使用id+for造成的全域污染問題 -->
+  <label>
+    <input type="checkbox" value="Jack" v-model="checkedNames">
+    Jack
+  </label>
+  <label>
+    <input type="checkbox" value="John" v-model="checkedNames">
+    John
+  </label>
+  <label>
+    <input type="checkbox" value="Mike" v-model="checkedNames">
+    Mike
+  </label>
+  <label>
+    <input type="checkbox" value="Mary" v-model="checkedNames">
+    Mary
+  </label>
+  <br>
+  <p>Checked names: {{ checkedNames }}</p>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+// 因為是複選的關係，這裡的checkedNames是陣列
+const checkedNames = ref([]);
+</script>
+
+<style scoped>
+p {
+  margin-bottom: 0;
+}
+</style>`
+            }
+          },
+          {
+            detailTitle: "checkbox 選擇框（單個選項）",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVModelCheckboxSingleDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="VuejsVModelCheckboxSingle">
+  <input type="checkbox" id="VuejsVModelCheckboxSingleCheckbox" v-model="isChecked">
+  <label for="VuejsVModelCheckboxSingleCheckbox">Status: {{ isChecked }}</label>
+</div>
+
+<script>
+  const VuejsVModelCheckboxSingleVM = Vue.createApp({
+    data() {
+      return {
+        isChecked: false
+      }
+    }
+  }).mount("#VuejsVModelCheckboxSingle");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <label>
+    <input type="checkbox" v-model="isChecked">
+    Status: {{ isChecked }}
+  </label>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const isChecked = ref(false);
+</script>
+
+<style scoped></style>`
+            }
+          },
+          {
+            detailTitle: "select 下拉式選單",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVModelSelectDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="VuejsVModelSelect">
+  <!-- 注意，v-model要放在select而不是option -->
+  <select v-model="selected">
+    <!-- 第一個選項設定為disabled的好處是可以保證使用者不會送出此預設值 -->
+    <option disabled value="">請選擇</option>
+    <option value="臺北市">臺北市</option>
+    <option value="新北市">新北市</option>
+    <option value="基隆市">基隆市</option>
+  </select>
+  <p>現在選到的行政區是 <b>{{ selected || '未選擇'}}</b></p>
+</div>
+
+<script>
+  const VuejsVModelSelectVM = Vue.createApp({
+    data() {
+      return {
+        selected: ""
+      }
+    }
+  }).mount("#VuejsVModelSelect");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <!-- 注意，v-model要放在select而不是option -->
+  <select v-model="selected">
+    <!-- 第一個選項設定為disabled的好處是可以保證使用者不會送出此預設值 -->
+    <option disabled value="">請選擇</option>
+    <option value="臺北市">臺北市</option>
+    <option value="新北市">新北市</option>
+    <option value="基隆市">基隆市</option>
+  </select>
+  <p>現在選到的行政區是 <b>{{ selected || '未選擇'}}</b></p>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const selected = ref("");
+</script>
+
+<style scoped></style>`
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "v-model 與修飾子",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "<code>v-model.lazy</code>",
+            detailSubtitle: '在 <code>v-model</code> 後面加上 <code>.lazy</code>，會在使用者離開輸入框焦點時，才會更新 data 內容。',
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode:  // 到這裡，尚未開啟新Vue SFC來寫此處元件
+`<div id="VuejsVModelLazy">
+  <input v-model.lazy="lazyMessage" placeholder="edit me">
+  <p>Message is: {{ lazyMessage }}</p>
+</div>
+
+<script>
+  const VuejsVModelLazyVM = Vue.createApp({
+    data() {
+      return {
+        lazyMessage: ""
+      }
+    }
+  }).mount("#VuejsVModelLazy");
+</script>`,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
       {
         listTitle: null,
         listSubtitle: null,
@@ -443,28 +1106,27 @@ npm install</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       }
     ]
   },
   {
     id: "vuejsEventNote",
-    title: "Vue.js事件處理",
+    title: "Vue 事件處理",
     description: null,
     descriptionComponent: null,
     descriptionComponentStyle: null,
@@ -476,28 +1138,27 @@ npm install</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       }
     ]
   },
   {
     id: "vuejsConditionListNote",
-    title: "Vue.js條件判斷與列表渲染",
+    title: "Vue 條件判斷與列表渲染",
     description: null,
     descriptionComponent: null,
     descriptionComponentStyle: null,
@@ -509,28 +1170,27 @@ npm install</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       }
     ]
   },
   {
     id: "vuejsLifecycleNote",
-    title: "Vue.js元件的生命週期與更新機制",
+    title: "Vue 元件的生命週期與更新機制",
     description: null,
     descriptionComponent: null,
     descriptionComponentStyle: null,
@@ -542,21 +1202,20 @@ npm install</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       }
     ]
@@ -575,21 +1234,20 @@ npm install</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueOptionApiCode: null,
-          vueCompositionApiCode: null
+          vueSFCCode: null
         },
         listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,
+            detailContent: null,
             detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueOptionApiCode: null,
-              vueCompositionApiCode: null
+              vueSFCCode: null
             }
-          },
+          }
         ]
       }
     ]

@@ -676,7 +676,14 @@ const subtotal = computed(() => price.value * quantity.value);
   {
     id: "vuejsDirectiveNote",
     title: "Vue 指令",
-    description: "包含 <code>v-bind</code>、<code>v-model</code> 與其修飾子、<code>v-text</code>、<code>v-html</code>、<code>v-once</code>、<code>v-pre</code>。",
+    description: 
+`包含——
+<ul style="margin-top: 8px; line-height: 1.6;">
+  <li>屬性綁定：<code>v-bind</code>。</li>
+  <li>表單綁定：<code>v-model</code> 與其修飾子。</li>
+  <li>模板綁定：<code>v-text</code>、<code>v-html</code>、<code>v-once</code>、<code>v-pre</code>。</li>
+  <li>樣式綁定：<code>v-bind:class</code>、<code>v-bind:style</code>。
+</ul>`,
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
@@ -731,7 +738,7 @@ const subtotal = computed(() => price.value * quantity.value);
             detailSubtitle: null,
             detailContent: null,
             detailComponent: defineAsyncComponent(() =>
-              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVModelInput.vue")
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVModelInputDemo.vue")
             ),
             detailCode: {
               htmlCode: 
@@ -1054,7 +1061,9 @@ const selected = ref("");
             detailTitle: "<code>v-model.lazy</code>",
             detailSubtitle: '在 <code>v-model</code> 後面加上 <code>.lazy</code>，會在使用者離開輸入框焦點時，才會更新 data 內容。',
             detailContent: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVModelLazyDemo.vue")
+            ),
             detailCode: {
               htmlCode:  // 到這裡，尚未開啟新Vue SFC來寫此處元件
 `<div id="VuejsVModelLazy">
@@ -1072,35 +1081,141 @@ const selected = ref("");
   }).mount("#VuejsVModelLazy");
 </script>`,
               jsCode: null,
-              vueSFCCode: null
+              vueSFCCode: 
+`<template>
+  <input v-model.lazy="lazyMessage" placeholder="edit me">
+  <p>Message is: {{ lazyMessage }}</p>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const lazyMessage = ref("");
+</script>
+
+<style scoped>
+p {
+  margin-bottom: 0;
+}
+</style>`
             }
           },
           {
-            detailTitle: null,
-            detailSubtitle: null,
+            detailTitle: "<code>v-model.number</code>",
+            detailSubtitle: "在 <code>&lt;input&gt;</code> 輸入框中輸入的數字都會是 string 型別，在 <code>v-model</code> 後加上 <code>.number</code> 可將其轉成 number 型別。",
             detailContent: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVModelNumberDemo.vue")
+            ),
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="app14">
+  字串相加<br />
+  <input v-model="message14a"> + <input v-model="message14b"> = {{ stringSum }}<br>
+</div>
+<br />
+<div id="app15">
+  數字相加<br />
+  <input v-model.number="message15a"> + <input v-model.number="message15b"> = {{ numberSum }}
+</div>
+
+<script>
+  const vm14 = Vue.createApp({
+    data() {
+      return {
+        message14a: 0,
+        message14b: 0
+      }
+    },
+    computed: {
+      stringSum() {
+        return this.message14a + this.message14b;
+      }
+    }
+  }).mount("#app14");
+
+  const vm15 = Vue.createApp({
+    data() {
+      return {
+        message15a: 0,
+        message15b: 0
+      }
+    },
+    computed: {
+      numberSum() {
+        return this.message15a + this.message15b;
+      }
+    }
+  }).mount("#app15");
+</script>`,
               jsCode: null,
-              vueSFCCode: null
+              vueSFCCode: 
+`<template>
+  字串相加<br />
+  <input v-model="message14a"> + <input v-model="message14b"> = {{ stringSum }}<br>
+  <br />
+  數字相加<br />
+  <input v-model.number="message15a"> + <input v-model.number="message15b"> = {{ numberSum }}
+</template>
+
+<script setup>
+import { ref, computed } from 'vue';
+
+const message14a = ref(0);
+const message14b = ref(0);
+const stringSum = computed(() => message14a.value + message14b.value);
+
+const message15a = ref(0);
+const message15b = ref(0);
+const numberSum = computed(() => message15a.value + message15b.value);
+</script>
+
+<style scoped></style>`
             }
           },
           {
-            detailTitle: null,
-            detailSubtitle: null,
+            detailTitle: "<code>v-model.trim</code>",
+            detailSubtitle: "<code>v-model</code> 加上 <code>.trim</code> 修飾子後，可自動過濾輸入框內前後輸入的空白字元。",
             detailContent: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVModelTrimDemo.vue")
+            ),
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="app16">
+  <textarea v-model.trim="message16"></textarea>
+  <p>產出結果為： <pre>{{ message16 }}</pre></p>
+</div>
+
+<script>
+  const vm16 = Vue.createApp({
+    data() {
+      return {
+        message16: ""
+      }
+    }
+  }).mount("#app16");
+</script>`,
               jsCode: null,
-              vueSFCCode: null
+              vueSFCCode: 
+`<template>
+  <textarea v-model.trim="message16"></textarea>
+  <p>產出結果為： <pre>{{ message16 }}</pre></p>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const message16 = ref("");
+</script>
+
+<style scoped></style>`
             }
           }
         ]
       },
       {
-        listTitle: null,
+        listTitle: "模板綁定",
         listSubtitle: null,
         listComponent: null,
         listCode: {
@@ -1110,14 +1225,349 @@ const selected = ref("");
         },
         listDetails: [
           {
-            detailTitle: null,
+            detailTitle: "<code>v-text</code> 與 <code>v-html</code>",
             detailSubtitle: null,
             detailContent: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVTextVHtmlDemo.vue")
+            ),
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="app17">
+  <div v-text="text"></div>
+  <div v-html="text"></div>
+  <div>{{ text }}</div>
+</div>
+
+<script>
+  const vm17 = Vue.createApp({
+    data() {
+      return {
+        text: "<h3>Hello World!</h3>"
+      }
+    }
+  }).mount("#app17");
+</script>`,
               jsCode: null,
-              vueSFCCode: null
+              vueSFCCode: 
+`<template>
+  <div v-text="text"></div>
+  <div v-html="text"></div>
+  <div>{{ text }}</div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const text = ref("<h3>Hello World!</h3>");
+</script>
+
+<style scoped></style>`
+            }
+          },
+          {
+            detailTitle: "<code>v-once</code>",
+            detailSubtitle: "只會渲染指定的節點一次，往後就不再更新。",
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVOnceDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app18">
+  <input v-model="text">
+  <div>
+    沒有 <code>v-once</code> → {{ text }}
+  </div>
+  <div v-once>
+    有 <code>v-once</code> → {{ text }}
+  </div>
+</div>
+
+<script>
+  const vm18 = Vue.createApp({
+    data() {
+      return {
+        text: "Hello World"
+      }
+    }
+  }).mount("#app18");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <input v-model="text">
+  <div>沒有 <code>v-once</code> → {{ text }}</div>
+  <div v-once>有 <code>v-once</code> → {{ text }}</div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const text = ref("Hello World");
+</script>
+
+<style scoped></style>`
+            }
+          },
+          {
+            detailTitle: "<code>v-pre</code>",
+            detailSubtitle: '以下面例子來說，加上 <code>v-pre</code> 指令，會顯示原始的 "{{ text }}" ，而不會是編譯後的 text 內容。',
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVPreDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app19">
+  <!-- 加上v-pre後不會解析模板內容，直接顯示{{ text }} -->
+  <div v-pre>
+    有 <code>v-pre</code> → {{ text }}
+  </div>
+
+  <!-- 將{{ text }}轉換為text的內容 -->
+  <div>
+    沒有 <code>v-pre</code> → {{ text }}
+  </div>
+</div>
+
+<script>
+  const vm19 = Vue.createApp({
+    data() {
+      return {
+        text: "v-pre測試內容"
+      }
+    }
+  }).mount("#app19");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <!-- 加上v-pre後不會解析模板內容，直接顯示{{ text }} -->
+  <div v-pre>
+    有 <code>v-pre</code> → {{ text }}
+  </div>
+
+  <!-- 將{{ text }}轉換為text的內容 -->
+  <div>
+    沒有 <code>v-pre</code> → {{ text }}
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const text = ref("v-pre測試內容");
+</script>
+
+<style scoped></style>`
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "樣式綁定",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "控制 <code>class</code>",
+            detailSubtitle: '以下面例子來說，當 <code>message20.length > 10</code> 為真，DOM 會有 <code>class="error"</code> 的樣式。',
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVBindClass1Demo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app20">
+  <input type="text" v-model.trim="message20" v-bind:class="{ 'error': message20.length > 10 }">
+</div>
+
+<style>
+  .error {
+    border: red solid 1px;
+    color: red;
+  }
+</style>
+
+<script>
+  const vm20 = Vue.createApp({
+    data() {
+      return {
+        message20: ""
+      }
+    }
+  }).mount("#app20");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <input
+    type="text"
+    v-model.trim="message20"
+    :class="{ 'error': message20.length > 10 }"
+  >
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const message20 = ref("");
+</script>
+
+<style scoped>
+  .error {
+    border: red solid 1px;
+    color: red;
+  }
+</style>`
+            }
+          },
+          {
+            detailTitle: "控制多組 <code>class</code>",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVBindClass2Demo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app21">
+  <input type="text" v-model.trim="message21" v-bind:class="{ 'active': isActive, 'text-danger': hasError }">
+</div>
+
+<style>
+  .active {
+    border: gray dashed 1px;
+    color: blue;
+  }
+  .text-danger {
+    border: red solid 1px;
+    color: red;
+  }
+</style>
+
+<script>
+  const vm21 = Vue.createApp({
+    data() {
+      return {
+        message21: "",
+        isActive: true,
+        hasError: false
+      }
+    },
+    watch: {
+      message21(newValue) {
+        if ( newValue.length <= 5 ) {
+          this.isActive = true;
+          this.hasError = false;
+        } else {
+          this.isActive = false;
+          this.hasError = true;
+        }
+      }
+    }
+  }).mount("#app21");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <input
+    type="text"
+    v-model.trim="message21"
+    :class="{ 'active': isActive, 'text-danger': hasError }"
+  >
+</template>
+
+<script setup>
+import { ref, watch } from "vue";
+
+const message21 = ref("");
+const isActive = ref(true);
+const hasError = ref(false);
+
+watch(message21, (newValue) => {
+  if ( newValue.length <= 5 ) {
+    isActive.value = true;
+    hasError.value = false;
+  } else {
+    isActive.value = false;
+    hasError.value = true;
+  };
+});
+</script>
+
+<style scoped>
+  .active {
+    border: gray dashed 1px;
+    color: blue;
+  }
+  .text-danger {
+    border: red solid 1px;
+    color: red;
+  }
+</style>`
+            }
+          },
+          {
+            detailTitle: "直接操作 <code>style</code> 屬性",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsDirectiveNote/VuejsVBindStyleDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app22">
+  <input type="text" v-model.trim="message22" placeholder="請勿超過10個字" :style="msgStyle">
+</div>
+
+<script>
+  const vm22 = Vue.createApp({
+    data() {
+      return {
+        message22: ""
+      }
+    },
+    computed: {
+      msgStyle() {
+        return {
+          'border': this.message22.length <= 10 ? "" : "red solid 1px",
+          'color': this.message22.length <= 10 ? "" : "red"
+        };
+      }
+    }
+  }).mount("#app22");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <input
+    type="text"
+    v-model.trim="message22"
+    placeholder="請勿超過10個字"
+    :style="msgStyle"
+  >
+</template>
+
+<script setup>
+import { ref, computed } from "vue";
+
+const message22 = ref("");
+const msgStyle = computed(() => {
+  return {
+    "border": message22.value.length <= 10 ? "" : "red solid 1px",
+    "color": message22.value.length <= 10 ? "" : "red"
+  };
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]
@@ -1127,7 +1577,7 @@ const selected = ref("");
   {
     id: "vuejsEventNote",
     title: "Vue 事件處理",
-    description: null,
+    description: "包含 <code></code>。",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [

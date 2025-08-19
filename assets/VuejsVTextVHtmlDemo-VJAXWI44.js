@@ -1,0 +1,1 @@
+import{r as l,c as o,f as a,b as t,t as n,F as s}from"./index-D0KH_eNs.js";const r=["textContent"],c=["innerHTML"],m={__name:"VuejsVTextVHtmlDemo",setup(u){const e=l("<h3>Hello World!</h3>");return(_,i)=>(a(),o(s,null,[t("div",{textContent:n(e.value)},null,8,r),t("div",{innerHTML:e.value},null,8,c),t("div",null,n(e.value),1)],64))}};export{m as default};

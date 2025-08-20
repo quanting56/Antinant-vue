@@ -1,0 +1,1 @@
+import{_ as s,c as t,b as n,f as o}from"./index-BfvGVxCl.js";const a={},c={class:"dashboard"};function r(d,e){return o(),t("div",c,e[0]||(e[0]=[n("p",{style:{"font-size":"144px"}},"my-investment",-1)]))}const f=s(a,[["render",r],["__scopeId","data-v-94f29d43"]]);export{f as default};

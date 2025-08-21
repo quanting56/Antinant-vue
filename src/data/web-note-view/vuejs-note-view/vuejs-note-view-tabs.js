@@ -1577,7 +1577,7 @@ const msgStyle = computed(() => {
   {
     id: "vuejsEventHandlingNote",
     title: "事件處理 v-on",
-    description: "包含 <code></code>。",
+    description: "包含 <code>v-on</code>、<code>v-on</code> 修飾子、鍵盤修飾子、滑鼠修飾子、<code>v-model</code> 的語法糖還原。",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
@@ -1936,19 +1936,150 @@ input {
   },
   {
     id: "vuejsConditionRenderingNote",
-    title: "條件判斷 v-if/v-show",
-    description: null,
+    title: "條件判斷 v-show/v-if",
+    description: "包含 <code>v-show</code> 與 <code>v-if</code>。",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
-        listSubtitle: null,
-        listComponent: null,
+        listTitle: "<code>v-show</code>",
+        listSubtitle: "作用十分單純，值為 <u>truthy</u> 時顯示，值為 <u>falsy</u> 則隱藏（透過 CSS 的 <code>display: none</code> 來將元素隱藏）。",
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsConditionRenderingNote/VuejsVShowDemo.vue")
+        ),
         listCode: {
-          htmlCode: null,
+          htmlCode: 
+`<div id="app26">
+  <button @click="toggleVisibility">切換顯示/隱藏</button>
+  <code>isVisible</code> 現在狀態：<code>{{ isVisible }}</code>
+  <p v-show="isVisible">這段文字會根據 <code>isVisible</code> 變數的值顯示或隱藏。</p>
+</div>
+
+<script>
+  const vm26 = Vue.createApp({
+    data() {
+      return {
+        isVisible: true  // 控制顯示/隱藏
+      }
+    },
+    methods: {
+      toggleVisibility() {
+        this.isVisible = !this.isVisible;  // 切換 isVisible 的值
+      }
+    }
+  }).mount("#app26");
+</script>`,
           jsCode: null,
-          vueSFCCode: null
+          vueSFCCode: 
+`<template>
+  <button @click="toggleVisibility">切換顯示/隱藏</button>
+  <code>isVisible</code> 現在狀態：<code>{{ isVisible }}</code>
+  <p v-show="isVisible">這段文字會根據 <code>isVisible</code> 變數的值顯示或隱藏。</p>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const isVisible = ref(true);  // 控制顯示/隱藏
+function toggleVisibility() {
+  isVisible.value = !isVisible.value;  // 切換 isVisible 的值
+};
+</script>
+
+<style scoped>
+button {
+  margin-right: 32px;
+}
+</style>`
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "<code>v-if</code>",
+        listSubtitle: 
+`<code>v-if</code> 可與 <code>v-else-if</code>、<code>v-else</code> 做條件搭配。
+<ul style="margin-top: 16px;">
+  <li><code>key</code>：加上 <code>key</code> 屬性，讓 Vue.js 根據 <code>key</code> 屬性的內容是否相同，決定是否重新渲染元素。雖可能會降低網頁渲染的效率，但可避免因重複利用已經存在的 DOM，導致畫面殘留。</li>
+</ul>`,
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsConditionRenderingNote/VuejsVIfDemo.vue")
+        ),
+        listCode: {
+          htmlCode: 
+`<div id="app27">
+  <button @click="changeVisibility">切換段落</button>
+  <template v-if="visibility === 'A'">
+    <h4>Title A</h4>
+    <p>Paragraph A - 1</p>
+    <p>Paragraph A - 2</p>
+  </template>
+  <template v-else>
+    <h4>Title B</h4>
+    <p>Paragraph B - 1</p>
+    <p>Paragraph B - 2</p>
+  </template>
+</div>
+
+<script>
+  const vm27 = Vue.createApp({
+    data() {
+      return {
+        visibility: "A"
+      }
+    },
+    methods: {
+      changeVisibility() {
+        if(this.visibility == "A") {
+          this.visibility = "B";
+        } else {
+          this.visibility = "A";
+        }
+      }
+    }
+  }).mount("#app27");
+</script>`,
+          jsCode: null,
+          vueSFCCode: 
+`<template>
+  <button @click="changeVisibility">切換段落</button>
+  <template v-if="visibility === 'A'">
+    <h4>Title A</h4>
+    <p>Paragraph A - 1</p>
+    <p>Paragraph A - 2</p>
+  </template>
+  <template v-else>
+    <h4>Title B</h4>
+    <p>Paragraph B - 1</p>
+    <p>Paragraph B - 2</p>
+  </template>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const visibility = ref("A");
+function changeVisibility() {
+  if(visibility.value == "A") {
+    visibility.value = "B";
+  } else {
+    visibility.value = "A";
+  };
+};
+</script>
+
+<style scoped></style>`
         },
         listDetails: [
           {
@@ -1969,12 +2100,362 @@ input {
   {
     id: "vuejsListRenderingNote",
     title: "列表渲染 v-for",
-    description: null,
+    description: "包含 <code></code>",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
+        listTitle: "<code>v-for</code> + 陣列",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "<code>item in Array</code> / <code>(item, index) in Array</code>",
+            detailSubtitle: "這裡的 <code>item</code> 可任意命名，只要是合法的 JavaScript 變數名稱即可。<code>index</code> 為索引值，從 0 開始。",
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsListRenderingNote/VuejsVForArrayDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app28">
+  <ul>
+    <h4>item in arr:</h4>
+    <li><u>item</u></li>
+    <li v-for="item in arr">{{ item }}</li>
+    <br>
+    <h4>(item, index) in arr:</h4>
+    <li><u>index</u> -&gt; <u>item</u></li>
+    <li v-for="(item, index) in arr">{{ index }} -&gt; {{ item }}</li>
+  </ul>
+</div>
+
+<script>
+  const vm28 = Vue.createApp({
+    data() {
+      return {
+        arr: ['008', 'js', 'is', 'awesome']
+      }
+    }
+  }).mount("#app28")
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <ul>
+    <h4>item in arr:</h4>
+    <li><u>item</u></li>
+    <li v-for="item in arr">{{ item }}</li>
+    <br>
+    <h4>(item, index) in arr:</h4>
+    <li><u>index</u> -&gt; <u>item</u></li>
+    <li v-for="(item, index) in arr">{{ index }} -&gt; {{ item }}</li>
+  </ul>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const arr = ref(['008', 'js', 'is', 'awesome']);
+</script>
+
+<style scoped>
+h4 {
+  margin-top: 0 !important;
+}
+</style>`
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "<code>v-for</code> + 物件",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "<code>value in Object</code> / <code>(value, key) in Object</code> / <code>(value, key, index) in Object</code>",
+            detailSubtitle: "這裡的 <code>value</code> 可任意命名，只要是合法的 JavaScript 變數名稱即可。<code>index</code> 為索引值，從 0 開始。",
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsListRenderingNote/VuejsVForObjectDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app29">
+  <ul>
+    <h4>item</h4>
+    <li v-for="value in fishBurger">{{ value }}</li>
+    <h4>key: value</h4>
+    <li v-for="(value, key) in fishBurger">{{ key }}: {{ value }}</li>
+    <h4>index -&gt; key: value</h4>
+    <li v-for="(value, key, index) in fishBurger">{{ index }} -&gt; {{ key }}: {{ value }}</li>
+  </ul>
+</div>
+
+<script>
+  const vm29 = Vue.createApp({
+    data() {
+      return {
+        fishBurger: {
+          Calories: "508 Kcal",
+          Protein: "20.5 g",
+          Fat: "28.7 g",
+          Carbonhydrates: "39.6 g",
+          Sodium: "608.0 mg"
+        }
+      }
+    }
+  }).mount("#app29");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <ul>
+    <h4>value in fishBurger</h4>
+    <li><u>value</u></li>
+    <li v-for="value in fishBurger">{{ value }}</li>
+    <h4>(value, key) in fishBurger</h4>
+    <li><u>key</u>: <u>value</u></li>
+    <li v-for="(value, key) in fishBurger">{{ key }}: {{ value }}</li>
+    <h4>(value, key, index) in fishBurger</h4>
+    <li><u>index</u> -&gt; <u>key</u>: <u>value</u></li>
+    <li v-for="(value, key, index) in fishBurger">{{ index }} -&gt; {{ key }}: {{ value }}</li>
+  </ul>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const fishBurger = ref({
+  Calories: "508 Kcal",
+  Protein: "20.5 g",
+  Fat: "28.7 g",
+  Carbonhydrates: "39.6 g",
+  Sodium: "608.0 mg"
+});
+</script>
+
+<script setup></script>`
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "<code>v-for</code> + 數字範圍",
+        listSubtitle: 
+`<p style="color: rgba(33, 37, 41, 0.75); font-size: 12px; font-style: italic; margin-bottom: 8px;">
+- 除了陣列（Array）與物件（Object）外，<code>v-for</code> 還可以接受整數作為渲染的條件，數字越大重複的次數越多。但需注意，此處的計數是從 1 開始計算。
+</p>`,
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsListRenderingNote/VuejsVForNumberRangeDemo.vue")
+        ),
+        listCode: {
+          htmlCode: 
+`<ul id="app30" class="pagination">
+  <li class="page-item"><a class="page-link">&lt;</a></li>
+  <!-- 會從 1 ~ 10 出現十次<li> -->
+  <li class="page-item" v-for="page in 10">
+    <a class="page-link" href="#">{{ page }}</a>
+  </li>
+  <li class="page-item"><a class="page-link">&gt;</a></li>
+</ul>
+
+<script>
+  const vm30 = Vue.createApp().mount("#app30");
+</script>`,
+          jsCode: null,
+          vueSFCCode: 
+`<template>
+  <ul class="pagination">
+    <li class="page-item"><a class="page-link">&lt;</a></li>
+    <!-- 會從 1 ~ 10 出現十次<li> -->
+    <li class="page-item" v-for="page in 10">
+      <a class="page-link" href="#">{{ page }}</a>
+    </li>
+    <li class="page-item"><a class="page-link">&gt;</a></li>
+  </ul>
+</template>
+
+<script setup></script>
+
+<style scoped>
+ul {
+  margin-bottom: 16px;
+}
+
+.pagination {
+  display: flex;
+  list-style: none;
+}
+
+.page-item {
+  margin: 0;
+}
+
+.page-link {
+  position: relative;
+  display: block;
+  padding: 0.375rem 0.75rem;
+  color: #0d6efd;
+  text-decoration: none;
+  background-color: #ffffff;
+  border: 1px solid #dee2e6;
+  border-radius: 0.25rem;
+  transition: background-color 0.15s, color 0.15s;
+}
+
+.page-link:hover {
+  color: #0a58ca;
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+.page-item.disabled .page-link {
+  color: #6c757d;
+  pointer-events: none;
+  background-color: #fff;
+  border-color: #dee2e6;
+}
+
+.page-item.active .page-link {
+  z-index: 1;
+  color: #fff;
+  background-color: #0d6efd;
+  border-color: #0d6efd;
+}
+</style>`
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "<code>v-for</code> + <code>&lt;template&gt;</code>",
+        listSubtitle: null,
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsListRenderingNote/VuejsVForTemplateDemo.vue")
+        ),
+        listCode: {
+          htmlCode: 
+`<!-- 加 style="display: inline;" 是因為 class="dropdown-menu" 預設 display: none -->
+<div class="dropdown">
+  <button class="btn btn-primary dropdown-toggle" type="button" data-bs-toggle="dropdown">個人連結</button>
+  <ul id="app31" class="dropdown-menu">
+    <template v-for="i in links">
+      <li><div class="dropdown-divider"></div></li>
+      <li><a class="dropdown-item" :href="i.link" target="_blank">{{ i.name }}</a></li>
+    </template>
+  </ul>
+</div>
+
+<script>
+  const vm31 = Vue.createApp({
+    data() {
+      return {
+        links: [
+          { name: "Instagram", link: "https://www.instagram.com/ting.d_927"},
+          { name: "Facebook", link: "https://www.facebook.com/guanting.dong"},
+          { name: "Line", link: "https://line.me/ti/p/fOtvr_KEbv"},
+        ]
+      }
+    }
+  }).mount("#app31");
+</script>`,
+          jsCode: null,
+          vueSFCCode: 
+`<template>
+  <div class="dropdown">
+    <button class="btn btn-primary dropdown-toggle" type="button" @click="toggleDropdown">個人連結</button>
+    <ul class="dropdown-menu" :class="{ show: isOpen }">
+      <template v-for="(item, idx) in links" :key="idx">
+        <li><div class="dropdown-divider"></div></li>
+        <li><a class="dropdown-item" :href="item.link" target="_blank">{{ item.name }}</a></li>
+      </template>
+    </ul>
+  </div>
+</template>
+
+<script setup>
+import { ref } from 'vue';
+
+const links = ref([
+  { name: "Instagram", link: "https://www.instagram.com/ting.d_927"},
+  { name: "Facebook", link: "https://www.facebook.com/guanting.dong"},
+  { name: "Line", link: "https://line.me/ti/p/fOtvr_KEbv"},
+]);
+
+// 取代Bootstrap樣式的code
+const isOpen = ref(false);
+const toggleDropdown = () => {
+  isOpen.value = !isOpen.value;
+};
+</script>
+
+<style scoped>
+/* 樣式模擬Bootstrap樣式，在此省略，若有需要可進入原元件查看 */
+/* 元件位置：components/WebNoteView/VuejsNoteView/VuejsListRenderingNote/VuejsVForTemplateDemo.vue */
+</style>`
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "<code>v-for</code> 列表的排序與過濾",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "<code>v-for</code> 可以使用 <code>index</code> 當作 <code>key</code> 嗎？",
         listSubtitle: null,
         listComponent: null,
         listCode: {

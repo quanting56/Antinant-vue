@@ -1575,15 +1575,301 @@ const msgStyle = computed(() => {
     ]
   },
   {
-    id: "vuejsEventNote",
-    title: "Vue 事件處理",
+    id: "vuejsEventHandlingNote",
+    title: "事件處理 v-on",
     description: "包含 <code></code>。",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
+        listTitle: "<code>v-on</code> 事件綁定",
+        listSubtitle: "Vue.js 中，與事件有關的指令，只有一個 <code>v-on</code>。",
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: '<code>v-on:[事件名稱]="運算式"</code>',
+            detailSubtitle: '註：<code>v-on:[事件名稱]="運算式"</code> = <code>@[事件名稱]="運算式"</code>',
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsEventHandlingNote/VuejsVOnDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<!-- 以下兩種寫法結果相同 -->
+<div id="app23">
+  <p>Count: {{ count }}</p>
+  <button v-on:click="count++">Plus</button>
+</div>
+<div id="app24">
+  <p>Count: {{ count }}</p>
+  <button v-on:click="plus">Plus</button>
+</div>
+
+<script>
+  const vm23 = Vue.createApp({
+    data() {
+      return {
+        count: 0
+      }
+    }
+  }).mount("#app23");
+
+  const vm24 = Vue.createApp({
+    data() {
+      return {
+        count: 0
+      }
+    },
+    methods: {
+      plus() {
+        this.count++;
+      }
+    }
+  }).mount("#app24");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <!-- 以下兩種寫法結果相同 -->
+  <!-- 寫法1：直接在模板中寫表達式 -->
+  <p>Count: {{ count1 }}</p>
+  <button v-on:click="count1++">Plus</button>
+  
+  <!-- 寫法2：用methods -->
+  <p>Count: {{ count2 }}</p>
+  <button v-on:click="plus">Plus</button>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+// 寫法1：直接操作變數
+const count1 = ref(0);
+
+// 寫法2：用methods（在<script setup其實就是一個函式）
+const count2 = ref(0);
+function plus() {
+  count2.value++;
+};
+</script>
+
+<style scoped>
+p {
+  margin: 0;
+}
+
+button {
+  margin-bottom: 16px;
+}
+</style>`
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "<code>v-on</code> 與修飾子",
         listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "<code>.stop</code>",
+            detailSubtitle: "用來阻擋事件冒泡，DOM 的 <code>@click</code> 加上 <code>.stop</code>，click 事件就不會像外層傳遞。",
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "<code>.prevent</code>",
+            detailSubtitle: "用來阻擋元素的預設行為。",
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "<code>.capture</code>",
+            detailSubtitle: "指定事件以捕獲（capturing）的形式來觸發。",
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "<code>.self</code>",
+            detailSubtitle: "<code>.self</code> 的作用是只會觸發元素自己的事件行為，由子層元素傳來的事件則不會觸發。例如燈箱操作，希望點擊燈箱外遮罩可自動關閉，但點擊元素時不想有關閉效果。",
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "<code>.once</code>",
+            detailSubtitle: "讓指定的事件只觸發一次，執行後就解除事件監聽。",
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "<code>.passive</code>",
+            detailSubtitle: "<code>.passive</code> 等同於 <code>addEventListener</code> 的 <code>passive</code> 屬性，用途是告訴瀏覽器這個事件處理器會不會呼叫 <code>event.preventDefault</code> 來停止瀏覽器的原生行為。",
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "鍵盤修飾子",
+        listSubtitle: 
+`<ul>
+  <li><code>.enter</code></li>
+  <li><code>.tab</code></li>
+  <li><code>.delete</code>：包含 <kbd>Delete</kbd> 與 <kbd>Backspace</kbd> 鍵。</li>
+  <li><code>.esc</code></li>
+  <li><code>.space</code></li>
+  <li><code>.up</code></li>
+  <li><code>.down</code></li>
+  <li><code>.left</code></li>
+  <li><code>.right</code></li>
+  <li><code>.ctrl</code></li>
+  <li><code>.alt</code></li>
+  <li><code>.shift</code></li>
+  <li><code>.meta</code>：在 window 系統對應的是 <kbd>⊞ Win</kbd> 鍵，在 mac 系統對應的是 <kbd>command</kbd> 鍵。</li>
+</ul>`,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "<code>.exact</code> 精確判斷",
+            detailSubtitle: "用來精確判斷鍵盤的修飾子，以此例來說，當沒有加上 <code>.exact</code> 時，按 <kbd>Ctrl</kbd> + <kbd>Enter</kbd> 鍵時，亦會執行 <code>alert()</code>；但當加上 <code>.exact</code> 後，就只有在「只按下 <kbd>Enter</kbd> 鍵」時，才會執行 <code>alert()</code>。",
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsEventHandlingNote/VuejsVOnKeydownEnterDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app25">
+  <div>
+    沒有加 <code>.exact</code>：
+    <input type="text" placeholder="輸入任意文字後按下Enter鍵" v-model.trim="keyboardModifiers1" @keydown.enter="addToMessages1">
+  </div>
+  <div>
+    有加 <code>.exact</code>：
+    <input type="text" placeholder="輸入任意文字後按下Enter鍵" v-model.trim="keyboardModifiers2" @keydown.enter.exact="addToMessages2">
+  </div>
+</div>
+
+<script>
+  const vm25 = Vue.createApp({
+    data() {
+      return {
+        keyboardModifiers1: "",
+        keyboardModifiers2: ""
+      };
+    },
+    methods: {
+      addToMessages1() {
+        alert("hello world\\n" + this.keyboardModifiers1 );
+      },
+      addToMessages2() {
+        alert("hello world\\n" + this.keyboardModifiers2 );
+      }
+    }
+  }).mount("#app25");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <div>
+    沒有加 <code>.exact</code>：
+    <input
+      type="text"
+      placeholder="輸入任意文字後按下Enter鍵"
+      v-model.trim="keyboardModifiers1"
+      @keydown.enter="addToMessages1"
+    >
+  </div>
+  <div>
+    有加 <code>.exact</code>：
+    <input
+      type="text"
+      placeholder="輸入任意文字後按下Enter鍵"
+      v-model.trim="keyboardModifiers2"
+      @keydown.enter.exact="addToMessages2"
+    >
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const keyboardModifiers1 = ref("");
+const keyboardModifiers2 = ref("");
+function addToMessages1() {
+  alert("hello world\n" + keyboardModifiers1.value );
+};
+function addToMessages2() {
+  alert("hello world\n" + keyboardModifiers2.value );
+};
+</script>
+
+<style scoped>
+h5 {
+  margin-top: 0;
+}
+
+input {
+  width: 180px;
+  padding: 3px;
+}
+</style>`
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "滑鼠修飾子",
+        listSubtitle: 
+`<ul>
+  <li><code>.left</code></li>
+  <li><code>.right</code></li>
+  <li><code>.middle</code></li>
+</ul>`,
         listComponent: null,
         listCode: {
           htmlCode: null,
@@ -1603,12 +1889,54 @@ const msgStyle = computed(() => {
             }
           }
         ]
+      },
+      {
+        listTitle: "拆解 <code>v-model</code> 的黑魔法",
+        listSubtitle: "<code>v-model</code> 本質上是一種語法糖，還原後如下：",
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: '<code>&lt;input type="text"&gt;</code> 與 <code>&lt;input type="textarea"&gt;</code>',
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<!-- 以下兩行幾乎等價（但不完全相同） -->
+<input v-model="msg">
+<input :value="msg" @input="msg = $event.target.value">
+
+
+<!-- 若需使用修飾符（如".trim"），使用v-model較方便 -->
+<input v-model.trim="msg">
+<input :value="msg" @input="msg = $event.target.value.trim()">`,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: '<code>&lt;input type="radio"&gt;</code>、<code>&lt;input type="checkbox"&gt;</code> 與 <code>&lt;select&gt;</code>',
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
       }
     ]
   },
   {
-    id: "vuejsConditionListNote",
-    title: "Vue 條件判斷與列表渲染",
+    id: "vuejsConditionRenderingNote",
+    title: "條件判斷 v-if/v-show",
     description: null,
     descriptionComponent: null,
     descriptionComponentStyle: null,
@@ -1639,8 +1967,200 @@ const msgStyle = computed(() => {
     ]
   },
   {
-    id: "vuejsLifecycleNote",
+    id: "vuejsListRenderingNote",
+    title: "列表渲染 v-for",
+    description: null,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: null,
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "vuejsLifecycleHooksNote",
     title: "Vue 元件的生命週期與更新機制",
+    description: null,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: null,
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "vuejsComponentNote",
+    title: "元件系統的特性",
+    description: null,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: null,
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "vuejsPropsNote",
+    title: "Props",
+    description: null,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: null,
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "vuejsVBindIsNote",
+    title: "動態元件的管理",
+    description: null,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: null,
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "vuejsSlotsNote",
+    title: "插槽 <slot>",
+    description: null,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: null,
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "vuejsTransitionNote",
+    title: "漸變與動畫 <transition>",
     description: null,
     descriptionComponent: null,
     descriptionComponentStyle: null,

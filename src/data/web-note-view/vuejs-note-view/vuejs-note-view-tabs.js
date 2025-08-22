@@ -2626,11 +2626,187 @@ const sortedNumbers = computed(() => {
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
+        listTitle: "生命週期與鉤子函式（Hooks function）",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: 
+`<div id="app35">{{ msg }}</div>
+
+<script>
+  const vm35 = Vue.createApp({
+    data() {
+      return {
+        msg: "生命週期與鉤子函式測試"
+      }
+    },
+    created() {
+      console.log("created");
+    },
+    mounted() {
+      console.log("mounted")
+    },
+    unmounted() {
+      console.log("unmounted")
+    }
+  });
+
+  // 如未執行"mount()"，則後續所有的lifecycle hook都將不會繼續執行
+  vm35.mount("#app35");
+</script>`,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "<code>unmount()</code> 卸載元件",
+            detailSubtitle: "若在 <code>Vue.createApp()</code> 時直接接上 <code>.mount()</code>，則無法透過 <code>vm.unmount()</code> 來卸載元件。",
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`// 錯誤寫法：
+const vm = Vue.createApp({
+  // 略
+}).mount("#app");
+
+// Error: "vm.unmount is not a function"
+vm.unmount();
+
+
+
+// 需要改為以下寫法，方可順利執行：
+
+// 正確寫法：
+const vm = Vue.createApp({
+  // 略
+});
+
+// mount
+vm.mount("#app");
+
+// It's ok.
+vm.unmount();`,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "狀態的更新與畫面的同步",
         listSubtitle: null,
         listComponent: null,
         listCode: {
           htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "聊天室",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsLifecycleHooksNote/VuejsChatRoomDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app36">
+  <p v-for="m in messages">{{ m }}</p>
+  <input type="text" placeholder="輸入任意文字後按下Enter鍵" v-model.trim="msg" @keydown.enter="addToMessages">
+</div>
+
+<script>
+  const vm36 = Vue.createApp({
+    data() {
+      return {
+        msg: "",
+        messages: ["Hello", "Vue.js is good", "Do you think so too?"]
+      }
+    },
+    methods: {
+      addToMessages() {
+        this.messages.push(this.msg);
+        this.msg = "";
+
+        // 等待畫面更新後再即時抓取元素屬性
+        this.$nextTick(() => {
+          // 透過this.$el取得實體綁定後的DOM
+          const el = document.querySelector("#app36");
+
+          // 將el.scrollTop指定為捲軸的高度el.scrollHeight
+          el.scrollTop = el.scrollHeight;
+        });
+      }
+    }
+  });
+  vm36.mount("#app36");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <div ref="msgContainer" style="max-height: 150px; overflow-y: auto;">
+    <p v-for="m in messages">{{ m }}</p>
+  </div>
+  <input
+    type="text"
+    placeholder="輸入任意文字後按下Enter鍵"
+    v-model.trim="msg"
+    @keydown.enter="addToMessages"
+  >
+</template>
+
+<script setup>
+import { ref, nextTick } from "vue";
+
+const msg = ref("");
+const messages = ref(["Hello", "Vue.js is good", "Do you think so too?"]);
+const msgContainer = ref(null);
+
+async function addToMessages() {
+  if (!msg.value) return;
+
+  messages.value.push(msg.value);
+  msg.value = "";
+
+  // 等待 DOM 更新後捲到最底
+  await nextTick();
+  if (msgContainer.value) {
+    msgContainer.value.scrollTop = msgContainer.value.scrollHeight;
+  };
+};
+</script>
+
+<style scoped></style>`
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "vuejsComponentNote",
+    title: "元件系統的特性",
+    description: null,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: "什麼是元件（Component）？",
+        listSubtitle: 
+`<p style="text-indent: 32px; line-height: 1.6;">
+  每一個被封裝後的元件單元，都含有自己的模板 <code>&lt;template&gt;</code>、行為邏輯 <code>&lt;script&gt;</code>、樣式 <code>&lt;style&gt;</code>，並且可以被重複使用。而在元件之中又可以含有元件，這樣由一個個元件單元組合而成的「元件樹」，就是 Vue.js 元件系統的概念。
+</p>`,
+        listComponent: null,
+        listCode: {
+          htmlCode: 
+`<div id="app">
+  <header-component>...</header-component>
+  <menu-component>...</menu-component>
+  <main-component>...</main-component>
+  <footer-component>...</footer-component>
+</div>`,
           jsCode: null,
           vueSFCCode: null
         },
@@ -2647,22 +2823,224 @@ const sortedNumbers = computed(() => {
             }
           }
         ]
-      }
-    ]
-  },
-  {
-    id: "vuejsComponentNote",
-    title: "元件系統的特性",
-    description: null,
-    descriptionComponent: null,
-    descriptionComponentStyle: null,
-    lists: [
+      },
       {
-        listTitle: null,
+        listTitle: "元件的分類",
         listSubtitle: null,
         listComponent: null,
         listCode: {
           htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "展示型元件（Presentation）",
+            detailSubtitle: null,
+            detailContent: 
+`<p style="text-indent: 32px; line-height: 1.6;">
+  以負責呈現 UI 為主的類型，我們很單純地把資料傳遞進去，然後 DOM 就根據我們丟進去的資料生成出來。這種元件的好處是可以提升 UI 的重複使用性。
+</p>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "容器型元件（Container）",
+            detailSubtitle: null,
+            detailContent: 
+`<p style="text-indent: 32px; line-height: 1.6;">
+  這類型的元件主要負責與資料層的 service 溝通，包含了與 server 端、資料來源做溝通的邏輯，然後再將資料傳遞給前面所說的展示型元件。
+</p>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "互動型元件（Interactive）",
+            detailSubtitle: null,
+            detailContent: 
+`<p style="text-indent: 32px; line-height: 1.6;">
+  像是大家所熟知的 elementUI、Bootstrap 的 UI library 都屬於此種類型。這種類型的元件通常會包含許多的互動邏輯在裡面，但也與展示型元件同樣強調重複使用。像是表單、燈箱等各種互動元素都算在這類型。
+</p>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "功能型元件（Functions）",
+            detailSubtitle: null,
+            detailContent: 
+`<p style="text-indent: 32px; line-height: 1.6;">
+  這類型的元件本身不渲染任何內容，主要負責將元件內容作為某種應用程式的延伸，或是某種機制的封裝。像是 <code>&lt;template&gt;</code>、<code>&lt;router-view&gt;</code> 都屬於此類型。
+</p>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "元件的宣告與註冊",
+        listSubtitle: "全域元件 / 區域元件 / X-Templates",
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "全域元件",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<div id="app37">
+  <h5>Root Instance</h5>
+
+  <!-- 使用自訂元件 my-component -->
+  <my-component></my-component>
+  <my-component></my-component>
+</div>
+
+<script>
+  const vm37 = Vue.createApp({});
+
+  // 將元件註冊在vm37上
+  vm37.component("my-component", {` + "\n" +
+'    template: `<div>Hello Vue 3.x!<br>此處為 {{ msg }} 。</div>`,' + "\n" +
+`    // 內部其餘選項與過去幾乎一樣
+    data() {
+      return {
+        msg: "全域元件"
+      }
+    },
+    props: {},
+    computed: {},
+    methods: {}
+  });
+
+  // 新增一個'根實體'，並掛載於#app37上
+  vm37.mount("#app37");
+</script>`,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "區域元件",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<div id="app38">
+  <h5>Root Instance</h5>
+
+  <my-component></my-component>
+  <my-component></my-component>
+</div>
+
+<script>
+  const vm38 = Vue.createApp({
+    components: {
+      "my-component": {
+        // 子元件的options` + "\n" +
+'        template:  `<div>Hello Vue 3.x!<br>此處為 {{ msg }} 。</div>`,' + "\n" +
+`        data() {
+          return {
+            msg: "區域元件"
+          }
+        }
+      }
+    }
+  });
+
+  vm38.mount("#app38");
+</script>`,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "X-Templates",
+            detailSubtitle: "這基本上是 Vue 2 時代的遺物，Vue 3 官方已完全不建議再使用，因為 SFC 完全取代了它，且 X-Templates 可讀性、維護性差。",
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<div id="app39"></div>
+
+<!-- 將網頁直接用<script>包覆 -->
+<script type="text/x-template" id="app39-x-template">
+  <div class="bg-warning">
+    <h5>這是一個x-template的標題</h5>
+    <p>這是一個x-template的內文，內文內文內文。</p>
+  </div>
+</script>
+
+<script>
+  const vm39 = Vue.createApp({
+    template: "<app39-x-template></app39-x-template>"
+  });
+
+  vm39.component("app39-x-template", {
+    // 這裡的#app39-x-template對應id="app39-x-template"
+    template: "#app39-x-template"
+  });
+
+  vm39.mount("#app39");
+</script>`,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "子元件的 <code>data</code> 必須是函式",
+        listSubtitle: "子元件的 <code>data</code> 必須是「函式（function）」而不能是「物件（object）」，以確保”<strong>每個元件實例有自己獨立的資料</strong>“；如果是寫死成物件，所有元件就會共用同一份資料，狀態會互相干擾。",
+        listComponent: null,
+        listCode: {
+          htmlCode: 
+`<div id="app40">
+  <my-component></my-component>
+  <my-component></my-component>
+  <my-component></my-component>
+  <my-component></my-component>
+</div>
+
+<script>
+  const vm40 = Vue.createApp({});
+  vm40.component("my-component", {` + "\n" +
+'    template: `' + "\n" +
+`      <div>
+        <div>Count: {{ count }}</div>
+        <button @click="count++">Plus</button>
+      </div>` + "\n" +
+'    `,' + "\n" +
+`    data() {  // 要寫成"data()"；若寫成"data:"，子元件們會變成共用同一份資料而造成干擾
+      return {
+        count: 0
+      }
+    }
+  })
+  vm40.mount("#app40");
+</script>`,
           jsCode: null,
           vueSFCCode: null
         },
@@ -2689,6 +3067,158 @@ const sortedNumbers = computed(() => {
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
+      {
+        listTitle: "元件之間的溝通傳遞",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "父元件與子元件之間的溝通傳遞",
+            detailSubtitle: "這段 code 是 Vue 2/3 Options API + CDN script 的舊寫法，現在如果是用 Vue 3 + Vite + SFC 開發，會建議改成 <strong>父元件（Parent.vue）</strong> 和 <strong>子元件（MyComponent.vue）</strong> 的形式，用兩個 Vue SFC。",
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsPropsNote/VuejsPropsParentsDemo/VuejsPropsParentsParentDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app41">
+  <!-- 這是外層元素的msg -->
+  <p>{{ msg }}</p>
+
+  <my-component :parent-msg="msg"></my-component>
+</div>
+
+<script>
+  const vm41 = Vue.createApp({
+    data() {
+      return {
+        msg: "這是外層元件的msg"
+      }
+    }
+  });
+
+  vm41.component("my-component", {` + "\n" +
+'    template: `' + "\n" +
+`      <div>
+        <div>從props來的parentMsg ==> {{ parentMsg }}</div>
+        <div>自己的msg ==> {{ innerMsg }}</div>
+      </div>` + "\n" +
+'    `,' + "\n" +
+`    // 此props處，接受的對象為一個陣列
+    props: ["parentMsg"],  // Vue會自動處理連字號（kebab-case）與駝峰式命名（camelCase）之間的轉換，此對應的是':parent-msg'
+    data() {
+      return {
+        innerMsg: "這是內層元件的msg"
+      }
+    }
+  });
+
+  vm41.mount("#app41");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<!-- 父元件 Parent.vue -->
+<template>
+  <!-- 這是外層元素的msg -->
+  <p>{{ msg }}</p>
+
+  <!-- 把父層的msg傳給子元件 -->
+  <my-component :parent-msg="msg"></my-component>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import MyComponent from "./VuejsPropsParentsChildDemo.vue";
+
+const msg = ref("這是外層元件的msg");
+</script>
+
+<style scoped>
+p {
+  margin-top: 0;
+}
+</style>
+
+
+
+<!-- 子元件 MyComponent.vue -->
+<template>
+  <div>
+    <div>從props來的parentMsg ==> {{ parentMsg }}</div>
+    <div>自己的msg ==> {{ innerMsg }}</div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+// 接受父元件傳來的資料
+defineProps({
+  parentMsg: {
+    type: String,
+    required: true
+  }
+});
+
+const innerMsg = ref("這是內層元件的msg");
+</script>
+
+<style scoped></style>`
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "Props 資料類型的驗證",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: null,
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
       {
         listTitle: null,
         listSubtitle: null,

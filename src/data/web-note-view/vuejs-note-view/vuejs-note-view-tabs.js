@@ -2100,7 +2100,7 @@ function changeVisibility() {
   {
     id: "vuejsListRenderingNote",
     title: "列表渲染 v-for",
-    description: "包含 <code></code>",
+    description: "包含「<code>v-for</code> + 陣列」、「<code>v-for</code> + 物件」、「<code>v-for</code> + 數字範圍」、「<code>v-for</code> + <code>&lt;template&gt;</code>」、「<code>v-for</code> 列表的過濾與順序」，以及「<code>v-for</code> 的 <code>key</code>」。",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
@@ -2432,7 +2432,7 @@ const toggleDropdown = () => {
         ]
       },
       {
-        listTitle: "<code>v-for</code> 列表的排序與過濾",
+        listTitle: "<code>v-for</code> 列表的過濾與排序",
         listSubtitle: null,
         listComponent: null,
         listCode: {
@@ -2442,21 +2442,107 @@ const toggleDropdown = () => {
         },
         listDetails: [
           {
-            detailTitle: null,
+            detailTitle: "<code>v-for</code> 列表的過濾",
             detailSubtitle: null,
             detailContent: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsListRenderingNote/VuejsVForFilterDemo.vue")
+            ),
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="app32">
+  <div :id="'app32-' + i" v-for="i in evenNumbers">{{ i }}</div>
+</div>
+
+<script>
+  const vm32 = Vue.createApp({
+    data() {
+      return {
+        numbers: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      }
+    },
+    computed: {
+      // 只顯示偶數
+      evenNumbers() {
+        return this.numbers.filter(num => num % 2 === 0);
+      }
+    }
+  }).mount("#app32");
+</script>`,
               jsCode: null,
-              vueSFCCode: null
+              vueSFCCode: 
+`<template>
+  <div v-for="i in evenNumbers">{{ i }}</div>
+</template>
+
+<script setup>
+import { ref, computed } from "vue";
+
+const numbers = ref([1, 2, 3, 4, 5, 6, 7, 8, 9, 10]);
+const evenNumbers = computed(() => {
+  return numbers.value.filter(num => num % 2 === 0);
+});
+</script>
+
+<style scoped></style>`
+            }
+          },
+          {
+            detailTitle: "<code>v-for</code> 列表的排序",
+            detailSubtitle: "由於 JavaScript 的 <code>Array.sort()</code> 會直接影響原始陣列，比較好的做法是先複製一份新的陣列再進行排序。",
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsListRenderingNote/VuejsVForSortDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app33">
+  <div :id="'app33-' + i" v-for="i in sortedNumbers">{{ i }}</div>
+</div>
+
+<script>
+  const vm33 = Vue.createApp({
+    data() {
+      return {
+        numbers: [3, 5, 2, 6, 1, 9, 8, 7]
+      }
+    },
+    computed: {
+      sortedNumbers() {
+        // return this.numbers.sort((a, b) => b - a);  // 若在此直接執行.sort會直接改變this.numbers的順序
+        return [...this.numbers].sort((a, b) => a - b);  // 先透過[...this.numbers]複製一份新陣列再排序
+      }
+    }
+  }).mount("#app33");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <div v-for="i in sortedNumbers">{{ i }}</div>
+</template>
+
+<script setup>
+import { ref, computed } from "vue";
+
+const numbers = ref([3, 5, 2, 6, 1, 9, 8, 7]);
+const sortedNumbers = computed(() => {
+  // return this.numbers.sort((a, b) => b - a);  // 若在此直接執行.sort會直接改變this.numbers的順序
+  return [...numbers.value].sort((a, b) => a - b);  // 先透過[...this.numbers]複製一份新陣列再排序
+});
+</script>
+
+<style scoped></style>`
             }
           }
         ]
       },
       {
         listTitle: "<code>v-for</code> 可以使用 <code>index</code> 當作 <code>key</code> 嗎？",
-        listSubtitle: null,
+        listSubtitle: 
+`<div style="text-indent: 32px; line-height: 1.6;">
+  <p><code>v-for</code> 為了提高網頁渲染的效率，會選擇重複利用已經存在的元素，而不是重新渲染。也就是說，當陣列的順序被改變時，Vue.js 不會移動實際 DOM 的節點，而是更新現有的 DOM 內容。當 <code>v-for</code> 內部含有子元件或表單元素時，此時要是沒有加上 <code>key</code> 屬性，就可能會出現一些不可預期的錯誤。</p>
+  <p>由於 <code>v-for</code> 裡的 <code>index</code> 是隨著陣列生成的，當 <code>index</code> 沒變時，對 Vue.js 而言，它就是一個可以重複使用的元素（或元件）。此時即使我們為 <code>v-for</code> 加上了 <code>key</code> 屬性，它的作用也會跟沒加一樣。所以標題的答案是——“<u><strong>不適合</strong></u>”。</p>
+</div>`,
         listComponent: null,
         listCode: {
           htmlCode: null,
@@ -2465,12 +2551,65 @@ const toggleDropdown = () => {
         },
         listDetails: [
           {
-            detailTitle: null,
+            detailTitle: "Todo List",
             detailSubtitle: null,
             detailContent: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsListRenderingNote/VuejsVForToDoListDemo.vue")
+            ),
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="app34">
+  <!-- Todo list -->
+  <h4>Todo</h4>
+  <ul>
+    <li v-for="i in todoLists" :key="i.id">
+      <label><input type="checkbox" v-model="i.isDone">{{ i.title }}</label>
+    </li>
+  </ul>
+
+  <!-- Done List -->
+  <h4>Done</h4>
+  <ul>
+    <li v-for="i in doneLists" :key="i.id">
+      <label><input type="checkbox" v-model="i.isDone">{{ i.title }}</label>
+    </li>
+  </ul>
+</div>
+
+<script>
+  const vm34 = Vue.createApp({
+    data() {
+      return {
+        lists: [
+          {
+            id: "task001",
+            title: "洗澡",
+            isDone: false
+          },
+          {
+            id: "task002",
+            title: "吃晚餐",
+            isDone: false
+          },
+          {
+            id: "task003",
+            title: "記錄飲食",
+            isDone: false
+          },
+        ]
+      }
+    },
+    computed: {
+      todoLists() {
+        return this.lists.filter(d => !d.isDone)
+      },
+      doneLists() {
+        return this.lists.filter(d => d.isDone)
+      }
+    }
+  }).mount("#app34");
+</script>`,
               jsCode: null,
               vueSFCCode: null
             }

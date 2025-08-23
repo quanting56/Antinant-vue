@@ -3063,7 +3063,7 @@ async function addToMessages() {
   {
     id: "vuejsPropsNote",
     title: "Props",
-    description: null,
+    description: "包含「元件之間的溝通傳遞」、「<code>Props</code> 資料類型的驗證」、「以物件作為 <code>porps</code> 傳遞」、",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
@@ -3082,7 +3082,7 @@ async function addToMessages() {
             detailSubtitle: "這段 code 是 Vue 2/3 Options API + CDN script 的舊寫法，現在如果是用 Vue 3 + Vite + SFC 開發，會建議改成 <strong>父元件（Parent.vue）</strong> 和 <strong>子元件（MyComponent.vue）</strong> 的形式，用兩個 Vue SFC。",
             detailContent: null,
             detailComponent: defineAsyncComponent(() =>
-              import("../../../components/WebNoteView/VuejsNoteView/VuejsPropsNote/VuejsPropsParentsDemo/VuejsPropsParentsParentDemo.vue")
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsPropsNote/VuejsPropsParentsDemo.vue")
             ),
             detailCode: {
               htmlCode: 
@@ -3174,7 +3174,475 @@ const innerMsg = ref("這是內層元件的msg");
         ]
       },
       {
-        listTitle: "Props 資料類型的驗證",
+        listTitle: "<code>Props</code> 資料類型的驗證",
+        listSubtitle: null,
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsPropsNote/VuejsPropsTypeValidationDemo.vue")
+        ),
+        listCode: {
+          htmlCode: 
+`<div id="app42">
+  <input type="text" v-model="msg" placeholder="請輸入msg內容">
+  <p>外層的msg：{{ msg }}</p>
+
+  <ol>
+    <li>
+      單純的資料傳遞
+      <simple-component :props-number="msg"></simple-component>
+    </li>
+    <li>
+      替props指定資料格式
+      <assign-type-component :props-number="msg"></assign-type-component>
+    </li>
+    <li>
+      加上 <code>required: true</code>，若沒有 props，Vue 會在開發模式下顯示警告
+      <required-assign-type-component></required-assign-type-component>
+    </li>
+    <li>
+      替 props 指定預設值
+      <set-props-default-component :props-number="msg || undefined"></set-props-default-component>
+    </li>
+    <li>
+      自訂 props 驗證規則，只會在主控臺跳警告通知，不會報錯<br />
+      <input type="text" v-model="msgForValidator" placeholder="請輸入 0 ~ 100"><br />
+      輸入的值為 {{ msgForValidator }}
+      <validator-component :props-number="Number(msgForValidator) || undefined"></validator-component>
+    </li>
+  </ol>
+</div>
+
+<script>
+  const vm42 = Vue.createApp({
+    data() {
+      return {
+        msg: "",
+        msgForValidator: ""
+      }
+    }
+  });
+
+  vm42.component("simple-component", {` + "\n" +
+'    template: `' + "\n" +
+`      <div>從外層接受到的的msg： {{ propsNumber }}</div>` + "\n" +
+'    `,' + "\n" +
+`    props: ["propsNumber"]
+  });
+
+  vm42.component("assign-type-component", {` + "\n" +
+'    template: `' + "\n" +
+`      <div>指定type後，接受到的msg： {{ propsNumber }}</div>` + "\n" +
+'    `,' + "\n" +
+`    // props除了陣列寫法，也可以寫成物件（下方這樣）
+    props: {
+      "propsNumber": {
+        type: [Number, String]  // 若只需要一個type，可寫作"type: Number"
+      }
+    }
+  });
+
+  vm42.component("required-assign-type-component", {` + "\n" +
+'    template: `' + "\n" +
+`      <div>接受到的msg：{{ propsNumber }}</div>` + "\n" +
+'    `,' + "\n" +
+`    props: {
+      "propsNumber": {
+        // required: true  // 先註解掉，不然一直報錯很煩
+      }
+    }
+  });
+
+  vm42.component("set-props-default-component", {` + "\n" +
+'    template: `' + "\n" +
+`      <div>這次轉帳的金額（若未輸入則顯示為0）： <b>{{ propsNumber }}</b> 元</div>` + "\n" +
+'    `,' + "\n" +
+`    props: {
+      "propsNumber": {
+        default: 0
+
+        // 可以是陣列
+        // default: [1,2,3]
+              
+        // 也可以是物件的預設內容
+        // default: {
+        //   msg: "Hello Vue3.0!"
+        // }
+      }
+    }
+  });
+
+  vm42.component("validator-component", {` + "\n" +
+'    template: `' + "\n" +
+`      <div>指定type並加入驗證後，收到的msg：{{ propsNumber }}</div>` + "\n" +
+'    `,' + "\n" +
+`    props: {
+      propsNumber: {
+        type: Number,
+        required: true,
+        default: 0,
+        validator: value => value >= 0 && value <= 100
+      }
+    }
+  });
+
+  vm42.mount("#app42");
+</script>`,
+          jsCode: null,
+          vueSFCCode: 
+`<!-- 把元件拆開成多個.vue檔（父元件＆子元件） -->
+
+<!-- 父元件 VuejsPropsTypeValidationDemo.vue -->
+<!-- 把元件拆開成多個.vue檔（父元件＆子元件） -->
+<template>
+  <input type="text" v-model="msg" placeholder="請輸入msg內容">
+  <p>外層的 msg：{{ msg }}</p>
+
+  <ol>
+    <li>
+      單純的資料傳遞
+      <simple-component :props-number="msg"></simple-component>
+    </li>
+    <li>
+      替props指定資料格式
+      <assign-type-component :props-number="msg"></assign-type-component>
+    </li>
+    <li>
+      加上 <code>required: true</code>，若沒有 props，Vue 會在開發模式下顯示警告
+      <required-assign-type-component></required-assign-type-component>
+    </li>
+    <li>
+      替 props 指定預設值
+      <set-props-default-component :props-number="msg || undefined"></set-props-default-component>
+    </li>
+    <li>
+      自訂 props 驗證規則，只會在主控臺跳警告通知，不會報錯<br />
+      <input type="text" v-model="msgForValidator" placeholder="請輸入 0 ~ 100"><br />
+      輸入的值為 {{ msgForValidator }}
+      <validator-component :props-number="Number(msgForValidator) || undefined"></validator-component>
+    </li>
+  </ol>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import SimpleComponent from "./VuejsPropsTypeValidationDemo/SimpleComponent.vue";
+import AssignTypeComponent from "./VuejsPropsTypeValidationDemo/AssignTypeComponent.vue";
+import RequiredAssignTypeComponent from "./VuejsPropsTypeValidationDemo/RequiredAssignTypeComponent.vue";
+import SetPropsDefaultComponent from "./VuejsPropsTypeValidationDemo/SetPropsDefaultComponent.vue";
+import ValidatorComponent from "./VuejsPropsTypeValidationDemo/ValidatorComponent.vue";
+
+// 父元件資料
+const msg = ref("");
+const msgForValidator = ref("");
+</script>
+
+<style scoped>
+li {
+  margin-bottom: 12px;
+  line-height: 1.6;
+}
+</style>
+
+
+
+
+
+<!-- 子元件 SimpleComponent.vue -->
+<template>
+  <div>從外層接受到的的msg： {{ propsNumber }}</div>
+</template>
+
+<script setup>
+defineProps(["propsNumber"]);
+// 或是寫成
+// defineProps({ propsNumber: {} });
+</script>
+
+
+
+<!-- 子元件 AssignTypeComponent.vue -->
+<template>
+  <div>指定type後，接受到的msg： {{ propsNumber }}</div>
+</template>
+
+<script setup>
+defineProps({
+  propsNumber: [Number, String]  // 若只需要一個type，可寫作"type: Number"
+});
+</script>
+
+
+
+<!-- 子元件 RequiredAssignTypeComponent.vue -->
+<template>
+  <div>接受到的msg：{{ propsNumber }}</div>
+</template>
+
+<script setup>
+defineProps({
+  propsNumber: {
+    // required: true  // 先註解掉，不然一直報錯很煩
+  }
+});
+</script>
+
+
+
+<!-- 子元件 SetPropsDefaultComponent.vue -->
+<template>
+  <div>這次轉帳的金額（若未輸入則顯示為0）： <b>{{ propsNumber }}</b> 元</div>
+</template>
+
+<script setup>
+defineProps({
+  propsNumber: {
+    default: 0
+
+    // 可以是陣列
+    // default: [1,2,3]
+            
+    // 也可以是物件的預設內容
+    // default: {
+    //   msg: "Hello Vue3.0!"
+    // }
+  }
+});
+</script>
+
+
+
+<!-- 子元件 ValidatorComponent.vue -->
+<template>
+  <div>指定type並加入驗證後，收到的msg： {{ propsNumber }}</div>
+</template>
+
+<script setup>
+defineProps({
+  propsNumber: {
+    type: Number,
+    required: true,
+    default: 0,
+    validator: value => value >= 0 && value <= 100
+  }
+});
+</script>`
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "以物件作為 <code>props</code> 傳遞",
+        listSubtitle: "Vue 為單向資料流（one-way data flow），應避免子元件直接修改 <code>props</code>，所以先在本地複製一段 <code>props</code>。",
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsPropsNote/VuejsPropsPassObjectAsPropsDemo.vue")
+        ),
+        listCode: {
+          htmlCode: 
+`<div id="app44">
+  <p>↓↓↓</p>
+  <p>這裡是父元件，由 <code>v-for</code> 將父元件的 data 渲染出來。</p>
+  <p>此處修改父元件 <code>props</code> 時子元件的「本地副本」不會自動跟著改，因為只是複製初始值。</p>
+  <ul v-for="book in books" :key="book.id">
+    <div class="test-input">
+      <input type="text" v-model="book.name"> <sub class="text-muted">&lt;- 這行是拿來測試單向資訊流</sub><br />
+      <input type="text" v-model="book.author"> <sub class="text-muted">&lt;- 這行是拿來測試單向資訊流</sub><br />
+      <input type="text" v-model="book.publishedAt"> <sub class="text-muted">&lt;- 這行是拿來測試單向資訊流</sub>
+    </div>
+    <div class="test-output">
+      <li>書名：{{ book.name }}</li>
+      <li>作者：{{ book.author }}</li>
+      <li>出版日期：{{ book.publishedAt }}</li>
+    </div>
+  </ul>
+  <hr />
+  <p>這裡是子元件 <code>&lt;my-component&gt;</code>，透過在本地複製一份 <code>props</code> 資訊，來避免直接修改父元件傳來的 <code>props</code>。（若希望父元件修改時，子元件內容跟著改，可用 <code>watch</code> 監聽 <code>props</code>，讓本地副本跟著更新，此處未示範）</p>
+  <my-component
+    v-for="book in books"
+    :name="book.name"
+    :author="book.author"
+    :published-at="book.publishedAt"></my-component>
+  <!-- 上面<my-component>也可以寫成以下這樣，Vue.js會自動解構 -->
+  <!-- <my-component
+    v-for="book in books"
+    v-bind="book"></my-component> -->
+</div>
+
+<script>
+  const vm44 = Vue.createApp({
+    data() {
+      return {
+        books: [
+          {
+            id: "a00001",
+            name: "D3.js資料視覺化實用攻略：完整掌握Web開發技術，繪製互動式圖表不求人",
+            author: "金筠婷",
+            publishedAt: "2023/06/16"
+          },
+          {
+            id: "a00002",
+            name: "重新認識Vue.js：008天絕對看不完的Vue.js 3指南",
+            author: "許國政",
+            publishedAt: "2021/02/09"
+          },
+          {
+            id: "a00003",
+            name: "第三本書？",
+            author: "作者？",
+            publishedAt: "哪天出版？"
+          }
+        ]
+      }
+    }
+  });
+
+  vm44.component("my-component", {
+    props: ["name", "author", "publishedAt"],
+    data() {  // 在本地建立一份data，以避免更改props
+      return {
+        localName: this.name,
+        localAuthor: this.author,
+        localPublishedAt: this.publishedAt
+      };
+    },` + "\n" +
+'    template: `' + "\n" +
+`      <div>
+        <div>書名：<input type="text" v-model="localName"> <sub class="text-muted">&lt;- 這行是拿來測試單向資訊流</sub></div>
+        <div>作者：<input type="text" v-model="localAuthor"> <sub class="text-muted">&lt;- 這行是拿來測試單向資訊流</sub></div>
+        <div>出版日期：<input type="text" v-model="localPublishedAt"> <sub class="text-muted">&lt;- 這行是拿來測試單向資訊流</sub></div>
+      </div>` + "\n" +
+'    `' + "\n" +
+`  });
+
+  vm44.mount("#app44");
+</script>`,
+          jsCode: null,
+          vueSFCCode: 
+`<!-- 父元件 VuejsPropsPassObjectAsPropsDemo.vue -->
+<template>
+  <p>↓↓↓</p>
+  <p>這裡是父元件，由 <code>v-for</code> 將父元件的 data 渲染出來。</p>
+  <p>此處修改父元件 <code>props</code> 時子元件的「本地副本」不會自動跟著改，因為只是複製初始值。</p>
+  <ul v-for="book in books" :key="book.id">
+    <div class="test-input">
+      <input type="text" v-model="book.name"> <sub>&lt;- 這行是拿來測試單向資訊流</sub><br />
+      <input type="text" v-model="book.author"> <sub>&lt;- 這行是拿來測試單向資訊流</sub><br />
+      <input type="text" v-model="book.publishedAt"> <sub>&lt;- 這行是拿來測試單向資訊流</sub>
+    </div>
+    <div class="test-output">
+      <li>書名：{{ book.name }}</li>
+      <li>作者：{{ book.author }}</li>
+      <li>出版日期：{{ book.publishedAt }}</li>
+    </div>
+  </ul>
+  <hr />
+  <p>這裡是子元件 <code>&lt;my-component&gt;</code>，透過在本地複製一份 <code>props</code> 資訊，來避免直接修改父元件傳來的 <code>props</code>。（若希望父元件修改時，子元件內容跟著改，可用 <code>watch</code> 監聽 <code>props</code>，讓本地副本跟著更新，此處未示範）</p>
+  <my-component
+    v-for="book in books"
+    :name="book.name"
+    :author="book.author"
+    :published-at="book.publishedAt"></my-component>
+  <!-- 上面<my-component>也可以寫成以下這樣，Vue.js會自動解構 -->
+  <!-- <my-component
+    v-for="book in books"
+    v-bind="book"></my-component> -->
+</template>
+
+<script setup>
+import { ref } from "vue";
+import MyComponent from "./VuejsPropsPassObjectAsPropsDemo/MyComponent.vue";
+
+const books = ref([
+  {
+    id: "a00001",
+    name: "D3.js資料視覺化實用攻略：完整掌握Web開發技術，繪製互動式圖表不求人",
+    author: "金筠婷",
+    publishedAt: "2023/06/16"
+  },
+  {
+    id: "a00002",
+    name: "重新認識Vue.js：008天絕對看不完的Vue.js 3指南",
+    author: "許國政",
+    publishedAt: "2021/02/09"
+  },
+  {
+    id: "a00003",
+    name: "第三本書？",
+    author: "作者？",
+    publishedAt: "哪天出版？"
+  }
+]);
+</script>
+
+<style scoped>
+p {
+  margin-top: 0;
+}
+
+ul {
+  margin-top: 32px;
+  margin-bottom: 32px;
+}
+</style>
+
+
+
+<!-- 子元件 MyComponent.vue -->
+<template>
+  <div class="my-component-book">
+    <div>書名：<input type="text" v-model="localName"> <sub>&lt;- 這行是拿來測試單向資訊流</sub></div>
+    <div>作者：<input type="text" v-model="localAuthor"> <sub>&lt;- 這行是拿來測試單向資訊流</sub></div>
+    <div>出版日期：<input type="text" v-model="localPublishedAt"> <sub>&lt;- 這行是拿來測試單向資訊流</sub></div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const props = defineProps({
+  name: String,
+  author: String,
+  publishedAt: String
+});
+
+// 在本地建立一份data，以避免更改props
+const localName = ref(props.name);
+const localAuthor = ref(props.author);
+const localPublishedAt = ref(props.publishedAt);
+</script>
+
+<style scoped>
+.my-component-book {
+  margin-top: 24px;
+  margin-bottom: 8px;
+}
+</style>`
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "<code>props</code> 與遞迴元件",
         listSubtitle: null,
         listComponent: null,
         listCode: {
@@ -3197,7 +3665,7 @@ const innerMsg = ref("這是內層元件的msg");
         ]
       },
       {
-        listTitle: null,
+        listTitle: "元件與自訂事件",
         listSubtitle: null,
         listComponent: null,
         listCode: {
@@ -3220,7 +3688,30 @@ const innerMsg = ref("這是內層元件的msg");
         ]
       },
       {
-        listTitle: null,
+        listTitle: "<code>v-model</code> 與元件的雙向綁定",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "跨越層級的傳遞方式",
         listSubtitle: null,
         listComponent: null,
         listCode: {

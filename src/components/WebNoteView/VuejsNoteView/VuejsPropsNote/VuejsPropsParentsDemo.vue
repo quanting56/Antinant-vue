@@ -8,7 +8,7 @@
 
 <script setup>
 import { ref } from "vue";
-import MyComponent from "./VuejsPropsParentsChildDemo.vue";
+import MyComponent from "./VuejsPropsParentsDemo/MyComponent.vue";
 
 const msg = ref("這是外層元件的msg");
 </script>

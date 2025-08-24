@@ -3063,7 +3063,7 @@ async function addToMessages() {
   {
     id: "vuejsPropsNote",
     title: "Props",
-    description: "包含「元件之間的溝通傳遞」、「<code>Props</code> 資料類型的驗證」、「以物件作為 <code>porps</code> 傳遞」、",
+    description: "包含「元件之間的溝通傳遞」、「<code>props</code> 資料類型的驗證」、「以物件作為 <code>props</code> 傳遞」、「<code>props</code> 與遞迴元件」、「元件與自訂事件（Props in, Evemt out）」、「<code>v-model</code> 與元件的雙向綁定」、「跨越層級的傳遞方式（<code>provide</code> 與 <code>inject</code>）」",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
@@ -3174,7 +3174,7 @@ const innerMsg = ref("這是內層元件的msg");
         ]
       },
       {
-        listTitle: "<code>Props</code> 資料類型的驗證",
+        listTitle: "<code>props</code> 資料類型的驗證",
         listSubtitle: null,
         listComponent: defineAsyncComponent(() =>
           import("../../../components/WebNoteView/VuejsNoteView/VuejsPropsNote/VuejsPropsTypeValidationDemo.vue")
@@ -3642,8 +3642,8 @@ const localPublishedAt = ref(props.publishedAt);
         ]
       },
       {
-        listTitle: "<code>props</code> 與遞迴元件",
-        listSubtitle: null,
+        listTitle: "<code>props</code> 與遞迴元件（Recursive Component）",
+        listSubtitle: "過去使用遞迴元件必須要有 <code>name</code> 屬性。然而在 Vue 3（尤其是 SFC + <code>&lt;script setup&gt;</code> 的寫法）中，這個要求就放寬了，不是必要的，但建議保留。",
         listComponent: null,
         listCode: {
           htmlCode: null,
@@ -3652,26 +3652,476 @@ const localPublishedAt = ref(props.publishedAt);
         },
         listDetails: [
           {
-            detailTitle: null,
-            detailSubtitle: null,
+            detailTitle: "階層式選單資訊",
+            detailSubtitle: "樹狀結構（tree view）的 Vue 實作",
             detailContent: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsPropsNote/VuejsPropsRecursiveComponentDemo.vue")
+            ),
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<style>
+  #app45 h2:hover {
+    color: lightcoral;
+    cursor: pointer;
+  }
+</style>
+
+<div id="app45">
+  <!-- Magic! -->
+  <menu-component
+    :title="app45Data.title"
+    :child="app45Data.childNodes"></menu-component>
+</div>
+
+<script>
+  const app45Data = {
+    title: '好書推薦',
+    childNodes: [{
+      title: 'Git',
+      url: null,
+      childNodes: [{
+        title: '為你自己學 Git',
+        url: 'https://www.tenlong.com.tw/products/9789864342662'
+      }]
+    },
+    {
+      title: '前端開發',
+      url: null,
+      childNodes: [{
+        title: '金魚都能懂的 CSS 選取器',
+        url: 'https://www.tenlong.com.tw/products/9789864344994'
+      },
+      {
+        title: '0 陷阱！0 誤解！8 天重新認識 JavaScript！',
+        url: 'https://www.tenlong.com.tw/products/9789864344130'
+      },
+      {
+        title: '讓 TypeScript 成為你全端開發的 ACE！',
+        url: 'https://www.tenlong.com.tw/products/9789864344895'
+      },
+      ]
+    },
+    {
+      title: 'IoT',
+      url: null,
+      childNodes: [{
+        title: 'IoT沒那麼難！新手用 JavaScript 入門做自己的玩具！',
+        url: 'https://www.tenlong.com.tw/products/9789864345328'
+      }]
+    },
+    {
+      title: 'Chatbot',
+      url: null,
+      childNodes: [{
+        title: '人人可作卡米狗：從零打造自己的 LINE 聊天機器人',
+        url: 'https://www.tenlong.com.tw/products/9789864342938'
+      }]
+    }]
+  };
+
+  const vm45 = Vue.createApp({
+    data() {
+      return {
+        app45Data
+      }
+    }
+  });
+
+  vm45.component("menu-component", {` + "\n" +
+'    name: `MenuComponent`,  // 必備的，不然Vue不知道<menu-component>這標籤應該對應誰' + "\n" +
+`    props: {
+      title: String,
+      url: String,
+      child: {
+        type: Array,
+        default: []
+      }
+    },
+    data() {
+      return {
+        isOpen: false
+      }
+    },` + "\n" +
+'    template: `' + "\n" +
+`      <ul>
+        <li>
+          <template v-if="child.length > 0">
+            <h2
+              :class="{ 'is-open': isOpen}"
+              @click="isOpen = !isOpen">{{ title }}</h2>
+            <menu-component
+              v-show="isOpen"
+              v-for="c in child"
+              :key="c.name"
+              :title="c.name"
+              :child="c.childNodes"
+              :url="c.url"></menu-component>
+          </template>
+          <!-- 下層已經沒有chileNodes了，表示是最後一層，直接渲染連結 -->
+          <a :href="url" target="_blank" v-else>{{ title }}</a>
+        </li>
+      </ul>` + "\n" +
+'    `' + "\n" +
+`  });
+
+  vm45.mount("#app45");
+</script>`,
               jsCode: null,
-              vueSFCCode: null
+              vueSFCCode: 
+`<!-- 父元件 VuejsPropsRecursiveComponentDemo.vue -->
+<template>
+  <!-- Magic! -->
+  <menu-component
+    :title="recursiveComponentData.title"
+    :child="recursiveComponentData.childNodes"></menu-component>
+</template>
+
+<script setup>
+import MenuComponent from "./VuejsPropsRecursiveComponentDemo/MenuComponent.vue";
+
+const recursiveComponentData = {
+  title: '好書推薦',
+  childNodes: [
+    {
+      title: 'Git',
+      url: null,
+      childNodes: [
+        {
+          title: '為你自己學 Git',
+          url: 'https://www.tenlong.com.tw/products/9789864342662'
+        }
+      ]
+    },
+    {
+      title: '前端開發',
+      url: null,
+      childNodes: [
+        {
+          title: '金魚都能懂的 CSS 選取器',
+          url: 'https://www.tenlong.com.tw/products/9789864344994'
+        },
+        {
+          title: '0 陷阱！0 誤解！8 天重新認識 JavaScript！',
+          url: 'https://www.tenlong.com.tw/products/9789864344130'
+        },
+        {
+          title: '讓 TypeScript 成為你全端開發的 ACE！',
+          url: 'https://www.tenlong.com.tw/products/9789864344895'
+        },
+      ]
+    },
+    {
+      title: 'IoT',
+      url: null,
+      childNodes: [
+        {
+          title: 'IoT沒那麼難！新手用 JavaScript 入門做自己的玩具！',
+          url: 'https://www.tenlong.com.tw/products/9789864345328'
+        }
+      ]
+    },
+    {
+      title: 'Chatbot',
+      url: null,
+      childNodes: [
+        {
+          title: '人人可作卡米狗：從零打造自己的 LINE 聊天機器人',
+          url: 'https://www.tenlong.com.tw/products/9789864342938'
+        }
+      ]
+    }
+  ]
+};
+</script>
+
+<style scoped></style>
+
+
+
+<!-- 子元件 MenuComponent.vue -->
+<template>
+  <ul>
+    <li>
+      <template v-if="child.length > 0">
+        <h3
+          :class="{ 'is-open': isOpen}"
+          @click="isOpen = !isOpen"
+        >
+          {{ title }}
+        </h3>
+        <menu-component
+          v-show="isOpen"
+          v-for="c in child"
+          :key="c.title"
+          :title="c.title"
+          :child="c.childNodes"
+          :url="c.url"
+        ></menu-component>
+      </template>
+      <!-- 下層已經沒有chileNodes了，表示是最後一層，直接渲染連結 -->
+      <a v-else :href="url" target="_blank">{{ title }}</a>
+    </li>
+  </ul>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+defineProps({
+  title: String,
+  url: String,
+  child: {
+    type: Array,
+    default: []
+  }
+});
+
+const isOpen = ref(false);
+
+// 在Vue SFC中指定元件名稱（方便 DevTools 與 遞迴 用）
+// 如果不寫defineOptions，Vue會用檔名"MenuComponent.vue"來顯示
+// 基本上也能正常運作，但在 遞迴 或 DevTools debug 上，寫name會更直覺
+defineOptions({
+  name: "MenuComponent"
+});
+</script>
+
+<style scoped>
+h3:hover {
+  color: lightcoral;
+  cursor: pointer;
+}
+</style>`
             }
           }
         ]
       },
       {
         listTitle: "元件與自訂事件",
-        listSubtitle: null,
-        listComponent: null,
+        listSubtitle: 
+`<strong style="border: 1.5px solid #9abcaa; padding: 1.5px 3px;">Props in, Event out</strong>——父層元件 data 透過 <code>props</code> 傳入子層，而子層透過 <code>event</code> 來觸發父層狀態的更新。
+<div style="
+  background-color: antiquewhite;
+  margin-top: 16px;
+  padding: 8px;
+">
+  <h5>下列範例 code 說明：</h5>
+  <p style="text-indent: 32px;">這段代碼繞了一個圈，實現了合法的父子組件數據交互，遵守了 Vue.js 的 <strong>單向數據流</strong> 原則。具體來說，這段代碼的流程是：</p>
+  <ol>
+    <li>
+      <p><strong>父元件的數據流</strong>：</p>
+      <ul>
+        <li>在父元件中，定義了 <code>books</code> 陣列作為其數據，這些數據會以 <code>props</code> 的形式傳遞給子元件 <code>&lt;my-component&gt;</code> 。</li>
+      </ul>
+    </li>
+    <li>
+      <p><strong>子元件的操作</strong>：</p>
+      <ul>
+        <li>子元件 <code>&lt;my-component&gt;</code> 收到父元件傳遞的 <code>props</code>，在本地 <code>data</code> 建立一份 <code>bookInfo</code>，並通過 <code>v-model</code> 雙向綁定（<code>bookInfo.name</code>、<code>bookInfo.author</code>和<code>bookInfo.publishedAt</code>）來處理表單輸入。</li>
+        <li>當用戶在輸入框中修改書籍資訊時，<code>bookInfo</code> 物件的內容會發生變化。亦即，當使用者改 input → 修改 <code>bookInfo</code>。</li>
+      </ul>
+    </li>
+    <li>
+      <p><strong>觸發事件通知父元件</strong>：</p>
+      <ul>
+        <li>在 <code>&lt;my-component&gt;</code> 中使用 <code>watch</code> 監聽 <code>bookInfo</code> 物件的變化，並且設置 <code>deep: true</code>，這樣 Vue 就會深層監聽 <code>bookInfo</code> 物件內的屬性變化。</li>
+        <li>每當 <code>bookInfo</code> 中的任一屬性發生改變時，<code>watch</code> 會觸發 <code>handler</code> 函數，並且這個函數會使用 <code>$emit</code> 發射一個名為 <code>update</code> 的自定義事件，將新的 <code>bookInfo</code> 數據傳遞給父元件（即用 <code>$emit("update", val)</code> 把新的 <code>bookInfo</code> 傳回給父元件）。</li>
+      </ul>
+    </li>
+    <li>
+      <p><strong>父元件接收事件並更新數據</strong>：</p>
+      <ul>
+        <li>在父元件中，<code>&lt;my-component&gt;</code> 綁定了 <code>@update="updateInfo"</code>，即當 <code>update</code> 事件發生時，會調用 <code>updateInfo</code> 方法。</li>
+        <li><code>updateInfo</code> 方法會接受傳來的 <code>val</code>（更新後的書籍數據），然後使用 <code>findIndex</code> 方法查找對應的書籍並更新 <code>books</code> 陣列中的數據。 → 保持 <strong>單向數據流</strong></li>
+      </ul>
+    </li>
+  </ol>
+  <h5>這樣做的目的：</h5>
+  <ol>
+    <li>
+      <strong>單向數據流</strong>：父元件通過 <code>props</code> 向子元件傳遞數據，子元件不直接修改父元件的數據，而是通過發射自定義事件告訴父元件更新數據，這符合 Vue 的數據流規範。
+    </li>
+    <li>
+      <strong>避免直接修改父數據</strong>：Vue 不建議子元件直接修改父元件的數據，這樣會使得數據流變得難以追蹤和維護。通過這種方式（發射事件），可以讓父元件來更新自己的數據，保證數據流的可預測性和一致性。
+    </li>
+  </ol>
+  <h5>總結：</h5>
+  <p>這段 code 遵循了 Vue 的單向數據流原則，使用了自定義事件（<code>update</code>）來讓子元件向父元件發送更新，從而合法地修改父元件的數據。這樣設計使得應用的數據管理更加清晰且易於維護。</p>
+</div>`,
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsPropsNote/VuejsPropsAndCustomEventDemo.vue")
+        ),
         listCode: {
-          htmlCode: null,
+          htmlCode: 
+`<div id="app46">
+  <ul v-for="(book, idx) in books" :key="book.id">
+    <li>{{ book.name }}</li>
+    <li>{{ book.author }}</li>
+    <li>{{ book.publishedAt }}</li>
+  </ul>
+
+  <!-- 直接將v-for物件作為props傳遞 -->
+  <!-- 並監聽自定義事件（此處update為自訂義事件） -->
+  <my-component
+    v-for="(book, idx) in books"
+    :key="idx"
+    v-bind="book"
+    @update="updateInfo"></my-component>
+</div>
+
+<script>
+  const vm46 = Vue.createApp({
+    data() {
+      return {
+        books: [
+          {
+            id: "a00001",
+            name: "D3.js資料視覺化實用攻略：完整掌握Web開發技術，繪製互動式圖表不求人",
+            author: "金筠婷",
+            publishedAt: "2023/06/16"
+          },
+          {
+            id: "a00002",
+            name: "重新認識Vue.js：008天絕對看不完的Vue.js 3指南",
+            author: "許國政",
+            publishedAt: "2021/02/09"
+          }
+        ]
+      }
+    },
+    methods: {
+      updateInfo(val) {
+        const idx = this.books.findIndex(d => d.id === val.id);
+        this.books[idx] = val;
+      }
+    }
+  });
+
+  vm46.component("my-component", {` + "\n" +
+'    template: `' + "\n" +
+`      <div>
+        <div>書名： <input type="text" v-model="bookInfo.name"></div>
+        <div>作者： <input type="text" v-model="bookInfo.author"></div>
+        <div>出版日期： <input type="text" v-model="bookInfo.publishedAt"></div>
+      </div>` + "\n" +
+'    `,' +
+`    props: ["id","name", "author", "publishedAt"],
+    data() {
+      return {
+        bookInfo: {
+          id: this.id,
+          name: this.name,
+          author: this.author,
+          publishedAt: this.publishedAt
+        }
+      }
+    },
+    watch: {
+      bookInfo: {
+        // 注意！bookInfo物件必須加上deep: true
+        // Vue才能做物件的深層更新偵測（偵測物件內部所有層次的屬性變化）
+        deep: true,
+        handler(val) {
+          this.$emit("update", val);  // 當watch事件觸發，發射"update"事件
+        }
+      }
+    }
+  })
+
+  vm46.mount("#app46")
+</script>`,
           jsCode: null,
-          vueSFCCode: null
+          vueSFCCode: 
+`<!-- 父元件 VuejsPropsAndCustomEventDemo.vue -->
+<template>
+  <ul v-for="(book, idx) in books" :key="book.id">
+    <li>{{ book.name }}</li>
+    <li>{{ book.author }}</li>
+    <li>{{ book.publishedAt }}</li>
+  </ul>
+
+  <!-- 直接將v-for物件作為props傳遞 -->
+  <!-- 並監聽自定義事件（此處update為自訂義事件） -->
+  <my-component
+    v-for="(book, idx) in books"
+    :key="idx"
+    v-bind="book"
+    @update="updateInfo"
+  ></my-component>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import MyComponent from "./VuejsPropsAndCustomEventDemo/MyComponent.vue";
+
+const books = ref([
+  {
+    id: "a00001",
+    name: "D3.js資料視覺化實用攻略：完整掌握Web開發技術，繪製互動式圖表不求人",
+    author: "金筠婷",
+    publishedAt: "2023/06/16"
+  },
+  {
+    id: "a00002",
+    name: "重新認識Vue.js：008天絕對看不完的Vue.js 3指南",
+    author: "許國政",
+    publishedAt: "2021/02/09"
+  }
+]);
+
+function updateInfo(val) {
+  const idx = books.value.findIndex(d => d.id === val.id);
+  books.value[idx] = val;
+};
+</script>
+
+<style scoped>
+ul {
+  margin-bottom: 32px;
+}
+</style>
+
+
+
+<!-- 子元件 MyComponent.vue -->
+<template>
+  <div class="book-item">
+    <div>書名： <input type="text" v-model="bookInfo.name"></div>
+    <div>作者： <input type="text" v-model="bookInfo.author"></div>
+    <div>出版日期： <input type="text" v-model="bookInfo.publishedAt"></div>
+  </div>
+</template>
+
+<script setup>
+import { ref, watch } from "vue";
+
+const props = defineProps(["id", "name", "author", "publishedAt"]);
+
+const bookInfo = ref({
+  id: props.id,
+  name: props.name,
+  author: props.author,
+  publishedAt: props.publishedAt
+});
+
+// Composition API中，要先明確宣告要用哪些事件
+const emit = defineEmits(["update"]);
+
+// 深度監聽物件 → 當任何屬性變更，emit給父層
+watch(bookInfo, (val) => {
+  emit("update", val);  // 當watch事件觸發，發射"update"事件
+},
+// 注意！bookInfo物件必須加上deep: true
+// Vue才能做物件的深層更新偵測（偵測物件內部所有層次的屬性變化）
+{ deep: true });
+</script>
+
+<style scoped>
+.book-item {
+  margin-bottom: 16px;
+}
+</style>`
         },
         listDetails: [
           {
@@ -3689,12 +4139,96 @@ const localPublishedAt = ref(props.publishedAt);
       },
       {
         listTitle: "<code>v-model</code> 與元件的雙向綁定",
-        listSubtitle: null,
-        listComponent: null,
+        listSubtitle: "<strong>不會違反單向數據流</strong> ，因為 <code>v-model</code> 只是 <code>props</code> + <code>emit</code> 的語法糖，底層仍然是 <strong>單向數據流</strong> + <strong>自訂事件</strong>。",
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsPropsNote/VuejsPropsVModelDemo.vue")
+        ),
         listCode: {
-          htmlCode: null,
+          htmlCode: 
+`<div id="app47">
+  <h4>{{ message }}</h4>
+
+  <!-- 透過v-model來做到父子元件間的「雙向綁定」 -->
+  <custom-input v-model="message"></custom-input>
+  <!-- 上一行實際上等於下一行，為下一行的語法糖 -->
+  <!-- <custom-input :modelValue="message" @update:modelValue="message = $event"></custom-input> -->
+</div>
+
+<script>
+  const vm47 = Vue.createApp({
+    data() {
+      return {
+        message: "Hello World!"
+      }
+    }
+  });
+
+  // 子元件<custom-input>
+  vm47.component("custom-input", {
+    props: ["modelValue"],  // modelValue是Vue 3 v-model預設對應的prop名稱，但要使用的話仍要明確宣告` + "\n" +
+'    template: `' + "\n" +
+`      <input
+        :value="modelValue"
+        @input="$emit('update:modelValue', $event.target.value)">` + "\n" +
+'    `' + "\n" +
+`  });
+
+  vm47.mount("#app47");
+</script>`,
           jsCode: null,
-          vueSFCCode: null
+          vueSFCCode: 
+`<!-- 父元件 VuejsPropsVModelDemo.vue -->
+<template>
+  <p>{{ message }}</p>
+
+  <!-- 透過v-model來做到父子元件間的「雙向綁定」 -->
+  <!-- "modelValue"是Vue 3 v-model預設對應的prop名稱 -->
+  <!-- 若想使用多個v-model prop或非modelValue，就必須使用"v-model:其他名稱" -->
+  <custom-input v-model="message"></custom-input>
+  <!-- 上一行實際上等於下一行，為下一行的簡寫 -->
+   <!-- <custom-input v-model:modelValue="message"></custom-input> -->
+  <!-- 上一行實際上等於下一行，為下一行的語法糖 -->
+  <!-- <custom-input :modelValue="message" @update:modelValue="message = $event"></custom-input> -->
+</template>
+
+<script setup>
+import { ref } from "vue";
+import CustomInput from "./VuejsPropsVModelDemo/CustomInput.vue";
+
+const message = ref("Hello World!");
+</script>
+
+<style scoped>
+p {
+  font-size: 28px;
+  margin-top: 0;
+}
+</style>
+
+
+
+<!-- 子元件 CustomInput.vue -->
+<template>
+  <input
+    :value="modelValue"
+    @input="onInput"
+  >
+</template>
+
+<script setup>
+// 定義props（接收父元件傳入的值）
+const props = defineProps(["modelValue"]);
+
+// 定義emit（發送事件給父元件）
+const emit = defineEmits(["update:modelValue"]);
+
+// 處理input事件
+function onInput(e) {
+  emit("update:modelValue", e.target.value)
+};
+</script>
+
+<style scoped></style>`
         },
         listDetails: [
           {
@@ -3711,13 +4245,143 @@ const localPublishedAt = ref(props.publishedAt);
         ]
       },
       {
-        listTitle: "跨越層級的傳遞方式",
-        listSubtitle: null,
-        listComponent: null,
+        listTitle: "跨越層級的傳遞方式<small>（透過 <code>provide</code> 與 <code>inject</code>）</small>",
+        listSubtitle: 
+`<ul style="line-height: 1.6;">
+  <li><code>props</code> / <code>emit</code> 是 <strong>標準溝通方式</strong>。 → 清楚、明確、好維護</li>
+  <li><code>provide</code> / <code>inject</code> 是 <strong>進階用法</strong>，專門解決「深層級或跨層級」的情境。 → 方便，但隱性依賴較多</li>
+  <li>Pinia（或 Vuex） 是 <strong>狀態管理工具</strong> ，處理更大規模共享狀態。</li>
+</ul>`,
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsPropsNote/VuejsPropsProvideAndInjectDemo.vue")
+        ),
         listCode: {
-          htmlCode: null,
+          htmlCode: 
+`<div id="app48">
+  輸入一些文字，看看底下的變化：<br />
+  <input type="text" v-model="msg"><br />
+  父層資料： {{ msg }}
+  <list-component></list-component>
+</div>
+
+<script>
+  const vm48 = Vue.createApp({
+    data() {
+      return {
+        msg: "Hello Vue.js!"
+      };
+    },
+    provide() {
+      // 將this.msg透過provide傳遞出去
+      return {
+        // 只是這樣寫的話，當父層資料更動，子孫元件不會跟著動
+        provideMsg1: this.msg,
+
+        // 使用Vue.computed()進行包裝，才會跟著連動
+        provideMsg2: Vue.computed(() => this.msg)
+      };
+    }
+  });
+
+  vm48.component("list-component", {` + "\n" +
+'    template: `' + "\n" +
+`      <ul>
+        <li v-for="i in 3">
+          用 <code>v-for</code> 跑出３次一樣的孫元件，這是第 {{ i }} 次
+          <list-item></list-item>
+        </li>
+      </ul>` + "\n" +
+'    `,' + "\n" +
+`    components: {
+      "list-item": {
+        inject: ["provideMsg1", "provideMsg2"],` + "\n" +
+'        template: `' + "\n" +
+`          <div>provideMsg1: {{ provideMsg1 }} <small>→ 非響應式</small></div>
+          <div>provideMsg2: {{ provideMsg2 }} <small>→ 響應式（用 <code>computed()</code>）</small></div>` + "\n" +
+'        `' + "\n" +
+`      }
+    }
+  });
+
+  vm48.mount("#app48");
+</script>`,
           jsCode: null,
-          vueSFCCode: null
+          vueSFCCode: 
+`<!-- 父元件 VuejsPropsProvideAndInjectDemo.vue -->
+<template>
+  輸入一些文字，看看底下的變化：<br />
+  <input type="text" v-model="msg"><br />
+  父層資料： {{ msg }}
+  <list-component></list-component>
+</template>
+
+<script setup>
+import { ref, provide, computed } from "vue";
+import ListComponent from "./VuejsPropsProvideAndInjectDemo/ListComponent.vue";
+
+const msg = ref("Hello Vue.js!");
+
+// 透過provide()，提供資料給子孫元件
+provide("provideMsg1", msg.value)  // 只是這樣寫的話，當父層資料更動，子孫元件不會跟著動
+provide("provideMsg2", computed(() => msg.value));  // 使用Vue.computed()進行包裝，才會跟著連動
+</script>
+
+<style scoped>
+input {
+  margin-top: 12px;
+  padding: 4px;
+  margin-bottom: 4px;
+}
+</style>
+
+
+
+
+
+<!-- 子元件 ListComponent.vue -->
+<template>
+  <ul>
+    <li v-for="i in 3">
+      用 <code>v-for</code> 跑出３次一樣的孫元件，這是第 {{ i }} 次
+      <list-item></list-item>
+    </li>
+  </ul>
+</template>
+
+<script setup>
+import ListItem from "./ListItem.vue";
+</script>
+
+<style scoped>
+li {
+  margin-top: 12px;
+  margin-bottom: 12px;
+}
+</style>
+
+
+
+
+
+<!-- 孫元件 ListItem.vue -->
+<template>
+  <div>provideMsg1: {{ provideMsg1 }} <small>→ 非響應式</small></div>
+  <div>provideMsg2: {{ provideMsg2 }} <small>→ 響應式（用 <code>computed()</code>）</small></div>
+</template>
+
+<script setup>
+import { inject } from "vue";
+
+// 用inject()拿資料
+const provideMsg1 = inject("provideMsg1");
+const provideMsg2 = inject("provideMsg2");
+</script>
+
+<style scoped>
+small {
+  margin-left: 8px;
+}
+</style>`
         },
         listDetails: [
           {

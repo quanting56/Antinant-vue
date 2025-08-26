@@ -4402,18 +4402,404 @@ small {
   {
     id: "vuejsVBindIsNote",
     title: "動態元件的管理",
-    description: null,
+    description: "包含「<code>v-bind:is</code> 與動態元件」、「<code>&lt;keep-alive&gt;</code>」。",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
-        listSubtitle: null,
-        listComponent: null,
+        listTitle: "<code>v-bind:is</code> 與動態元件（Dynamic Component）",
+        listSubtitle: '使用 <code>&lt;component :is="currentTabComponent"&gt;&lt;/component&gt;</code>。',
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsVBindIsNote/VuejsDynamicComponentDemo.vue")
+        ),
         listCode: {
-          htmlCode: null,
+          htmlCode: 
+`<div id="app49">
+  <button
+    v-for="tab in tabs"
+    :key="tab"
+    :class="['tab-button', { active: currentTab === tab}]"
+    @click="currentTab = tab"
+  >
+    {{ tab }}
+  </button>
+
+  <!-- 動態元件切換 -->
+  <component :is="currentTabComponent"></component>
+</div>
+
+<script>
+  const vm49 = Vue.createApp({
+    data() {
+      return {
+        currentTab: "Home",
+        tabs: ["Home", "Posts", "Archive"]
+      };
+    },
+    computed: {
+      currentTabComponent() {` + "\n" +
+'        return `tab-${ this.currentTab.toLowerCase() }`;' + "\n" +
+`      }
+    }
+  });
+
+  vm49.component("tab-home", {` + "\n" +
+'    template: `<div class="demo-tab">Home component</div>`' + "\n" +
+`  });
+
+  vm49.component("tab-posts", {` + "\n" +
+'    template: `<div class="demo-tab">Post component</div>`' + "\n" +
+`  });
+
+  vm49.component("tab-archive", {` + "\n" +
+'    template: `<div class="demo-tab">Archive component</div>`' + "\n" +
+`  });
+
+  vm49.mount("#app49");
+</script>
+
+<style>
+  .demo-tab {
+    padding: 10px;
+    border: 1px solid #cccccc;
+    margin-top: -0.5px;
+  }
+
+  .tab-button {
+    padding: 6px 10px;
+    border: 1px solid #cccccc;
+    background: #f0f0f0;
+    margin-bottom: -1px;
+  }
+
+  .tab-button:hover{
+    background: #e4e4e4;
+    color: #0a0a0a
+  }
+
+  .tab-button.active {
+    background: #d8d8d8;
+    color: #0a0a0a
+  }
+</style>`,
           jsCode: null,
-          vueSFCCode: null
+          vueSFCCode: 
+`<!-- 父元件 VuejsDynamicComponentDemo.vue -->
+<template>
+  <button
+    v-for="tab in tabs"
+    :key="tab"
+    :class="['tab-button', { active: currentTab === tab}]"
+    @click="currentTab = tab"
+  >
+    {{ tab }}
+  </button>
+
+  <!-- 動態元件切換 -->
+  <!-- 加一個tab-wrapper，否則css選擇器抓不到子元件的DOM（<component>不是實際DOM） -->
+  <div class="tab-wrapper">
+    <component :is="currentTabComponent"></component>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from "vue";
+import TabHome from "./VuejsDynamicComponentDemo/TabHome.vue";
+import TabPosts from "./VuejsDynamicComponentDemo/TabPosts.vue";
+import TabArchive from "./VuejsDynamicComponentDemo/TabArchive.vue";
+
+const currentTab = ref("Home");
+const tabs = ref(["Home", "Posts", "Archive"]);
+
+// 根據currentTab切換元件
+const currentTabComponent = computed(() => {
+  switch (currentTab.value) {
+    case "Home": 
+      return TabHome;
+    case "Posts":
+      return TabPosts;
+    case "Archive":
+      return TabArchive;
+    default:
+      return TabHome;
+  };
+});
+</script>
+
+<style scoped>
+::v-deep(.demo-tab) {
+  padding: 10px;
+  border: 1px solid #cccccc;
+  margin-top: -0.5px;
+}
+
+.tab-button {
+  padding: 6px 10px;
+  border: 1px solid #cccccc;
+  background: #f0f0f0;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+
+.tab-button:hover{
+  background: #e4e4e4;
+  color: #0a0a0a
+}
+
+.tab-button.active {
+  background: #d8d8d8;
+  color: #0a0a0a
+}
+</style>
+
+
+
+
+
+<!-- 子元件 TabHome.vue -->
+<template>
+  <div class="demo-tab">Home component</div>
+</template>
+
+
+<!-- 子元件 TabPosts.vue -->
+<template>
+  <div class="demo-tab">Post component</div>
+</template>
+
+
+<!-- 子元件 TabArchive.vue -->
+<template>
+  <div class="demo-tab">Archive component</div>
+</template>`
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "<code>&lt;keep-alive&gt;</code> 保留元件狀態",
+        listSubtitle: 
+`<ul style="line-height: 1.6;">
+  <li>過去遇到這狀況，會將 <code>v-if</code> 改成 <code>v-show</code> 以避開元件銷毀與重建。</li>
+  <li>現在改用 <code>:is</code>（即 <code>v-bind:is</code>）來動態切換元件後，用 <code>&lt;keep-alive&gt;</code> 標籤包住，即可保留切換後的元素狀態。</li>
+  <li>
+    <code>&lt;keep-alive&gt;</code> 有 <code>include</code>、<code>exclude</code>、<code>max</code> 等屬性可以用。<code>include</code> 可針對某部分的子元件進行暫存快取；<code>exclude</code> 排除某些子元件有 <code>&lt;keep-alive&gt;</code> 效果，<code>max</code> 則可指定瀏覽器暫存的元件數量。
+    <div style="color: rgba(33, 37, 41, 0.75); font-size: 12px; font-style: italic; margin-top: 4px;">
+      - 註：在 Vue Option API 中，<code>include</code>、<code>exclude</code>、<code>max</code> 等屬性對應的是子元件的 <code>name</code> 屬性，而非子元件的標籤名。
+    </div>
+  </li>
+</ul>`,
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsVBindIsNote/VuejsDynamicComponentKeepAliveDemo.vue")
+        ),
+        listCode: {
+          htmlCode: 
+`<div id="app50">
+  <button
+    v-for="tab in tabs"
+    :key="tab"
+    :class="['tab-button', { active: currentTab === tab}]"
+    @click="currentTab = tab">
+    {{ tab }}
+  </button>
+  <keep-alive>
+    <component :is="currentTabComponent"></component>
+  </keep-alive>
+</div>
+
+<script>
+  const vm50 = Vue.createApp({
+    data() {
+      return {
+        currentTab: "Home",
+        tabs: ["Home", "Posts", "Archive"]
+      };
+    },
+    computed: {
+      currentTabComponent() {` + "\n" +
+'        return `tab-${ this.currentTab.toLowerCase() }`;' + "\n" +
+`      }
+    }
+  });
+
+  vm50.component("tab-home", {
+    name: "tab-home",` + "\n" +
+'    template: `<div class="demo-tab"><input v-model="title"></div>`,' + "\n" +
+`    data() {
+      return {
+        title: "Home component"
+      };
+    }
+  });
+
+  vm50.component("tab-posts", {
+    name: "tab-posts",` + "\n" +
+'    template: `<div class="demo-tab"><input v-model="title"></div>`,' + "\n" +
+`    data() {
+      return {
+        title: "Post component"
+      };
+    }
+  });
+
+  vm50.component("tab-archive", {
+    name: "tab-archive",` + "\n" +
+'    template: `<div class="demo-tab"><input v-model="title"></div>`,' + "\n" +
+`    data() {
+      return {
+        title: "Archive component"
+      };
+    }
+  });
+
+  vm50.mount("#app50");
+</script>
+
+<style>
+  .demo-tab {
+    padding: 10px;
+    border: 1px solid #cccccc;
+    margin-top: -0.5px;
+  }
+
+  .tab-button {
+    padding: 6px 10px;
+    border: 1px solid #cccccc;
+    background: #f0f0f0;
+    margin-bottom: -1px;
+  }
+
+  .tab-button:hover{
+    background: #e4e4e4;
+    color: #0a0a0a
+  }
+
+  .tab-button.active {
+    background: #d8d8d8;
+    color: #0a0a0a
+  }
+</style>`,
+          jsCode: null,
+          vueSFCCode: 
+`<!-- 父元件 VuejsDynamicComponentKeepAliveDemo.vue -->
+<template>
+  <button
+    v-for="tab in tabs"
+    :key="tab"
+    :class="['tab-button', { active: currentTab === tab}]"
+    @click="currentTab = tab"
+  >
+    {{ tab }}
+  </button>
+
+  <!-- 動態元件切換 -->
+  <!-- 加一個tab-wrapper，否則css選擇器抓不到子元件的DOM（<component>不是實際DOM） -->
+  <div class="tab-wrapper">
+    <keep-alive>
+      <component :is="currentTabComponent"></component>
+    </keep-alive>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from "vue";
+import TabHome from "./VuejsDynamicComponentKeepAliveDemo/TabHome.vue";
+import TabPosts from "./VuejsDynamicComponentKeepAliveDemo/TabPosts.vue";
+import TabArchive from "./VuejsDynamicComponentKeepAliveDemo/TabArchive.vue";
+
+const currentTab = ref("Home");
+const tabs = ref(["Home", "Posts", "Archive"]);
+
+// 根據currentTab切換元件
+const currentTabComponent = computed(() => {
+  switch (currentTab.value) {
+    case "Home": 
+      return TabHome;
+    case "Posts":
+      return TabPosts;
+    case "Archive":
+      return TabArchive;
+    default:
+      return TabHome;
+  };
+});
+</script>
+
+<style scoped>
+.tab-wrapper ::v-deep(.demo-tab) {
+  padding: 10px;
+  border: 1px solid #cccccc;
+  margin-top: -0.5px;
+}
+
+.tab-button {
+  padding: 6px 10px;
+  border: 1px solid #cccccc;
+  background: #f0f0f0;
+  margin-bottom: -1px;
+  cursor: pointer;
+}
+
+.tab-button:hover{
+  background: #e4e4e4;
+  color: #0a0a0a
+}
+
+.tab-button.active {
+  background: #d8d8d8;
+  color: #0a0a0a
+}
+</style>
+
+
+
+
+
+<!-- 子元件 TabHome.vue -->
+<template>
+  <div class="demo-tab"><input v-model="title"></div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const title = ref("Home component");
+</script>
+
+
+<!-- 子元件 TabPosts.vue -->
+<template>
+  <div class="demo-tab"><input v-model="title"></div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const title = ref("Post component");
+</script>
+
+
+<!-- 子元件 TabArchive.vue -->
+<template>
+  <div class="demo-tab"><input v-model="title"></div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const title = ref("Archive component");
+</script>`
         },
         listDetails: [
           {
@@ -4433,14 +4819,19 @@ small {
   },
   {
     id: "vuejsSlotsNote",
-    title: "插槽 <slot>",
-    description: null,
+    title: "插槽 Slots",
+    description: "包含 <code></code>",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
-        listSubtitle: null,
+        listTitle: "<code>&lt;slot&gt;</code> 插槽",
+        listSubtitle: 
+`<ul style="line-height: 1.6;">
+  <li>在子元件開個洞（<code>&lt;slot&gt;</code>），由外層元件將內容置放在子層元件指定位置中。</li>
+  <li>子元件本身對 <code>&lt;slot&gt;</code> 裡面被傳了什麼東西沒有控制權。</li>
+  <li><code>&lt;slot&gt;</code> 標籤內是預設內容，用於外層元件 <strong>沒有提供任何內容</strong> 給子元件時顯示用。</li>
+</ul>`,
         listComponent: null,
         listCode: {
           htmlCode: null,
@@ -4448,6 +4839,224 @@ small {
           vueSFCCode: null
         },
         listDetails: [
+          {
+            detailTitle: "一般插槽",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsSlotsNote/VuejsGeneralSlotDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app52">
+  <p>&gt; {{ msg }}</p>
+  <custom-component>{{ msg }}</custom-component>
+</div>
+
+<script>
+  const vm52 = Vue.createApp({
+    data() {
+      return {
+        msg: "Parent!"
+      };
+    }
+  });
+
+  vm52.component("custom-component", {` + "\n" +
+'    template: `' + "\n" +
+`      <div>
+        &gt; Hello {{ msg }}
+        <div>
+          &gt; <slot>這是預設內容，若沒有傳資料進來就會出現這段文字。</slot>
+        </div>
+      </div>` + "\n" +
+'    `,' + "\n" +
+`    data() {
+      return {
+        msg: "Child!"
+      }
+    }
+  });
+
+  vm52.mount("#app52");
+</script>`,
+              jsCode: null,
+              vueSFCCode: 
+`<!-- 父元件 VuejsGeneralSlotDemo.vue -->
+<template>
+  <p>&gt; {{ msg }}</p>
+  <custom-component>{{ msg }}</custom-component>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import CustomComponent from "./VuejsGeneralSlotDemo/CustomComponent.vue";
+
+const msg = ref("Parent!");
+</script>
+
+<style scoped>
+p {
+  margin-top: 0;
+}
+</style>
+
+
+
+<!-- 子元件 CustomComponent.vue -->
+<template>
+  <div>
+    &gt; Hello {{ msg }}
+    <div>
+      &gt; <slot>這是預設內容，若沒有傳資料進來就會出現這段文字。</slot>
+    </div>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const msg = ref("Child!");
+</script>
+
+<style scoped></style>`
+            }
+          },
+          {
+            detailTitle: "具名插槽（Named Slots）",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>  // 這個元件（或其子元件）還有些問題，要再處理
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsSlotsNote/VuejsNamedSlotsDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app53">
+  <light-box>
+    <template v-slot:header>
+      <p>我是Header</p>
+    </template>
+
+    <template v-slot:footer>
+      <p>我是Footer</p>
+    </template>
+
+    <div>
+      <a href="https://www.google.com/" target="_blank">點我進到內容的超連結</a>
+    </div>
+  </light-box>
+</div>
+
+<script>
+  const vm53 = Vue.createApp({
+    data() {
+      return {
+        msg: "預設文字呼呼嘿嘿"
+      };
+    }
+  });
+
+  vm53.component("light-box", {` + "\n" +
+'    template: `' + "\n" +
+`      <div class="lightbox">
+        <div class="modal-mask" :style="modalStyle">
+          <div class="modal-container" @click.self="toggleModal">
+            <div class="modal-body">
+              <header>
+                <slot name="header">Default Header</slot>
+              </header>
+              <hr>
+              <section>
+                <slot>Default Body</slot>
+              </section>
+              <hr>
+              <footer>
+                <slot name="footer">Default Footer</slot>
+              </footer>
+            </div>
+          </div>
+        </div>
+      
+        <button @click="isShow = true">Click Me</button>
+      </div>` + "\n" +
+'    `,' + "\n" +
+`    data() {
+      return {
+        isShow: false
+      };
+    },
+    computed: {
+      modalStyle() {
+        return {
+          "display": this.isShow ? "" : "none"
+        };
+      }
+    },
+    methods: {
+      toggleModal() {
+        this.isShow = !this.isShow;
+      }
+    }
+  });
+
+  vm53.mount("#app53");
+</script>
+
+<style>
+  .lightbox {
+    position: relative;
+    display: table;
+    width: 90%;
+  }
+
+  .modal-mask {
+    position: absolute;
+    display: table-cell;
+    width: 100%;
+    z-index: 20;
+    background-color: rgb(0, 0, 0, 0.5);
+  }
+
+  .modal-container {
+    cursor: pointer;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .modal-body {
+    cursor: auto;
+    width: 50%;
+    margin: 0 auto;
+    padding: 32px;
+    background-color: #fafafa;
+  }
+</style>`,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
           {
             detailTitle: null,
             detailSubtitle: null,

@@ -1,1 +1,0 @@
-import{r as u,k as o,c as r,f as t,d as l,t as c,F as m}from"./index-DZGOIZg7.js";const f={__name:"VuejsVForFilterDemo",setup(i){const s=u([1,2,3,4,5,6,7,8,9,10]),n=o(()=>s.value.filter(e=>e%2===0));return(e,p)=>(t(!0),r(m,null,l(n.value,a=>(t(),r("div",null,c(a),1))),256))}};export{f as default};

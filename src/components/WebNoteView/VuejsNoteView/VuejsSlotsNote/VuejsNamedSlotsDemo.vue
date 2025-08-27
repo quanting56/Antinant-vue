@@ -16,6 +16,7 @@
 
 <script setup>
 import { ref } from "vue";
+import LightBox from "./VuejsNamedSlotsDemo/LightBox.vue";
 
 const msg = ref("預設文字呼呼嘿嘿");
 </script>

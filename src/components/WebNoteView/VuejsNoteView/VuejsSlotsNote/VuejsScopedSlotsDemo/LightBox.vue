@@ -3,35 +3,35 @@
     <div class="modal-mask" :style="modalStyle">
       <div class="modal-container" @click.self="toggleModal">
         <div class="modal-body">
-          <header>
-            <slot name="header">Default Header</slot>
-          </header>
-          <hr>
-          <section>
-            <slot>Default Body</slot>
-          </section>
-          <hr>
-          <footer>
-            <slot name="footer">Default Footer</slot>
-          </footer>
+          <slot name="content" v-bind:hello="helloString[lang]"></slot>
         </div>
       </div>
     </div>
-  
+
     <button @click="isShow = true">Click Me</button>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { ref, computed } from "vue";
+
+defineProps({
+  lang: {
+    type: String,
+    default: "tw"
+  }
+});
 
 const isShow = ref(false);
-
-const modalStyle = computed(() => {
-  return {
-    "display": isShow.value ? "" : "none"
-  };
+const helloString = ref({
+  "tw": "哈囉世界！",
+  "en": "Hello World!",
+  "de": "Hello Welt!"
 });
+
+const modalStyle = computed(() => ({
+  "display": isShow.value ? "" : "none"
+}));
 
 function toggleModal() {
   isShow.value = !isShow.value;

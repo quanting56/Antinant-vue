@@ -4820,7 +4820,7 @@ const title = ref("Archive component");
   {
     id: "vuejsSlotsNote",
     title: "插槽 Slots",
-    description: "包含 <code></code>",
+    description: "包含「一般插槽」、「具名插槽（Named Slots）」、「動態切換具名插槽」、「作用域插槽（Scoped Slots）」、「<code>&lt;teleport&gt;</code>」。",
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
@@ -4926,7 +4926,7 @@ const msg = ref("Child!");
             detailTitle: "具名插槽（Named Slots）",
             detailSubtitle: null,
             detailContent: null,
-            detailComponent: defineAsyncComponent(() =>  // 這個元件（或其子元件）還有些問題，要再處理
+            detailComponent: defineAsyncComponent(() =>
               import("../../../components/WebNoteView/VuejsNoteView/VuejsSlotsNote/VuejsNamedSlotsDemo.vue")
             ),
             detailCode: {
@@ -5030,6 +5030,890 @@ const msg = ref("Child!");
     padding: 32px;
     background-color: #fafafa;
   }
+  
+  .button {
+    cursor: pointer;
+  }
+</style>`,
+              jsCode: null,
+              vueSFCCode: 
+`<!-- 父元件 VuejsNamedSlotsDemo.vue -->
+<template>
+  <light-box>
+    <template v-slot:header>
+      <p>我是Header</p>
+    </template>
+
+    <template v-slot:footer>
+      <p>我是Footer</p>
+    </template>
+
+    <div>
+      <a href="https://www.google.com/" target="_blank">點我進到內容的超連結</a>
+    </div>
+  </light-box>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import LightBox from "./VuejsNamedSlotsDemo/LightBox.vue";
+
+const msg = ref("預設文字呼呼嘿嘿");
+</script>
+
+<style scoped></style>
+
+
+
+
+
+<!-- 子元件 LightBox.vue -->
+<template>
+  <div class="lightbox">
+    <div class="modal-mask" :style="modalStyle">
+      <div class="modal-container" @click.self="toggleModal">
+        <div class="modal-body">
+          <header>
+            <slot name="header">Default Header</slot>
+          </header>
+          <hr>
+          <section>
+            <slot>Default Body</slot>
+          </section>
+          <hr>
+          <footer>
+            <slot name="footer">Default Footer</slot>
+          </footer>
+        </div>
+      </div>
+    </div>
+  
+    <button @click="isShow = true">Click Me</button>
+  </div>
+</template>
+
+<script setup>
+import { computed, ref } from "vue";
+
+const isShow = ref(false);
+
+const modalStyle = computed(() => {
+  return {
+    "display": isShow.value ? "" : "none"
+  };
+});
+
+function toggleModal() {
+  isShow.value = !isShow.value;
+}
+</script>
+
+<style scoped>
+.lightbox {
+  position: relative;
+  display: table;
+  width: 90%;
+}
+
+.modal-mask {
+  position: absolute;
+  display: table-cell;
+  width: 100%;
+  z-index: 20;
+  background-color: rgb(0, 0, 0, 0.5);
+}
+
+.modal-container {
+  cursor: pointer;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+.modal-body {
+  cursor: auto;
+  width: 50%;
+  margin: 0 auto;
+  padding: 32px;
+  background-color: #fafafa;
+}
+
+button {
+  cursor: pointer;
+}
+</style>`
+            }
+          },
+          {
+            detailTitle: "動態切換具名插槽",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsSlotsNote/VuejsDynamicNamedSlotsDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app54">
+  <label v-for="opt in options">
+    <input type="radio" :value="opt" v-model="dynamic_slot_name">{{ opt }}
+  </label>
+
+  <light-box>
+    <!-- 透過所選的dynamic_slot_name動態切換對應的slot -->
+    <template v-slot:[dynamic_slot_name]>
+      <p>點擊按鈕我就會到那行去</p>
+    </template>
+  </light-box>
+</div>
+
+<script>
+  const vm54 = Vue.createApp({
+    data() {
+      return {
+        options: ["header", "footer", "default"],
+        dynamic_slot_name: "header"
+      };
+    }
+  });
+
+  vm54.component("light-box", {` + "\n" +
+'    template: `' + "\n" +
+`      <div class="lightbox">
+        <div class="modal-mask" :style="modalStyle">
+          <div class="modal-container" @click.self="toggleModal">
+            <div class="modal-body">
+              <header>
+                <slot name="header">Default Header</slot>
+              </header>
+              <hr>
+              <section>
+                <slot>Default Body</slot>
+              </section>
+              <hr>
+              <footer>
+                <slot name="footer">Default Footer</slot>
+              </footer>
+            </div>
+          </div>
+        </div>
+      
+        <button @click="isShow = true">Click Me</button>
+      </div>` + "\n" +
+'    `,' + "\n" +
+`    data() {
+      return {
+        isShow: false
+      };
+    },
+    computed: {
+      modalStyle() {
+        return {
+          "display": this.isShow ? "" : "none"
+        };
+      }
+    },
+    methods: {
+      toggleModal() {
+        this.isShow = !this.isShow;
+      }
+    }
+  });
+
+  vm54.mount("#app54");
+</script>
+
+<style>
+  .lightbox {
+    position: relative;
+    display: table;
+    width: 90%;
+  }
+
+  .modal-mask {
+    position: absolute;
+    display: table-cell;
+    width: 100%;
+    z-index: 20;
+    background-color: rgb(0, 0, 0, 0.5);
+  }
+
+  .modal-container {
+    cursor: pointer;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .modal-body {
+    cursor: auto;
+    width: 50%;
+    margin: 0 auto;
+    padding: 32px;
+    background-color: #fafafa;
+  }
+
+  button {
+    cursor: pointer;
+  }
+</style>`,
+              jsCode: null,
+              vueSFCCode: 
+`<!-- 父元件 VuejsDynamicNamedSlotsDemo.vue -->
+<template>
+  <label v-for="opt in options">
+    <input type="radio" :value="opt" v-model="dynamic_slot_name">{{ opt }}
+  </label>
+
+  <light-box>
+    <!-- 透過所選的dynamic_slot_name動態切換對應的slot -->
+    <template v-slot:[dynamic_slot_name]>
+      <p>點擊按鈕我就會到那行去</p>
+    </template>
+  </light-box>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import LightBox from "./VuejsDynamicNamedSlotsDemo/LightBox.vue";
+
+const options = ref(["header", "footer", "default"]);
+const dynamic_slot_name = ref("header");
+</script>
+
+<style scoped></style>
+
+
+
+
+
+<!-- 子元件 LightBox.vue -->
+<template>
+  <div class="lightbox">
+    <div class="modal-mask" :style="modalStyle">
+      <div class="modal-container" @click.self="toggleModal">
+        <div class="modal-body">
+          <header>
+            <slot name="header">Default Header</slot>
+          </header>
+          <hr>
+          <section>
+            <slot>Default Body</slot>
+          </section>
+          <hr>
+          <footer>
+            <slot name="footer">Default Footer</slot>
+          </footer>
+        </div>
+      </div>
+    </div>
+
+    <button @click="isShow = true">Click Me</button>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from "vue";
+
+const isShow = ref(false);
+
+const modalStyle = computed(() => ({
+  "display": isShow.value ? "" : "none"
+}));
+
+function toggleModal() {
+  isShow.value = !isShow.value;
+};
+</script>
+
+<style scoped>
+.lightbox {
+  position: relative;
+  display: table;
+  width: 90%;
+}
+
+.modal-mask {
+  position: absolute;
+  display: table-cell;
+  width: 100%;
+  z-index: 20;
+  background-color: rgb(0, 0, 0, 0.5);
+}
+
+.modal-container {
+  cursor: pointer;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+.modal-body {
+  cursor: auto;
+  width: 50%;
+  margin: 0 auto;
+  padding: 32px;
+  background-color: #fafafa;
+}
+
+button {
+  cursor: pointer;
+}
+</style>`
+            }
+          },
+          {
+            detailTitle: "作用域插槽（Scoped Slots）",
+            detailSubtitle: "「具名插槽（named slots）」 + 「slot props（作用域插槽）」",
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsSlotsNote/VuejsScopedSlotsDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app55">
+  <p>
+    請選擇：
+    <select v-model="lang">
+      <option v-for="n in langOptions" :value="n.val">{{ n.name }}</option>
+    </select>
+  </p>
+
+  <light-box :lang="lang">
+    <template v-slot:content="slotProps">
+      {{ langOptions.find(d => d.val === lang)["name"] }}: {{ slotProps.hello }}
+    </template>
+  </light-box>
+</div>
+
+<script>
+  const vm55 = Vue.createApp({
+    data() {
+      return {
+        langOptions: [
+          {name: "繁體中文", val: "tw"},
+          {name: "英文", val: "en"},
+          {name: "德文", val: "de"}
+        ],
+        lang: "tw"
+      }
+    }
+  });
+
+  vm55.component("light-box", {
+    data() {
+      return {
+        isShow: false,
+        helloString: {
+          "tw": "哈囉世界！",
+          "en": "Hello World!",
+          "de": "Hello Welt!"
+        }
+      };
+    },
+    props: {
+      lang: {
+        type: String,
+        default: "tw"
+      }
+    },` + "\n" +
+'    template: `' + "\n" +
+`      <div class="lightbox">
+        <div class="modal-mask" :style="modalStyle">
+          <div class="modal-container" @click.self="toggleModal">
+            <div class="modal-body">
+              <slot name="content" v-bind:hello="helloString[lang]"></slot>
+            </div>
+          </div>
+        </div>
+
+        <button @click="isShow = true">Click Me</button>
+      </div>` + "\n" +
+'    `,' + "\n" +
+`    computed: {
+      modalStyle() {
+        return {
+          "display": this.isShow ? "" : "none"
+        };
+      }
+    },
+    methods: {
+      toggleModal() {
+        this.isShow = !this.isShow;
+      }
+    }
+  });
+
+  vm55.mount("#app55");
+</script>
+
+<style>
+  .lightbox {
+    position: relative;
+    display: table;
+    width: 90%;
+  }
+
+  .modal-mask {
+    position: absolute;
+    display: table-cell;
+    width: 100%;
+    z-index: 20;
+    background-color: rgb(0, 0, 0, 0.5);
+  }
+
+  .modal-container {
+    cursor: pointer;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .modal-body {
+    cursor: auto;
+    width: 50%;
+    margin: 0 auto;
+    padding: 32px;
+    background-color: #fafafa;
+  }
+
+  button {
+    cursor: pointer;
+  }
+</style>`,
+              jsCode: null,
+              vueSFCCode: 
+`<!-- 父元件 VuejsScopedSlotsDemo.vue -->
+<template>
+  <p>
+    請選擇：
+    <select v-model="lang">
+      <option v-for="n in langOptions" :value="n.val">{{ n.name }}</option>
+    </select>
+  </p>
+
+  <light-box :lang="lang">
+    <template v-slot:content="slotProps">
+      {{ langOptions.find(d => d.val === lang)["name"] }}: {{ slotProps.hello }}
+    </template>
+  </light-box>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import LightBox from "./VuejsScopedSlotsDemo/LightBox.vue";
+
+const langOptions = ref([
+  {name: "繁體中文", val: "tw"},
+  {name: "英文", val: "en"},
+  {name: "德文", val: "de"}
+]);
+const lang = ref("tw");
+</script>
+
+<style scoped></style>
+
+
+
+
+
+<!-- 子元件 LightBox.vue -->
+<template>
+  <div class="lightbox">
+    <div class="modal-mask" :style="modalStyle">
+      <div class="modal-container" @click.self="toggleModal">
+        <div class="modal-body">
+          <slot name="content" v-bind:hello="helloString[lang]"></slot>
+        </div>
+      </div>
+    </div>
+
+    <button @click="isShow = true">Click Me</button>
+  </div>
+</template>
+
+<script setup>
+import { ref, computed } from "vue";
+
+defineProps({
+  lang: {
+    type: String,
+    default: "tw"
+  }
+});
+
+const isShow = ref(false);
+const helloString = ref({
+  "tw": "哈囉世界！",
+  "en": "Hello World!",
+  "de": "Hello Welt!"
+});
+
+const modalStyle = computed(() => ({
+  "display": isShow.value ? "" : "none"
+}));
+
+function toggleModal() {
+  isShow.value = !isShow.value;
+}
+</script>
+
+<style scoped>
+.lightbox {
+  position: relative;
+  display: table;
+  width: 90%;
+}
+
+.modal-mask {
+  position: absolute;
+  display: table-cell;
+  width: 100%;
+  z-index: 20;
+  background-color: rgb(0, 0, 0, 0.5);
+}
+
+.modal-container {
+  cursor: pointer;
+  padding-top: 48px;
+  padding-bottom: 48px;
+}
+
+.modal-body {
+  cursor: auto;
+  width: 50%;
+  margin: 0 auto;
+  padding: 32px;
+  background-color: #fafafa;
+}
+
+button {
+  cursor: pointer;
+}
+</style>`
+            }
+          },
+          {
+            detailTitle: "<code>&lt;teleport&gt;</code>",
+            detailSubtitle: "透過 <code>&lt;teleport&gt;</code>，可以將 DOM 移動到指定位置渲染。<code>to</code> 屬性的值為目標 DOM 節點，使用 CSS 選擇器。",
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsSlotsNote/VuejsTeleportDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app56">
+  <p>
+    請選擇：
+    <select v-model="lang">
+      <option v-for="n in langOptions" :value="n.val">{{ n.name }}</option>
+    </select>
+  </p>
+
+  <light-box :lang="lang">
+    <template v-slot:content="slotProps">
+      {{ langOptions.find(d => d.val === lang)["name"] }}: {{ slotProps.hello }}
+    </template>
+  </light-box>
+</div>
+
+<script>
+  const vm56 = Vue.createApp({
+    data() {
+      return {
+        langOptions: [
+          {name: "繁體中文", val: "tw"},
+          {name: "英文", val: "en"},
+          {name: "德文", val: "de"}
+        ],
+        lang: "tw"
+      }
+    }
+  });
+
+  vm56.component("light-box", {
+    data() {
+      return {
+        isShow: false,
+        helloString: {
+          "tw": "哈囉世界！",
+          "en": "Hello World!",
+          "de": "Hello Welt!"
+        }
+      };
+    },
+    props: {
+      lang: {
+        type: String,
+        default: "tw"
+      }
+    },` + "\n" +
+'    template: `' + "\n" +
+`      <div class="lightbox">
+        <teleport to="body">
+          <div class="modal-mask" :style="modalStyle">
+            <div class="modal-container" @click.self="toggleModal">
+              <div class="modal-body">
+                <slot name="content" v-bind:hello="helloString[lang]"></slot>
+              </div>
+            </div>
+          </div>
+        </teleport>
+
+        <button @click="isShow = true">Click Me</button>
+      </div>` + "\n" +
+'    `,' + "\n" +
+`   computed: {
+      modalStyle() {
+        return {
+          "display": this.isShow ? "" : "none"
+        };
+      }
+    },
+    methods: {
+      toggleModal() {
+        this.isShow = !this.isShow;
+      }
+    }
+  });
+
+  vm56.mount("#app56");
+</script>
+
+<style>
+  .lightbox {
+    position: relative;
+    display: table;
+    width: 90%;
+  }
+
+  .modal-mask {
+    position: absolute;
+    display: table-cell;
+    width: 100%;
+    z-index: 20;
+    background-color: rgb(0, 0, 0, 0.5);
+  }
+
+  .modal-container {
+    cursor: pointer;
+    padding-top: 48px;
+    padding-bottom: 48px;
+  }
+
+  .modal-body {
+    cursor: auto;
+    width: 50%;
+    margin: 0 auto;
+    padding: 32px;
+    background-color: #fafafa;
+  }
+</style>`,
+              jsCode: null,
+              vueSFCCode: 
+`<!-- 跟上面原code不完全相同，有改善一些code -->
+<!-- 父元件 VuejsTeleportDemo.vue -->
+<template>
+  <p>
+    請選擇：
+    <select v-model="lang">
+      <option v-for="n in langOptions" :value="n.val">{{ n.name }}</option>
+    </select>
+  </p>
+
+  <light-box :lang="lang">
+    <template v-slot:content="slotProps">
+      {{ langOptions.find(d => d.val === lang)["name"] }}: {{ slotProps.hello }}
+    </template>
+  </light-box>
+</template>
+
+<script setup>
+import { ref, computed } from "vue";
+import LightBox from "./VuejsTeleportDemo/LightBox.vue";
+
+const langOptions = ref([
+  {name: "繁體中文", val: "tw"},
+  {name: "英文", val: "en"},
+  {name: "德文", val: "de"}
+]);
+const lang = ref("tw");
+</script>
+
+<style scoped></style>
+
+
+
+
+
+<!-- 子元件 LightBox.vue -->
+<template>
+  <div class="lightbox">
+    <teleport to="body" v-if="isShow">
+      <div class="modal-mask" @click.self="toggleModal">
+        <div class="modal-body">
+          <slot name="content" v-bind:hello="helloString[lang]"></slot>
+        </div>
+      </div>
+    </teleport>
+
+    <button @click="isShow = true">Click Me</button>
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+defineProps({
+  lang: {
+    type: String,
+    default: "tw"
+  }
+});
+
+const isShow = ref(false);
+const helloString = ref({
+  "tw": "哈囉世界！",
+  "en": "Hello World!",
+  "de": "Hello Welt!"
+});
+
+function toggleModal() {
+  isShow.value = !isShow.value;
+};
+</script>
+
+<style scoped>
+.lightbox {
+  width: 90%;
+}
+
+.modal-mask {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 2000;
+  background-color: rgb(0, 0, 0, 0.5);
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+
+.modal-body {
+  cursor: auto;
+  width: 50%;
+  margin: 0 auto;
+  padding: 32px;
+  background-color: #fafafa;
+}
+
+button {
+  cursor: pointer;
+}
+</style>`
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "vuejsTransitionNote",
+    title: "漸變與動畫 <transition>",
+    description: "包含 <code></code>。",
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: "<code>&lt;transition&gt;</code> 漸變與動畫",
+        listSubtitle: 
+`<p><code>&lt;transition&gt;</code> 提供的是 <strong>動畫生命週期 + class 名稱約定</strong> ，方便管理和套用動畫。它並不會自帶動畫，只處理「元素進出 DOM 時的 <code>class</code> 套用」，實際動畫效果還是要靠 CSS 或 JavaScript 寫。</p>
+<table>
+  <thead>
+    <tr>
+      <th>狀態</th>
+      <th><code>class</code> 名稱</th>
+      <th>說明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td>進入前</td>
+      <td><code>v-enter-from</code></td>
+      <td>定義元素在進場「之前」的樣式。</td>
+    </tr>
+    <tr>
+      <td>進入</td>
+      <td><code>v-enter-active</code></td>
+      <td>定義元素在進場「過程」的樣式。</td>
+    </tr>
+    <tr>
+      <td>進入完成</td>
+      <td><code>v-enter-to</code></td>
+      <td>定義元素在進場「結束時」的樣式。</td>
+    </tr>
+    <tr>
+      <td>離開前</td>
+      <td><code>v-leave-from</code></td>
+      <td>定義元素在退場「之前」的樣式。</td>
+    </tr>
+    <tr>
+      <td>離開</td>
+      <td><code>v-leave-active</code></td>
+      <td>定義元素在退場「過程」的樣式。</td>
+    </tr>
+    <tr>
+      <td>離開完成</td>
+      <td><code>v-leave-to</code></td>
+      <td>定義元素在退場「結束時」的樣式。</td>
+    </tr>
+  </tbody>
+</table>`,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "基本的 <code>&lt;transition&gt;</code> 漸變動畫",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<div id="app57">
+  <transition>
+    <!-- 透過v-show來控制顯示或隱藏 -->
+    <div v-show="isShow">Hello Vue!</div>
+  </transition>
+
+  <button @click="isShow = !isShow">Toggle</button>
+</div>
+
+<script>
+  const vm57 = Vue.createApp({
+    data() {
+      return {
+        isShow: true
+      }
+    }
+  }).mount("#app57");
+</script>
+
+<style>
+  .v-enter-active,
+  .v-leave-active {
+    transition: opacity 1s;
+  }
+
+  .v-enter-from,
+  .v-leave-to {
+    opacity: 0;
+  }
+
+  .v-enter-to,
+  .v-leave-from {
+    opacity: 1;
+  }
 </style>`,
               jsCode: null,
               vueSFCCode: null
@@ -5057,38 +5941,6 @@ const msg = ref("Child!");
               vueSFCCode: null
             }
           },
-          {
-            detailTitle: null,
-            detailSubtitle: null,
-            detailContent: null,
-            detailComponent: null,
-            detailCode: {
-              htmlCode: null,
-              jsCode: null,
-              vueSFCCode: null
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: "vuejsTransitionNote",
-    title: "漸變與動畫 <transition>",
-    description: null,
-    descriptionComponent: null,
-    descriptionComponentStyle: null,
-    lists: [
-      {
-        listTitle: null,
-        listSubtitle: null,
-        listComponent: null,
-        listCode: {
-          htmlCode: null,
-          jsCode: null,
-          vueSFCCode: null
-        },
-        listDetails: [
           {
             detailTitle: null,
             detailSubtitle: null,

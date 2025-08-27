@@ -17,25 +17,23 @@
         </div>
       </div>
     </div>
-  
+
     <button @click="isShow = true">Click Me</button>
   </div>
 </template>
 
 <script setup>
-import { computed, ref } from "vue";
+import { ref, computed } from "vue";
 
 const isShow = ref(false);
 
-const modalStyle = computed(() => {
-  return {
-    "display": isShow.value ? "" : "none"
-  };
-});
+const modalStyle = computed(() => ({
+  "display": isShow.value ? "" : "none"
+}));
 
 function toggleModal() {
   isShow.value = !isShow.value;
-}
+};
 </script>
 
 <style scoped>

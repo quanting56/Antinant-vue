@@ -5877,7 +5877,9 @@ button {
             detailTitle: "基本的 <code>&lt;transition&gt;</code> 漸變動畫",
             detailSubtitle: null,
             detailContent: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsTransitionNote/VuejsTransitionBasicDemo.vue")
+            ),
             detailCode: {
               htmlCode: 
 `<div id="app57">
@@ -5916,24 +5918,538 @@ button {
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: null
+              vueSFCCode: 
+`<template>
+  <transition>
+    <!-- 透過v-show來控制顯示或隱藏 -->
+    <div v-show="isShow">Hello Vue.js!</div>
+  </transition>
+
+  <button @click="isShow = !isShow">Toggle</button>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const isShow = ref(true);
+</script>
+
+<style scoped>
+.v-enter-active,
+.v-leave-active {
+  transition: opacity 1s;
+}
+
+.v-enter-from,
+.v-leave-to {
+  opacity: 0;
+}
+
+.v-enter-to,
+.v-leave-from {
+  opacity: 1;
+}
+
+button {
+  cursor: pointer;
+}
+</style>`
             }
           },
           {
-            detailTitle: null,
-            detailSubtitle: null,
+            detailTitle: "有自定義名稱的 <code>&lt;transition&gt;</code>",
+            detailSubtitle: '<code>&lt;transition name="<i>自定義名稱</i>"&gt; ... &lt;/transition&gt;</code>',
             detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsTransitionNote/VuejsTransitionNamedDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app58">
+  <!-- slide -->
+  <transition name="slide">
+    <div v-show="slideIsShow">我是slide特效</div>
+  </transition>
+  <button @click="slideIsShow = !slideIsShow">Toggle</button>
+  <br>
+
+  <!-- fade -->
+  <transition name="fade">
+    <div v-show="fadeIsShow">我是fade特效</div>
+  </transition>
+  <button @click="fadeIsShow = !fadeIsShow">Toggle</button>
+</div>
+
+<script>
+  const vm58 = Vue.createApp({
+    data() {
+      return {
+        slideIsShow: true,
+        fadeIsShow: true
+      }
+    }
+  }).mount("#app58");
+</script>
+
+<style>
+  /* <transition name="slide"> */
+  .slide-enter-active,
+  .slide-leave-active {
+    transition: all 0.9s ease;
+  }
+
+  .slide-enter-from {
+    transform: translateX(-100%);
+  }
+
+  .slide-leave-to {
+    transform: translateX(100%);
+  }
+
+  /* <transition name="fade"> */
+  .fade-enter-active,
+  .fade-leave-active {
+    transition: opacity 1s;
+  }
+
+  .fade-enter-from,
+  .fade-leave-to {
+    opacity: 0;
+  }
+
+  .fade-enter-to,
+  .fade-leave-from {
+    opacity: 1;
+  }
+</style>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <!-- slide -->
+  <transition name="slide">
+    <div v-show="slideIsShow">我是slide特效</div>
+  </transition>
+  <button @click="slideIsShow = !slideIsShow">Toggle</button>
+
+  <!-- fade -->
+  <transition name="fade">
+    <div v-show="fadeIsShow">我是fade特效</div>
+  </transition>
+  <button @click="fadeIsShow = !fadeIsShow">Toggle</button>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const slideIsShow = ref(true);
+const fadeIsShow = ref(true);
+</script>
+
+<style scoped>
+/* <transition name="slide"> */
+.slide-enter-active,
+.slide-leave-active {
+  transition: all 0.9s ease;
+}
+
+.slide-enter-from {
+  transform: translateX(-100%);
+}
+
+.slide-leave-to {
+  transform: translateX(100%);
+}
+
+/* <transition name="fade"> */
+.fade-enter-active,
+.fade-leave-active {
+  transition: opacity 1s;
+}
+
+.fade-enter-from,
+.fade-leave-to {
+  opacity: 0;
+}
+
+.fade-enter-to,
+.fade-leave-from {
+  opacity: 1;
+}
+
+button {
+  margin-bottom: 16px;
+}
+</style>`
+            }
+          },
+          {
+            detailTitle: "條件與動態切換",
+            detailSubtitle: "若我們要在 <code>&lt;transition&gt;</code> 進行多個 DOM 元素或元件切換，必須寫成 <code>v-if</code>、<code>v-else-if</code>、<code>v-else</code> 的形式，或採用 <code>:is</code> 的方式進行切換，才能正常運作。不可直接使用多個 <code>v-if</code> 或 <code>v-show</code>。",
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsTransitionNote/VuejsTransitionDynamicSwitchDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app59">
+  <button @click="modeToggle()">Toggle</button>
+
+  <!-- 用mode="out-in"以先執行離場動畫，再執行進場動畫 -->
+  <transition name="app59-fade" mode="out-in">
+    <div v-if="mode === 'mode-1'">Block 1</div>
+    <div v-else-if="mode === 'mode-2'">Block 2</div>
+    <div v-else>Block 3</div>
+  </transition>
+</div>
+
+<script>
+  const vm59 = Vue.createApp({
+    data() {
+      let modeLists = ["mode-1", "mode-2", "mode-3"];
+      return {
+        modeChoose: modeLists,
+        mode: modeLists[0]
+      }
+    },
+    methods: {
+      modeToggle() {
+        const index = this.modeChoose.indexOf(this.mode);
+        this.mode = this.modeChoose[(index + 1) % this.modeChoose.length];
+      },
+    },
+  }).mount("#app59");
+</script>
+
+<style>
+  .app59-fade-enter-active,
+  .app59-fade-leave-active {
+    transition: opacity 0.5s;
+  }
+
+  .app59-fade-enter-from,
+  .app59-fade-leave-to {
+    opacity: 0;
+  }
+
+  .app59-fade-enter-to,
+  .app59-fade-leave-from {
+    opacity: 1;
+  }
+</style>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <button @click="modeToggle()">Toggle</button>
+
+  <!-- 用mode="out-in"以先執行離場動畫，再執行進場動畫 -->
+  <transition name="app59-fade" mode="out-in">
+    <div v-if="mode === 'mode-1'">Block 1</div>
+    <div v-else-if="mode === 'mode-2'">Block 2</div>
+    <div v-else>Block 3</div>
+  </transition>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const modeLists = ["mode-1", "mode-2", "mode-3"];
+const mode = ref(modeLists[0]);
+
+function modeToggle() {
+  const index = modeLists.indexOf(mode.value);
+  mode.value = modeLists[(index + 1) % modeLists.length];
+};
+</script>
+
+<style scoped>
+.app59-fade-enter-active,
+.app59-fade-leave-active {
+  transition: opacity 0.25s;
+}
+
+.app59-fade-enter-from,
+.app59-fade-leave-to {
+  opacity: 0;
+}
+
+.app59-fade-enter-to,
+.app59-fade-leave-from {
+  opacity: 1;
+}
+
+button {
+  cursor: pointer;
+}
+</style>`
+            }
+          },
+          {
+            detailTitle: "漸變效果的順序（transition mode）",
+            detailSubtitle: null,
+            detailContent: 
+`上例中漸變效果的切換，除了預設的「新元素進場的動畫先執行，再移除現有的元素以外（<code>in-out</code>），同時也提供了「先移除現有的元素，再執行新元素進場」的動畫（<code>in-out</code>）方式。`,
             detailComponent: null,
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<!-- 舊元素先離場，再進新元素，避免新舊元素同時出現 -->
+<transition mode="out-in"></transition>
+
+<!-- 新元素先進，舊元素再離場，需「新舊重疊」一小段時間使用 -->
+<transition mode="in-out"></transition>`,
               jsCode: null,
               vueSFCCode: null
             }
           },
           {
-            detailTitle: null,
+            detailTitle: "複數元素／元件的漸變渲染 <code>&lt;transition-group&gt;</code>",
             detailSubtitle: null,
             detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsTransitionNote/VuejsTransitionGroupDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app60">
+  <button @click="addListElement()">生成一個隨機數字方塊</button><br>
+  <button @click="shuffle()">給我重新排列</button><br>
+  <button @click="lists.length = 0">通通蛋雕</button>
+
+  <!-- 添增一個tag屬性，此處代表在外層加一層<ul>來包覆 -->
+  <!-- <transition>的class屬性，是給外層<ul>的class屬性 -->
+  <!-- 另外，內層子元素都需要加上key的唯一屬性來確保動畫正常運作 -->
+  <transition-group tag="ul" class="number-list" name="number-list">
+    <li v-for="item in lists" :key="item" class="number-item">{{ item }}</li>
+  </transition-group>
+</div>
+
+<script>
+  const vm60 = Vue.createApp({
+    data() {
+      return {
+        lists: [1, 2, 3, 4, 5]
+      };
+    },
+    methods: {
+      addListElement() {
+        // 生成新數字，並且是唯一
+        let randomNumber;
+        do {
+          randomNumber = Math.ceil(Math.random() * 100);
+        } while ( this.lists.includes(randomNumber) );
+        this.lists.push(randomNumber);
+      },
+      shuffle() {
+        this.lists.sort(() => Math.random() - 0.5);
+      }
+    }
+  }).mount("#app60");
+</script>
+
+<style>
+  .number-list {
+    overflow: hidden;
+    padding: 0;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .number-list li {
+    display: block;
+    float: left;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    background-color: #ff0000;
+    color: #ffffff;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    font-family: system-ui;
+  }
+
+  .number-list-enter-from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  /* 只有在<transition-group>中才會有v-move可以使用 */
+  .number-list-enter-active,
+  .number-list-leave-active,
+  .number-list-move {
+    transition: opacity 0.7s, transform 0.7s ease;
+  }
+
+  .number-list-enter-to,
+  .number-list-leave-from {
+    opacity: 1;
+    transform: 0;
+  }
+
+  /* 此步是為了要讓元素到同一處消失 */
+  .number-list-leave-active {
+    position: absolute;
+  }
+
+  .number-list-leave-to {
+    opacity: 0;
+  }
+</style>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <button @click="addListElement()">生成一個隨機數字方塊</button><br>
+  <button @click="shuffle()">給我重新排列</button><br>
+  <button @click="lists.length = 0">通通蛋雕</button>
+
+  <!-- 添增一個tag屬性，此處代表在外層加一層<ul>來包覆 -->
+  <!-- <transition>的class屬性，是給外層<ul>的class屬性 -->
+  <!-- 另外，內層子元素都需要加上key的唯一屬性來確保動畫正常運作 -->
+  <transition-group tag="ul" class="number-list" name="number-list">
+    <li v-for="item in lists" :key="item" class="number-item">{{ item }}</li>
+  </transition-group>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const lists = ref([1, 2, 3, 4, 5]);
+
+function addListElement() {
+  // 生成新數字，並且是唯一
+  let randomNumber;
+  do {
+    randomNumber = Math.ceil(Math.random() * 100);
+  } while ( lists.value.includes(randomNumber) );
+  lists.value.push(randomNumber);
+};
+
+function shuffle() {
+  lists.value.sort(() => Math.random() - 0.5);
+}
+</script>
+
+<style scoped>
+  .number-list {
+    overflow: hidden;
+    padding: 0;
+    margin-top: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .number-list li {
+    display: block;
+    float: left;
+    width: 35px;
+    height: 35px;
+    text-align: center;
+    line-height: 35px;
+    background-color: #ff0000;
+    color: #ffffff;
+    margin-right: 1rem;
+    margin-bottom: 1rem;
+    font-family: system-ui;
+  }
+
+  .number-list-enter-from {
+    opacity: 0;
+    transform: translateY(-20px);
+  }
+
+  /* 只有在<transition-group>中才會有v-move可以使用 */
+  .number-list-enter-active,
+  .number-list-leave-active,
+  .number-list-move {
+    transition: opacity 0.7s, transform 0.7s ease;
+  }
+
+  .number-list-enter-to,
+  .number-list-leave-from {
+    opacity: 1;
+    transform: 0;
+  }
+
+  /* 此步是為了要讓元素到同一處消失 */
+  .number-list-leave-active {
+    position: absolute;
+  }
+
+  .number-list-leave-to {
+    opacity: 0;
+  }
+</style>`
+            }
+          },
+          {
+            detailTitle: "結合漸變動畫的 Hooks 函式處理事件",
+            detailSubtitle: null,
+            detailContent: 
+`<p>在執行漸變動畫時，搭配 Hooks 函式來處理執行動畫之前、過程中、結束後要做的事。</p>
+<table>
+  <thead>
+    <tr>
+      <th>Hooks 名稱</th>
+      <th>階段</th>
+      <th>說明</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>before-enter</code></td>
+      <td>進場</td>
+      <td>漸變動畫開始前。</td>
+    </tr>
+    <tr>
+      <td><code>enter</code></td>
+      <td>進場</td>
+      <td>漸變動畫執行時。</td>
+    </tr>
+    <tr>
+      <td><code>after-enter</code></td>
+      <td>進場</td>
+      <td>漸變動畫執行完畢。</td>
+    </tr>
+    <tr>
+      <td><code>enter-cancelled</code></td>
+      <td>進場</td>
+      <td>漸變動畫執行時取消。</td>
+    </tr>
+    <tr>
+      <td><code>before-leave</code></td>
+      <td>退場</td>
+      <td>漸變動畫開始前。</td>
+    </tr>
+    <tr>
+      <td><code>leave</code></td>
+      <td>退場</td>
+      <td>漸變動畫執行時。</td>
+    </tr>
+    <tr>
+      <td><code>after-leave</code></td>
+      <td>退場</td>
+      <td>漸變動畫執行完畢。</td>
+    </tr>
+    <tr>
+      <td><code>leave-cancelled</code></td>
+      <td>退場</td>
+      <td>漸變動畫執行時取消（僅限 <code>v-show</code> 有效）。</td>
+    </tr>
+    <tr>
+      <td><code>appear</code></td>
+      <td>初始渲染</td>
+      <td>初始渲染的漸變動畫。</td>
+    </tr>
+    <tr>
+      <td><code>after-appear</code></td>
+      <td>初始渲染</td>
+      <td>初始渲染的漸變動畫執行完畢。</td>
+    </tr>
+    <tr>
+      <td><code>appear-cancelled</code></td>
+      <td>初始渲染</td>
+      <td>初始渲染的漸變動畫執行時取消。</td>
+    </tr>
+  </tbody>
+</table>`,  // 還沒弄完，要把ChatGPT改善的內容加進去
             detailComponent: null,
             detailCode: {
               htmlCode: null,

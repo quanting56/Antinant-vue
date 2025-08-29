@@ -5817,7 +5817,29 @@ button {
   {
     id: "vuejsTransitionNote",
     title: "漸變與動畫 <transition>",
-    description: "包含 <code></code>。",
+    description: 
+`包含 「<code>&lt;transition&gt;</code> 漸變與動畫」與「其他動畫（不用 <code>&lt;transition&gt;</code>）」。
+<ul style="line-height: 1.7;">
+  <li>
+    <h5><code>&lt;transition&gt;</code> 漸變與動畫</h5>
+    <ol>
+      <li>基本的 <code>&lt;transition&gt;</code> 漸變動畫</li>
+      <li>有自定義名稱的 <code>&gt;transition&gt;</code></li>
+      <li>條件與動態切換</li>
+      <li>漸變效果的順序（transition mode）</li>
+      <li>複數元素／元件的漸變渲染 <code>&lt;transition-group&gt;</code></li>
+      <li>結合漸變動畫的 Hooks 函式處理事件</li>
+    </ol>
+  </li>
+  <li>
+    <h5>其他動畫（不用 <code>&lt;transition&gt;</code>）</h5>
+    <ol>
+      <li>自己寫 CSS 的 keyframes 影格動畫</li>
+      <li>與其他 CSS 工具庫搭配</li>
+    </ol>
+  </li>
+</ul>
+<hr />`,
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
@@ -6396,37 +6418,37 @@ function shuffle() {
     <tr>
       <td><code>before-enter</code></td>
       <td>進場</td>
-      <td>漸變動畫開始前。</td>
+      <td>漸變動畫開始前，常用來設定初始狀態。</td>
     </tr>
     <tr>
       <td><code>enter</code></td>
       <td>進場</td>
-      <td>漸變動畫執行時。</td>
+      <td>漸變動畫執行時，可用於 JavaScript 動畫。</td>
     </tr>
     <tr>
       <td><code>after-enter</code></td>
       <td>進場</td>
-      <td>漸變動畫執行完畢。</td>
+      <td>漸變動畫執行完畢觸發。</td>
     </tr>
     <tr>
       <td><code>enter-cancelled</code></td>
       <td>進場</td>
-      <td>漸變動畫執行時取消。</td>
+      <td>漸變動畫執行時取消，如狀態瞬間切換。</td>
     </tr>
     <tr>
       <td><code>before-leave</code></td>
       <td>退場</td>
-      <td>漸變動畫開始前。</td>
+      <td>漸變動畫開始前，常用來設定初始狀態。</td>
     </tr>
     <tr>
       <td><code>leave</code></td>
       <td>退場</td>
-      <td>漸變動畫執行時。</td>
+      <td>漸變動畫執行時，可用於 JavaScript 動畫。</td>
     </tr>
     <tr>
       <td><code>after-leave</code></td>
       <td>退場</td>
-      <td>漸變動畫執行完畢。</td>
+      <td>漸變動畫執行完畢觸發。</td>
     </tr>
     <tr>
       <td><code>leave-cancelled</code></td>
@@ -6436,12 +6458,12 @@ function shuffle() {
     <tr>
       <td><code>appear</code></td>
       <td>初始渲染</td>
-      <td>初始渲染的漸變動畫。</td>
+      <td>初始渲染的漸變動畫開始（需 <code>&lt;transition appear&gt;</code>）。</td>
     </tr>
     <tr>
       <td><code>after-appear</code></td>
       <td>初始渲染</td>
-      <td>初始渲染的漸變動畫執行完畢。</td>
+      <td>初始渲染的漸變動畫執行完觸發。</td>
     </tr>
     <tr>
       <td><code>appear-cancelled</code></td>
@@ -6449,23 +6471,527 @@ function shuffle() {
       <td>初始渲染的漸變動畫執行時取消。</td>
     </tr>
   </tbody>
-</table>`,  // 還沒弄完，要把ChatGPT改善的內容加進去
-            detailComponent: null,
+</table>`,
+            detailComponent: defineAsyncComponent(() =>
+              import ("../../../components/WebNoteView/VuejsNoteView/VuejsTransitionNote/VuejsTransitionHooksFunctionDemo.vue")
+            ),
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="app61">
+  <button @click="getUserInfo">取得隨機User資訊</button>
+
+  <div class="flexbox-wrapper" :style="{ height: heightControlByVue + 'px'}">
+    <div class="flexbox-body" ref="content">
+      <div class="user-block" v-if="userInfo.name">
+        <h6>{{ userInfo.name }} / @{{ userInfo.username }}</h6>
+
+        <img src="https://dummyimage.com/200x200/666/fff" alt="dummyimage">
+        <div class="wraps">
+          <p>{{ userInfo.company.name }}</p>
+          <p>{{ userInfo.phone }}</p>
+          <p>{{ userInfo.email }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- hooks event需搭配v-on使用 -->
+    <transition
+      @before-enter="beforeEnter"
+      @before-leave="beforeLeave"
+      name="user-info">
+      <!-- loading圖 -->
+      <div class="loading" v-if="isLoading">
+        載入中...
+        <!-- 在此使用Bootstrap的載入符號 -->
+        <div class="spinner-border" role="status">
+          <span class="visually-hidden"></span>
+        </div>
+      </div>
+    </transition>
+  </div>
+</div>
+
+<script>
+  const vm61 = Vue.createApp({
+    data() {
+      return {
+        heightControlByVue: 0,
+        userInfo: {},
+        isLoading: false
+      };
+    },
+    methods: {
+      getRandomUserIdNumber() {
+        // 隨機從1~10取出一數字作為user ID
+        return Math.ceil(Math.random() * 10);
+      },
+      async getUserInfo() {
+        // 從jsonplaceholder取得隨機假資料
+        this.isLoading = true;
+        this.userInfo = {};  // 清空舊資料
+        const userId = this.getRandomUserIdNumber();
+
+        const res = await fetch("https://jsonplaceholder.typicode.com/users/" + userId)
+                            .then(response => response.json());
+
+        // 加上setTimeout模擬延遲，避免回傳太快看不到loading
+        window.setTimeout(() => {
+          this.isLoading = false;
+          this.userInfo = res;
+        }, 800);
+      },
+      beforeEnter() {
+        // 開始執行動畫前，將文字區塊的高度歸零
+        this.heightControlByVue = 0;
+      },
+      beforeLeave() {
+        // 取得隨機文字後，為確保資料與畫面同步，加上$nextTick
+        // 並透過getBoundingClientRect()來取得DOM實際高度
+        this.$nextTick(() => {
+          this.heightControlByVue = this.$refs.content.getBoundingClientRect().height;
+        });
+      }
+    }
+  }).mount("#app61");
+</script>
+
+<style>
+  .flexbox-wrapper {
+    position: relative;
+    overflow: hidden;
+    transition: height 1s;
+    min-height: 35px;  /* 缺少這一行會導致Loading的<div>不可見 */
+    height: auto;
+  }
+
+  .user-block {
+    overflow: hidden;
+    background: #eeeeee;
+    padding: 1rem;
+    width: 420px;
+  }
+        
+  .user-block img {
+    width: 100px;
+    height: 100px;
+    float: left;
+    margin: 0.5rem 1rem 0 0;
+  }
+
+  .user-block .wraps {    
+    float: left;
+    margin-top: 0.5rem;
+    margin-left: 0.7rem;
+    font-size: 0.9rem;
+  }
+
+  .loading {
+    display: block;
+    margin: 0 auto;
+    text-align: center;
+  }
+
+  .user-info-enter-active,
+  .user-info-leave-active {
+    transition: opacity 1s;
+  }
+        
+  .user-info-enter-from,
+  .user-info-leave-to {
+    opacity: 0;
+  }
+</style>`,
               jsCode: null,
-              vueSFCCode: null
+              vueSFCCode: 
+`<!-- 與上面略有不同，有些小修改（例如未使用Bootstrap） -->
+<template>
+  <button @click="getUserInfo">取得隨機User資訊</button>
+
+  <div class="flexbox-wrapper" :style="{ height: heightControlByVue + 'px'}">
+    <div class="flexbox-body" ref="content">
+      <div class="user-block" v-if="userInfo.name">
+        <h6>{{ userInfo.name }} / @{{ userInfo.username }}</h6>
+
+        <img src="https://dummyimage.com/200x200/666/fff" alt="dummyimage">
+        <div class="wraps">
+          <p>{{ userInfo.company.name }}</p>
+          <p>{{ userInfo.phone }}</p>
+          <p>{{ userInfo.email }}</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- hooks event需搭配v-on使用 -->
+    <transition
+      @before-enter="beforeEnter"
+      @before-leave="beforeLeave"
+      name="user-info"
+    >
+      <!-- loading圖 -->
+      <div class="loading" v-if="isLoading">
+        載入中...
+        <span class="spinner"></span>
+      </div>
+    </transition>
+  </div>
+</template>
+
+<script setup>
+import { ref, nextTick } from "vue";
+
+const heightControlByVue = ref(0);
+const userInfo = ref({});
+const isLoading = ref(false);
+const content = ref(null);
+
+function getRandomUserIdNumber() {
+  // 隨機從1~10取出一數字作為user ID
+  return Math.ceil(Math.random() * 10);
+};
+
+async function getUserInfo() {
+  // 從jsonplaceholder取得隨機假資料
+  isLoading.value = true;
+  userInfo.value = {};  // 清空舊資料
+  const userId = getRandomUserIdNumber();
+
+  const res = await fetch(
+    "https://jsonplaceholder.typicode.com/users/" + userId
+  ).then(response => response.json());
+
+  // 加上setTimeout模擬延遲，避免回傳太快看不到loading
+  window.setTimeout(() => {
+    isLoading.value = false;
+    userInfo.value = res;
+  }, 800);
+};
+
+function beforeEnter() {
+  // 開始執行動畫前，將文字區塊的高度歸零
+  heightControlByVue.value = 0;
+};
+
+function beforeLeave() {
+  // 取得隨機文字後，為確保資料與畫面同步，使用nextTick
+  // 並透過getBoundingClientRect()來取得DOM實際高度
+  nextTick(() => {
+    heightControlByVue.value = content.value.getBoundingClientRect().height;
+  });
+};
+</script>
+
+<style scoped>
+.flexbox-wrapper {
+  position: relative;
+  overflow: hidden;
+  transition: height 1s;
+  min-height: 60px;  /* 缺少這一行會導致Loading的<div>不可見 */
+}
+
+.user-block {
+  overflow: hidden;
+  background: #eeeeee;
+  padding: 1rem;
+  width: 420px;
+}
+        
+.user-block img {
+  width: 100px;
+  height: 100px;
+  float: left;
+  margin: 0.5rem 1rem 0 0;
+}
+
+.user-block .wraps {    
+  float: left;
+  margin-top: 0.5rem;
+  margin-left: 0.7rem;
+  font-size: 0.9rem;
+}
+
+.user-info-enter-active,
+.user-info-leave-active {
+  transition: opacity 1s;
+}
+        
+.user-info-enter-from,
+.user-info-leave-to {
+  opacity: 0;
+}
+
+button {
+  cursor: pointer;
+}
+
+/* 自製loading、spinner */
+.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  text-align: center;
+  color: #333333;
+}
+
+.spinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid #dddddd;  /* 淡色邊框 */
+  border-top-color: #333333;  /* 深色邊框，會形成旋轉效果 */
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
+}
+
+/* 旋轉動畫 */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+</style>`
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "其他動畫（不用 <code>&lt;transition&gt;</code>）",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "自己寫 CSS 的 keyframes 影格動畫",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsTransitionNote/VuejsCssKeyframesAnimationDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: 
+`<div id="app62">
+  <div id="app62-block" ref="block" :class="{ 'app62-shake': activated }">Block</div>
+  <button @click="activated = true">Shake it!</button>
+</div>
+
+<script>
+  const vm62 = Vue.createApp({
+    data() {
+      return {
+        activated: false
+      };
+    },
+    methods: {
+      reactivated() {
+        this.activated = false;
+      }
+    },
+    mounted() {
+      // 在mounted階段加入animationend事件
+      this.$refs.block.addEventListener("animationend", this.reactivated);
+    },
+    beforeUnmount() {
+      // 記得解除事件
+      this.$refs.block.removeEventListener("animationend", this.reactivated);
+    }
+  }).mount("#app62");
+</script>
+
+<style>
+  .app62-shake {
+    animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+    transform: translate3d(0, 0, 0);
+  }
+
+  @keyframes shake {
+    10%, 90% {
+      transform: translate3d(-1px, 0, 0);
+    }
+
+    20%, 80% {
+      transform: translate3d(2px, 0, 0);
+    }
+
+    30%, 50%, 70% {
+      transform: translate3d(-4px, 0, 0);
+    }
+
+    40%, 60% {
+      transform: translate3d(4px, 0, 0);
+    }
+  }
+</style>`,
+              jsCode: null,
+              vueSFCCode: 
+`<template>
+  <div ref="block" :class="{ 'app62-shake': activated }">Block</div>
+  <button @click="activated = true">Shake it!</button>
+</template>
+
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
+
+const block = ref(null);
+const activated = ref(false);
+
+function reactivated() {
+  activated.value = false;
+};
+
+onMounted(() => {
+  // 在onMounted階段加入animationend事件
+  block.value.addEventListener("animationend", reactivated);
+});
+
+onBeforeUnmount(() => {
+  // 記得解除事件
+  block.value.removeEventListener("animationend", reactivated);
+});
+</script>
+
+<style scoped>
+.app62-shake {
+  animation: shake 0.82s cubic-bezier(0.36, 0.07, 0.19, 0.97);
+  transform: translate3d(0, 0, 0);
+}
+
+@keyframes shake {
+  10%, 90% {
+    transform: translate3d(-1px, 0, 0);
+  }
+
+  20%, 80% {
+    transform: translate3d(2px, 0, 0);
+  }
+
+  30%, 50%, 70% {
+    transform: translate3d(-4px, 0, 0);
+  }
+
+  40%, 60% {
+    transform: translate3d(4px, 0, 0);
+  }
+}
+
+button {
+  cursor: pointer;
+}
+</style>`
             }
           },
           {
-            detailTitle: null,
-            detailSubtitle: null,
+            detailTitle: "與其他 CSS 工具庫搭配",
+            detailSubtitle: "以 Animation.css 為例。",
             detailContent: null,
-            detailComponent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsTransitionNote/VuejsAnimationCssAnimationDemo.vue")
+            ),
             detailCode: {
-              htmlCode: null,
+              htmlCode: 
+`<div id="app63">
+  <div id="app63-wrap">
+    <button
+      v-for="c in animateClasses"
+      :key="c"
+      @click="activedAnimate(c)"
+    >
+      {{ c }}
+    </button>
+  </div>
+
+  <!-- 透過v-bind:class來控制class屬性 -->
+  <div id="app63-block" ref="block" :class="animatedClassName">Block</div>
+</div>
+
+<script>
+  const vm63 = Vue.createApp({
+    data() {
+      return {
+        animateClasses: [
+          'bounce',
+          'rubberBand',
+          'tada',
+          'shakeY',
+          'shakeX'
+        ],
+        animatedClassName: ''
+      };
+    },
+    methods: {
+      activedAnimate(className) {` + "\n" +
+'        this.animatedClassName = `animate__animated animate__${className}`;' + "\n" +
+`      }
+    }
+  }).mount("#app63");
+</script>
+
+<style>
+  #app63-block {
+    display: block;
+    width: 120px;
+    height: 80px;
+    line-height: 80px;
+    text-align: center;
+    background-color: #3eaf7c;
+    color: #ffffff;
+  }
+</style>`,
               jsCode: null,
-              vueSFCCode: null
+              vueSFCCode: 
+`<template>
+  <div id="app63-wrap">
+    <button
+      v-for="c in animateClasses"
+      :key="c"
+      @click="activedAnimate(c)"
+    >
+      {{ c }}
+    </button>
+  </div>
+
+  <!-- 透過v-bind:class來控制class屬性 -->
+  <div
+    ref="block"
+    class="app63-block"
+    :class="animatedClassName"
+  >
+    Block
+  </div>
+</template>
+
+<script setup>
+import { ref } from "vue";
+
+const animateClasses = ref([
+  "bounce",
+  "rubberBand",
+  "tada",
+  "shakeY",
+  "shakeX"
+]);
+const animatedClassName = ref("");
+
+function activedAnimate(className) {` + "\n" +
+'  animatedClassName.value = `animate__animated animate__${className}`;' + "\n" +
+`};
+</script>
+
+<style scoped>
+#app63-block {
+  display: block;
+  width: 120px;
+  height: 80px;
+  line-height: 80px;
+  text-align: center;
+  background-color: #3eaf7c;
+  color: #ffffff;
+}
+
+button {
+  cursor: pointer;
+}
+</style>`
             }
           }
         ]

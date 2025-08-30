@@ -81,7 +81,28 @@ const routes = [
           {
             path: "vuejs-note",
             name: "vuejs-note",
-            component: () => import("../views/WebNote/VuejsNoteView.vue")
+            component: () => import("../views/WebNote/VuejsNoteView.vue"),
+            children: [
+              {
+                path: "route-practice", // 這裡開頭不能加'/'，否則會被帶回根目錄
+                name: "route-practice",
+                component: () => import("../components/WebNoteView/VuejsNoteView/VuejsVueRouterNote/VuejsVueRouterDemo/RoutePractice.vue"),
+                children: [
+                  {
+                    path: "users/:userId",  // 這裡的:userId已由RoutePractice.vue（上一層的元件）決定
+                    name: "users",
+                    component: () => import("../components/WebNoteView/VuejsNoteView/VuejsVueRouterNote/VuejsVueRouterDemo/RoutePracticeDynamicRouteMatching.vue"),
+                    children: [
+                      {
+                        path: "posts",
+                        name: "posts",
+                        component: () => import("../components/WebNoteView/VuejsNoteView/VuejsVueRouterNote/VuejsVueRouterDemo/RoutePracticeDynamicRouteMatchingPost.vue")
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
           },
           {
             path: "python-note",

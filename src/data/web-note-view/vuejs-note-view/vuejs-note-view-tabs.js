@@ -6999,6 +6999,390 @@ button {
     ]
   },
   {
+    id: "vuejsVueRouterNote",
+    title: "Vue Router",
+    description: null,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: "HTML 或 <code>&lt;template&gt;</code>",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "<code>&lt;router-view&gt;</code> 與 <code>&lt;router-link&gt;</code>",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: 
+`<!-- <router-link>在編譯後會變成<a>，使用to屬性來處理目標URL -->
+
+<!-- 透過route name（具名路由）導航，不依賴URL路徑 -->
+<router-link :to="{ name: 'about-me' }"></router-link>
+
+<!-- 直接用URL路徑字串 -->
+<router-link to="/about-me"></router-link>
+
+<!-- 指定path -->
+<router-link :to="{ path: '/about-me' }"></router-link>
+
+
+
+<!-- 渲染route的位置 -->
+<router-view></router-view>`,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "JavaScript 的部分",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "router/index.js",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`import { createRouter, createWebHistory } from "vue-router";
+
+// 路由設定
+const routes = [
+  {
+    path: "",
+    name: "home",
+    component: () => import("../views/HomeView.vue"),
+  },
+  {
+    path: "/home",
+    redirect: "/",  // 路由轉址，重新導向首頁（HomeView.vue）
+  },
+  {
+    path: "/about-me",
+    name: "about-me",
+    component: () => import("../views/AboutMeView.vue"),
+    meta: { title: "關於我"}  // 網頁名稱
+  },
+  {
+    path: "/web-note",
+    name: "web-note",
+    component: () => import("../views/WebNoteView.vue"),
+    meta: { title: "網頁練習筆記"},
+    children: [
+      {
+        path: "web-note-simple",
+        name: "web-note-simple",
+        component: () => import("../views/WebNote/WebNoteSimpleView.vue")
+      }
+    ]
+  }
+];
+
+const router = createRouter({
+  history: createWebHistory(import.meta.env.BASE_URL),
+  routes,
+  // 若有兩個網頁之間互相切換時要停留在原捲動處，設定scrollBehavior()
+  scrollBehavior(to, from, savePosition) {
+    // 判斷是否為/activity與/activity/:id之間的跳轉
+    const isActivityPost = (route) => 
+      route.name === "activity" ||
+      route.name === "activity_post";
+
+    if (isActivityPost(to) && isActivityPost(from)) {
+      return false;  // 頁面返回會停留在原本捲動到的地方
+    }
+
+    // 其他情況：總是捲動到頁面最上方
+    return { top: 0 };
+  }
+});
+
+// 設定網頁個別的名稱（在routes中設定meta值）
+router.beforeEach((to, from, next) => {
+  const siteName = "阿蛤ㄉ窩";
+  if (to.meta.title) {` + "\n" +
+'    document.title = `${siteName}｜${to.meta.title}`;' + "\n" +
+`  } else {
+    document.title = siteName;
+  };
+  next();
+});
+
+export default router;`,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "main.js",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`import { createApp } from "vue";
+import App from "./App.vue";
+
+// Vue-router
+import router from "./router/index.js";
+
+const app = createApp(App);
+app.use(router);
+
+app.mount("#app");`,
+              vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "一個動態路由的例子",
+        listSubtitle: '<p style="color: rgba(33, 37, 41, 0.75); font-size: 12px; font-style: italic; margin-bottom: 8px;">- 使用 jsonplaceholder 的假資料。</p>',
+        listComponent: defineAsyncComponent(() =>
+          import("../../../components/WebNoteView/VuejsNoteView/VuejsVueRouterNote/VuejsVueRouterDemo.vue")
+        ),
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "router/index.js 路由設定",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`const routes = [
+  {
+    ...
+  },
+  {
+    path: "vuejs-note",
+    name: "vuejs-note",
+    component: () => import("../views/WebNote/VuejsNoteView.vue"),
+    children: [
+      {
+        path: "route-practice", // 這裡開頭不能加'/'，否則會被帶回根目錄
+        name: "route-practice",
+        component: () => import("../components/WebNoteView/VuejsNoteView/VuejsVueRouterNote/VuejsVueRouterDemo/RoutePractice.vue"),
+        children: [
+          {
+            path: "users/:userId",  // 這裡的:userId已由RoutePractice.vue（上一層的元件）決定
+            name: "users",
+            component: () => import("../components/WebNoteView/VuejsNoteView/VuejsVueRouterNote/VuejsVueRouterDemo/RoutePracticeDynamicRouteMatching.vue"),
+            children: [
+              {
+                path: "posts",
+                name: "posts",
+                component: () => import("../components/WebNoteView/VuejsNoteView/VuejsVueRouterNote/VuejsVueRouterDemo/RoutePracticeDynamicRouteMatchingPost.vue")
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  }
+];`,
+              vueSFCCode: 
+`<!-- VuejsVueRouterDemo.vue -->
+<template>
+  <router-link :to="{ name: 'route-practice' }">路由練習</router-link>
+  <router-view></router-view>
+</template>
+
+<script setup></script>
+
+<style scoped></style>
+
+
+
+
+
+<!-- RoutePractice.vue -->
+<template>
+  <ul>
+    <li v-for="i in 5" :key="i">
+      <router-link :to="{ name: 'users', params: { userId: i } }">
+        /web_note/users/{{ i }}
+      </router-link>
+    </li>
+  </ul>
+
+  <router-view></router-view>
+</template>
+
+<script setup></script>
+
+<style scoped></style>
+
+
+
+
+
+<!-- RoutePracticeDynamicRouteMatching.vue -->
+<template>
+  <h3>User ID: {{ $route.params.userId }} - {{ userInfo.name }}</h3>
+  <p>
+    username: {{ userInfo.name }}<br />
+    email: {{ userInfo.email }}<br />
+    phone: {{ userInfo.phone }}
+  </p>
+  <hr />
+  <h4>原始資料如下：</h4>
+  <pre><code>{{ userInfo }}</code></pre>
+  <br />
+  <router-link :to="{ name: 'posts', params: { userId } }">
+    查看post
+  </router-link>
+  <router-view></router-view>
+</template>
+
+<script setup>
+import { ref, computed, watch, onMounted } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();  // 先呼叫一次存在route，避免多次呼叫useRoute()
+const userInfo = ref({});
+
+// 假設URL為'/users/1'，'route.params.userId'的值就是1
+const userId = computed(() => route.params.userId);
+  
+async function fetchUserInfo(id) {
+  const res = await fetch("https://jsonplaceholder.typicode.com/users/" + id);
+  return res.json();
+};
+
+onMounted(async () => {
+  userInfo.value = await fetchUserInfo(userId.value);
+});
+
+// 監聽userId的變化
+watch(userId, async (val) => {
+  userInfo.value = await fetchUserInfo(val);
+});
+</script>
+
+<style scoped></style>
+
+
+
+
+
+<!-- RoutePracticeDynamicRouteMatchingPost.vue -->
+<template>
+  <h3>Post form User-{{ userId }}</h3>
+  <ol>
+    <li v-for="post in posts" :key="post.id">
+      <h4>{{ post.id }}</h4>
+      <p>{{ post.body }}</p>
+    </li>
+  </ol>
+</template>
+
+<script setup>
+import { ref, computed, onMounted } from "vue";
+import { useRoute } from "vue-router";
+
+const route = useRoute();  // 把route先存起來
+const posts = ref([]);
+
+// 取得網址路由提供的userId
+const userId = computed(() => route.params.userId);
+
+// api:取得指定user的post列表
+async function fetchUserPosts(id) {
+  const res = await fetch("https://jsonplaceholder.typicode.com/posts?userId=" + id);
+  return res.json();
+};
+
+onMounted(async () => {
+  posts.value = await fetchUserPosts(userId.value);
+});
+</script>
+
+<style scoped></style>`
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "導航守衛（Navigation Guards）",
+        listSubtitle: '詳情請見 <a href="https://router.vuejs.org/zh/guide/advanced/navigation-guards.html" target="_blank">Vue Router 官網 - Navigation Guards</a>',
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "vuejsPiniaNote",
+    title: "Pinia",
+    description: null,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: null,
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     id: "vuejs??????Note",
     title: "？？？？？",
     description: null,

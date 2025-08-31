@@ -7187,7 +7187,7 @@ app.mount("#app");`,
         component: () => import("../components/WebNoteView/VuejsNoteView/VuejsVueRouterNote/VuejsVueRouterDemo/RoutePractice.vue"),
         children: [
           {
-            path: "users/:userId",  // 這裡的:userId已由RoutePractice.vue（上一層的元件）決定
+            path: "users/:userId",  // 這裡的:userId會被當成參數傳給Vue Router
             name: "users",
             component: () => import("../components/WebNoteView/VuejsNoteView/VuejsVueRouterNote/VuejsVueRouterDemo/RoutePracticeDynamicRouteMatching.vue"),
             children: [
@@ -7372,6 +7372,53 @@ onMounted(async () => {
             detailSubtitle: null,
             detailContent: null,
             detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
+    id: "vuejsSomeInterestingNote",
+    title: "一些小工具",
+    description: null,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: "小工具們",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "ToDo List",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsSomeInterestingNote/ToDoApp.vue")
+            ),
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueSFCCode: null
+            }
+          },
+          {
+            detailTitle: "複利計算器",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsSomeInterestingNote/CompoundInterestCalculator/CompoundInterestCalculator.vue")
+            ),
             detailCode: {
               htmlCode: null,
               jsCode: null,

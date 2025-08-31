@@ -1,1 +1,0 @@
-import{r as s,c as l,f as o,y as r,i as c,I as n,b as u,t as i}from"./index-BUCvJxgH.js";const f={__name:"VuejsVModelCheckboxSingleDemo",setup(p){const e=s(!1);return(d,a)=>(o(),l("label",null,[r(u("input",{type:"checkbox","onUpdate:modelValue":a[0]||(a[0]=t=>e.value=t)},null,512),[[n,e.value]]),c(" Status: "+i(e.value),1)]))}};export{f as default};

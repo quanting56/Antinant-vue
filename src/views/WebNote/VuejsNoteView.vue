@@ -145,7 +145,7 @@ import { vuejsNoteViewTabs } from "../../data/web-note-view/vuejs-note-view/vuej
 const tabs = vuejsNoteViewTabs;
 
 // 處理 tab 切換
-const activeTab = ref(tabs[14].id);
+const activeTab = ref(tabs[0].id);
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];
 });

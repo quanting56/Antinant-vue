@@ -7353,17 +7353,31 @@ onMounted(async () => {
   {
     id: "vuejsPiniaNote",
     title: "Pinia",
-    description: null,
+    description: 
+`把 <code>&lt;script setup&gt;</code> 裡 data/computed/methods 移到一個可共享的 JS 模組（store），然後在各元件 <code>import</code> 來用。
+<ul style="line-height: 1.7;">
+  <li><code>state</code> ≈ <code>data</code></li>
+  <li><code>getters</code> ≈ <code>computed</code></li>
+  <li><code>actions</code> ≈ <code>methods</code></li>
+</ul>`,
     descriptionComponent: null,
     descriptionComponentStyle: null,
     lists: [
       {
-        listTitle: null,
+        listTitle: "開始使用",
         listSubtitle: null,
         listComponent: null,
         listCode: {
-          htmlCode: null,
-          jsCode: null,
+          htmlCode: "npm install pinia",
+          jsCode: 
+`// main.js
+import { createApp } from "vue";
+import { createPinia } from "pinia";
+import App from "./App.vue";
+
+const app = createApp(App);
+app.use(createPinia());  // 啟用 Pinia
+app.mount("#app");`,
           vueSFCCode: null
         },
         listDetails: [
@@ -7376,6 +7390,226 @@ onMounted(async () => {
               htmlCode: null,
               jsCode: null,
               vueSFCCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "Options Store（物件式，像 Vue Options API）",
+        listSubtitle: 
+`<ul style="line-height: 1.7;">
+  <li><code>state</code> ≈ <code>data()</code></li>
+  <li><code>getters</code> ≈ <code>computed</code></li>
+  <li><code>actions</code> ≈ <code>methods</code>/<code>functions</code></li>
+</ul>`,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "一個一般例子",
+            detailSubtitle: "元件.vue 幾乎不含邏輯，只需要 import store + 呼叫 store 的方法就好。",
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsPiniaNote/VuejsCounterDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`// stores/counter.js
+import { defineStore } from "pinia";
+
+export const useCounterStore = defineStore("counter", {
+  state: () => ({
+    count: 0,  // 狀態
+  }),
+  getters: {
+    doubleCount: (state) => state.count * 2,  // 計算屬性（像computed）
+  },
+  actions: {
+    increment() {
+      this.count++
+    }
+  }
+});`,
+              vueSFCCode: 
+`<template>
+  <div>
+    <p>Count: {{ counter.count }}</p>
+    <p>Double: {{ counter.doubleCount }}</p>
+    <button @click="counter.increment">+1</button>
+    <button @click="counter.reset">reset</button>
+  </div>
+</template>
+
+<script setup>
+import { useCounterStore } from "../stores/counter";
+
+// 取得 store
+const counter = useCounterStore();
+</script>
+
+<style scoped></style>`
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "Setup Store（函式式，像 Vue Composition API）",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueSFCCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "一個一般例子",
+            detailSubtitle: "元件.vue 幾乎不含邏輯，只需要 import store + 呼叫 store 的方法就好。",
+            detailContent: null,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsPiniaNote/VuejsProductDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`// stores/productStore.js
+import { defineStore } from "pinia";
+import { ref, computed } from "vue";
+
+export const useProductStore = defineStore("productStore", () => {
+  // state
+  const product = ref("Pinia");
+
+  // getter
+  const upperProduct = computed(() => product.value.toUpperCase());
+
+  // action
+  function setProduct(newProduct) {
+    product.value = newProduct;
+  };
+
+  // return 必須列出要給外部用的東西
+  return { product, upperProduct, setProduct };
+});`,
+              vueSFCCode: 
+`<template>
+  <div>
+    <p>產品名稱：{{ productStore.product }}</p>
+    <p>大寫名稱：{{ productStore.upperProduct }}</p>
+    <button @click="productStore.setProduct('Apple')">換 Apple</button>
+    <button @click="productStore.setProduct('Banana')">換 Banana</button>
+    <button @click="productStore.setProduct('Pinia')">換 Pinia</button>
+  </div>
+</template>
+
+<script setup>
+import { useProductStore } from "../../../../stores/webNote/VuejsNotePiniaNote/productStore"
+
+// 拿到 store
+const productStore = useProductStore();
+</script>
+
+<style scoped></style>`
+            }
+          },
+          {
+            detailTitle: "一個使用 D3.js 繪圖的例子",
+            detailSubtitle: null,
+            detailContent: 
+`<p style="text-indent: 32px;">D3 的責任主要是「<strong>把資料轉成視覺元素（SVG/Canvas）</strong>」，跟 <strong>畫面</strong> 高度綁定，所以通常不會放在 Pinia store 裡。</p>
+<ul>
+  <li>Store：管理狀態（state）、邏輯（actions）、轉換資料（getters），負責準備乾淨的資料（例如一個陣列）。</li>
+  <li>元件 (SFC)：消費 store 的資料，並決定怎麼顯示（元件用 D3 畫圖）。</li>
+</ul>`,
+            detailComponent: defineAsyncComponent(() =>
+              import("../../../components/WebNoteView/VuejsNoteView/VuejsPiniaNote/VuejsD3ChartDemo.vue")
+            ),
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`// stores/chartStore.js
+import { defineStore } from "pinia";
+import { ref } from "vue";
+
+export const useChartStore = defineStore("chart", () => {
+  const data = ref([]);
+
+  async function fetchChartData() {
+    const res = await fetch("https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json");
+    const json = await res.json();
+    data.value = json.map(d => ({
+      x: +d.longitude,  // 經度
+      y: +d.latitude,  // 緯度
+      name: d.sna  // 站名
+    })); // 整理成 D3 好處理的格式
+  };
+
+  return { data, fetchChartData };
+});
+              `,
+              vueSFCCode: 
+`<template>
+  <svg ref="myChart"></svg>
+</template>
+
+<script setup>
+import { ref, onMounted, watch } from "vue";
+import { useChartStore } from "../../../../stores/webNote/VuejsNotePiniaNote/d3ChartStore";
+import * as d3 from "d3";
+
+const chartStore = useChartStore();
+const myChart = ref(null);
+
+onMounted(() => {
+  chartStore.fetchChartData();
+});
+
+// 監聽 store.data 更新 -> 重新畫圖
+watch(() => chartStore.data, (newData) => {
+  if (newData.length > 0) drawChart(newData);
+});
+
+function drawChart(data) {
+  const width = 400;
+  const height = 400;
+  const margin = 15;
+  
+  const svg = d3.select(myChart.value)
+    .attr("width", width)
+    .attr("height", height)
+    .style("border", "1px solid lightgray");
+
+  svg.selectAll("*").remove(); // 清空舊圖
+
+  // 標題
+  svg.append("text")
+    .text("《臺北市 Ubike 站點圖》")
+    .attr("x", margin)
+    .attr("y", height - margin);
+
+  // 建立投影：把經緯度轉成畫布上的座標
+  const projection = d3.geoMercator()
+    .center([121.54, 25.06]) // 以台北為中心（經度, 緯度）
+    .scale(100000) // 縮放倍率
+    .translate([width / 2, height / 2]); // 置中
+
+  // 畫點
+  svg.selectAll("circle")
+    .data(data)
+    .join("circle")
+    .attr("cx", d => projection([d.x, d.y])[0]) // 投影後的 x
+    .attr("cy", d => projection([d.x, d.y])[1]) // 投影後的 y
+    .attr("r", 2)
+    .attr("fill", "green");
+};
+</script>
+
+<style scoped></style>`
             }
           }
         ]
@@ -7419,38 +7653,6 @@ onMounted(async () => {
             detailComponent: defineAsyncComponent(() =>
               import("../../../components/WebNoteView/VuejsNoteView/VuejsSomeInterestingNote/CompoundInterestCalculator/CompoundInterestCalculator.vue")
             ),
-            detailCode: {
-              htmlCode: null,
-              jsCode: null,
-              vueSFCCode: null
-            }
-          }
-        ]
-      }
-    ]
-  },
-  {
-    id: "vuejs??????Note",
-    title: "？？？？？",
-    description: null,
-    descriptionComponent: null,
-    descriptionComponentStyle: null,
-    lists: [
-      {
-        listTitle: null,
-        listSubtitle: null,
-        listComponent: null,
-        listCode: {
-          htmlCode: null,
-          jsCode: null,
-          vueSFCCode: null
-        },
-        listDetails: [
-          {
-            detailTitle: null,
-            detailSubtitle: null,
-            detailContent: null,
-            detailComponent: null,
             detailCode: {
               htmlCode: null,
               jsCode: null,

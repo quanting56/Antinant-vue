@@ -170,11 +170,65 @@ const data = res.map((i) => {
   return i;
 });  // 日期格式轉換
 `
+  },
+  {
+    id: "ES6ClassNote",
+    title: "一個典型的 class",
+    description: 
+`<p style="padding-top: 8px;">一個常見的 <code>class</code> 結構包含：</p>
+<ul style="line-height: 1.65;">
+  <li><strong>constructor</strong> → 初始化屬性</li>
+  <li><strong>instance methods</strong> → 實例可以呼叫的方法</li>
+  <li><strong>getters</strong> / <strong>setters</strong> → 讀取或修改屬性時做特殊處理</li>
+  <li><strong>static methods</strong> → 類別本身的方法（不用 <code>new</code> 就能呼叫）</li>
+  <li><strong>繼承（extends + super）</strong>→ 讓子類別可以共用父類別的功能</li>
+</ul>`,
+    demoStyle: null,
+    component: null,
+    demo: null,
+    demoJS: 
+`class Person {
+  constructor(name, age) {
+    this.name = name;
+    this.age = age;
+  }
+
+  // Instance method
+  sayHello() {` + "\n" +
+"    return `Hi, I'm ${this.name}`;" + "\n" +
+`  }
+
+  // Getter
+  get isAdult() {
+    return this.age >= 18;
+  }
+
+  // Setter
+  set rename(newName) {
+    this.name = newName;
+  }
+
+  // Static method
+  static species() {
+    return "Homo sapiens";
+  }
+}
+
+// 建立實例
+const p = new Person("Kuro", 25);
+console.log(p.sayHello());  // "Hi, I'm Kuro"
+console.log(p.isAdult);     // true
+p.rename = "Ken";
+console.log(p.sayHello());  // "Hi, I'm Ken"
+
+// 不用 new，直接呼叫 class 的方法
+console.log(Person.species()); // "Homo sapiens"
+`
   }
   // ...把其他 tab 照此格式一一加入 tabs 陣列
 ];
 
-const activeTab = ref(tabs[0].id);
+const activeTab = ref(tabs[3].id);
 
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];

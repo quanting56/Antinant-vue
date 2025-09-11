@@ -73,6 +73,13 @@ export const programLearningTimelineData = [
       },
       {
         time: "2025.??",
+        title: "Tailwind｜？？？",
+        text: null,
+        hashtag: null,
+        image: null
+      },
+      {
+        time: "2025.??",
         title: "Node.js｜？？？",
         text: null,
         hashtag: null,

@@ -228,7 +228,7 @@ console.log(Person.species()); // "Homo sapiens"
   // ...把其他 tab 照此格式一一加入 tabs 陣列
 ];
 
-const activeTab = ref(tabs[3].id);
+const activeTab = ref(tabs[0].id);
 
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];

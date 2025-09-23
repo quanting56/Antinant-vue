@@ -26,21 +26,75 @@
           <h3 class="content-title">{{ currentTab.title }}</h3>
           <hr />
 
-          <div class="content-body">
-            <!-- 先顯示說明，再顯示程式碼 -->
-            <div
-              class="description"
-              v-if="currentTab.description"
-              v-html="currentTab.description"
-            ></div>
+          <!-- 總說明 -->
+          <div
+            class="description"
+            v-if="currentTab.description"
+            v-html="currentTab.description"
+          ></div>
 
-            <div class="code">
-              <template v-if="currentTab.pythonCode">
-                Python code:
-                <pre><code class="language-python">{{ currentTab.pythonCode }}</code></pre>
-              </template>
-            </div>
-          </div>
+          <!-- 大項說明 -->
+          <ul
+            v-if="currentTab.lists.length && currentTab.lists[0].listTitle"
+            class="content-body"
+          >
+            <li
+              v-for="list in currentTab.lists"
+              :key="list.listTitle"
+              class="list"
+            >
+              <h4 class="list-title" v-html="list.listTitle"></h4>
+              <div
+                v-if="list.listSubtitle"
+                class="list-subtitle"
+                v-html="list.listSubtitle"
+              ></div>
+
+              <!-- 大項程式碼 -->
+              <div
+                v-if="list.listCode.pythonCode"
+                class="code"
+              >
+                <template v-if="list.listCode.pythonCode">
+                  Python code:
+                  <pre><code class="language-python">{{ list.listCode.pythonCode }}</code></pre>
+                </template>
+              </div>
+
+
+              <!-- 小項說明 -->
+              <ol v-if="list.listDetails.length && list.listDetails[0].detailTitle">
+                <li
+                  v-for="detail in list.listDetails"
+                  :key="detail.detailTitle"
+                  class="detail"
+                >
+                  <h5 class="detail-title" v-html="detail.detailTitle"></h5>
+                  <div
+                    v-if="detail.detailSubtitle"
+                    class="detail-subtitle"
+                    v-html="detail.detailSubtitle"
+                  ></div>
+                  <div
+                    v-if="detail.detailContent"
+                    class="detail-content"
+                    v-html="detail.detailContent"
+                  ></div>
+
+                  <!-- 小項程式碼 -->
+                  <div
+                    v-if="detail.detailCode.pythonCode"
+                    class="code"
+                  >
+                    <template v-if="detail.detailCode.pythonCode">
+                      Python code:
+                      <pre><code class="language-python">{{ detail.detailCode.pythonCode }}</code></pre>
+                    </template>
+                  </div>
+                </li>
+              </ol>
+            </li>
+          </ul>
         </section>
       </transition>
     </div>
@@ -48,66 +102,24 @@
 </template>
 
 <script setup>
+import { onMounted, ref, computed, nextTick } from "vue";
+
+// import 資料進來渲染
+import { pythonNoteViewTabs } from "../../data/web-note-view/python-note-view/python-note-view-tabs";
+const tabs = pythonNoteViewTabs;
+
+// 處理 tab 切換
+const activeTab = ref(tabs[6].id);
+const currentTab = computed(() => {
+  return tabs.find(t => t.id === activeTab.value) || tabs[0];
+});
+
+
 // 預先 import Highlight.js
 import hljs from "highlight.js/lib/core";
 import python from "highlight.js/lib/languages/python";
 import "highlight.js/styles/vs2015.css";
 hljs.registerLanguage("python", python);
-
-import { onMounted, ref, computed, nextTick } from "vue";
-
-// import照片，用於tabs
-// import ... from ...;
-
-const tabs = [
-  {
-    id: "pythonZipProcessNote",
-    title: "解壓縮/壓縮 zip",
-    description: "<p><code>import zipfile</code> ，解壓縮 zip 或壓縮 zip。</p>",
-    pythonCode: 
-`import zipfile
-
-
-# 解壓縮
-files = zipfile.ZipFile("/Users/dongguanting/Downloads/python-3.5.1-embed-win32.zip")
-print(files.namelist())  # 顯示zip裡包含了哪些檔案
-
-# 解壓縮"python.exe"這個檔案到路徑
-files.extract("python.exe", r"/Users/dongguanting/Downloads")
-
-# 解壓縮全部檔案到路徑
-files.extractall("/Users/dongguanting/Downloads")
-
-files.close() # 關閉檔案物件
-
-
-# 壓縮檔案
-zip_file = zipfile.ZipFile("/Users/dongguanting/Downloads/python.zip", mode="w")  # 壓縮後的檔名
-zip_file.write("/Users/dongguanting/Downloads/python.exe")  # 要壓縮的檔案
-zip_file.close()  # 關閉檔案物件`
-  },
-  {
-    id: "pythonOpenNote",
-    title: "存取檔案物件",
-    description: "<p>使用 <code>open()</code> 建立 <strong>檔案物件</strong> ，並進行操作。</p>",
-    pythonCode: 
-``
-  },
-  {
-    id: "python???Note",
-    title: "？？？",
-    description: "<p><code>import zipfile</code> ，解壓縮 zip 或壓縮 zip。</p>",
-    pythonCode: 
-``
-  },
-  // ...把其他 tab 照此格式一一加入 tabs 陣列
-];
-
-const activeTab = ref(tabs[1].id);
-
-const currentTab = computed(() => {
-  return tabs.find(t => t.id === activeTab.value) || tabs[0];
-});
 
 // 每次切換後重新 highlight
 onMounted(() => {
@@ -128,6 +140,10 @@ function handleHighlight() {
 </script>
 
 <style scoped>
+.python-note-view {
+  max-width: 100%;
+}
+
 /* 分欄布局 */
 .layout {
   display: flex;
@@ -181,6 +197,68 @@ function handleHighlight() {
   margin-bottom: 8px;
 }
 
+/* import 的內容格式 */
+::v-deep(.content h1),
+::v-deep(.content h2),
+::v-deep(.content h3:not(.content-title)),
+::v-deep(.content h4),
+::v-deep(.content h5),
+::v-deep(.content h6) {
+  margin-top: 16px;
+  margin-bottom: 8px;
+}
+
+.description {
+  margin-bottom: 36px;
+}
+
+.list {
+  margin-bottom: 60px;
+}
+
+.list-title {
+  font-size: 22px;
+}
+
+.list-subtitle {
+  margin-bottom: 28px;
+}
+
+.detail {
+  margin-bottom: 28px;
+}
+
+.detail-title {
+  font-size: 16px;
+}
+
+.detail-subtitle {
+  color: rgba(33, 37, 41, 0.75);
+  font-size: 12px;
+  font-style: italic;
+  margin-bottom: 16px;
+}
+
+.detail-subtitle ::v-deep(code) {
+  font-style: normal;
+}
+
+.detail-subtitle::before {
+  content: "- ";
+}
+
+.detail-content {
+  margin-top: 16px;
+  line-height: 1.6;
+}
+
+/* Demo 區塊樣式 */
+.lists-demo,
+.details-demo {
+  padding: 16px 16px;
+  margin-bottom: 8px;
+}
+
 /* 其他樣式寫在style.css裡 */
 pre code {
   padding: 24px;
@@ -208,5 +286,17 @@ pre code {
     padding: 8px 12px;
     border: 1px solid #cccccc;
   }
+}
+
+/* 表格樣式 */
+::v-deep(table) {
+  border: 1px solid #666666;
+  border-collapse: collapse;
+}
+
+::v-deep(th),
+::v-deep(td) {
+  border: 1px solid #666666;
+  padding: 4px;
 }
 </style>

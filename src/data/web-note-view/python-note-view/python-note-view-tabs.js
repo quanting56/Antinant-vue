@@ -591,45 +591,369 @@ for website in soup.find_all(class_ = "col"):  # 這裡的"class_"為html裡面�
   {
     id: "pythonTkinterNote",
     title: "Tkinter",
-    description: "<p>Vue.js 可以透過多種方式使用，依據不同的需求，選擇最適合的方法。（From ChatGPT）</p>",
+    description: "<p><strong>Tkinter</strong> 是 Python 提供開發 GUI 應用程式的標準函式庫，是 <u><b>T</b></u>ool <u><b>K</b></u>it <u><b>I</b></u>nterface 的簡稱。以下為 Tkinter 常見元件與佈局方法，最後還有一個「QR code Generator」應用程式的範例。</p>",
     lists: [
       {
-        listTitle: null,
+        listTitle: "基本元件",
         listSubtitle: null,
         listCode: {
           pythonCode: null,
         },
         listDetails: [
           {
-            detailTitle: null,
-            detailSubtitle: null,
+            detailTitle: "基本視窗",
+            detailSubtitle: "建立一個最簡單的空視窗，<code>mainloop()</code> 會讓程式持續等待使用者操作。",
             detailContent: null,
             detailCode: {
-              pythonCode: null,
+              pythonCode: 
+`import tkinter as tk
+base = tk.Tk()
+base.mainloop()  # 啟動事件迴圈（event loop），程式會停在這裡，不斷等待並處理使用者互動`,
+            }
+          },
+          {
+            detailTitle: "Button 按鈕",
+            detailSubtitle: "建立按鈕，用 <code>.pack()</code> 自動排列在視窗中。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+base = tk.Tk()
+
+button = tk.Button(base, text="PUSH")
+button.pack()`
+            }
+          },
+          {
+            detailTitle: "多個 Button 按鈕 + Pack 佈局",
+            detailSubtitle: "<code>.pack(side=...)</code>，<code>side</code> 有 4 個參數——<code>tk.TOP</code>、<code>tk.LEFT</code>、<code>tk.RIGHT</code>、<code>tk.BOTTOM</code>，可以分別控制靠上、靠左、靠右、靠下。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+base = tk.Tk()
+
+button1 = tk.Button(base, text="push1", width=20).pack()
+button2 = tk.Button(base, text="push2").pack(side=tk.LEFT)
+button3 = tk.Button(base, text="push3").pack(side=tk.RIGHT)`
+            }
+          },
+          {
+            detailTitle: "多個 Button 按鈕 + Grid 佈局",
+            detailSubtitle: "<code>.grid()</code> 用表格方式控制元件位置。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+base = tk.Tk()
+
+button1 = tk.Button(base, text="push1")
+button2 = tk.Button(base, text="push2")
+button3 = tk.Button(base, text="push3")
+button1.grid(row=0, column=0)
+button2.grid(row=0, column=1)
+button3.grid(row=1, column=1)`
+            }
+          },
+          {
+            detailTitle: "多個 Button 按鈕 + Place 佈局",
+            detailSubtitle: "<code>.place(x, y)</code> 直接用座標定位元件。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+base = tk.Tk()
+
+button1 = tk.Button(base, text="push1")
+button2 = tk.Button(base, text="push2")
+button3 = tk.Button(base, text="push3")
+button1.place(x=0, y=0)
+button2.place(x=50, y=30)
+button3.place(x=100, y=60)`
+            }
+          },
+          {
+            detailTitle: "Button 搭配 Command",
+            detailSubtitle: "透過 <code>command</code> 設定按鈕點即時的處理。此例中，按下按鈕會執行 <code>push()</code> 函式。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+base = tk.Tk()
+
+def push():
+    print("Hello World!")
+
+button = tk.Button(base, text="PUSH", command=push).pack()`
+            }
+          },
+          {
+            detailTitle: "Label",
+            detailSubtitle: "建立 Label 標籤，可設定文字、背景色、寬度。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+base = tk.Tk()
+
+tk.Label(base, text="紅", bg="red", width=20).pack()
+tk.Label(base, text="綠", bg="green", width=20).pack()
+tk.Label(base, text="藍", bg="blue", width=20).pack()`
+            }
+          },
+          {
+            detailTitle: "CheckButton（複選框）",
+            detailSubtitle: "建立複選框 CheckButton，透過 <code>BooleanVar()</code> 記錄是否勾選。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+base = tk.Tk()
+
+topping = {0: "海苔", 1: "水煮蛋", 2: "豆芽菜", 3: "叉燒"}
+check_value = {}
+for i in range(len(topping)):
+    check_value[i] = tk.BooleanVar()
+    tk.Checkbutton(base, variable=check_value[i], text=topping[i]).pack(anchor=tk.W)  # "anchor=tk.W"代表固定於基本視窗的西側(West)
+
+def buy():
+    for i in check_value:
+        if check_value[i].get() == True:
+            print(topping[i])
+
+tk.Button(base, text="點菜", command=buy).pack()`
+            }
+          },
+          {
+            detailTitle: "RadioButton（單選框）",
+            detailSubtitle: "建立單選框 Radiobutton，透過 <code>IntVar()</code> 記錄選項值。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+base = tk.Tk()
+
+radio_value = tk.IntVar()
+radio_value.set(1)
+lunch = {0: "A套餐", 1: "B套餐", 2: "C套餐"}
+tk.Radiobutton(base, text=lunch[0], variable=radio_value, value=0).pack()
+tk.Radiobutton(base, text=lunch[1], variable=radio_value, value=1).pack()
+tk.Radiobutton(base, text=lunch[2], variable=radio_value, value=2).pack()
+
+def buy():
+    value = radio_value.get()
+    print(lunch[value])
+
+tk.Button(base, text="點菜", command=buy).pack()`
+            }
+          },
+          {
+            detailTitle: "MessageBox",
+            detailSubtitle: "彈出對話框，可能有選項，例如詢問使用者是否要選「Yes / No」。",
+            detailContent: 
+`tkinter 提供了 8 種 MessageBox：
+<table style="margin-bottom: 24px;">
+  <thead>
+    <tr>
+      <th>方法名稱</th>
+      <th>功能</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><code>askokcancel()</code></td>
+      <td>OK / Cancel</td>
+    </tr>
+    <tr>
+      <td><code>askquestion()</code></td>
+      <td>Yes / No</td>
+    </tr>
+    <tr>
+      <td><code>askretrycancel()</code></td>
+      <td>Retry / Cancel</td>
+    </tr>
+    <tr>
+      <td><code>askyesno()</code></td>
+      <td>Yes / No</td>
+    </tr>
+    <tr>
+      <td><code>askyesnocancel()</code></td>
+      <td>Yes / No / Cancel</td>
+    </tr>
+    <tr>
+      <td><code>showerror()</code></td>
+      <td>顯示錯誤圖示與訊息<br />（只有用於關閉視窗的 OK 按鈕）</td>
+    </tr>
+    <tr>
+      <td><code>showinfo()</code></td>
+      <td>顯示錯誤圖示與訊息<br />（只有用於關閉視窗的 OK 按鈕）</td>
+    </tr>
+    <tr>
+      <td><code>showwarning()</code></td>
+      <td>顯示錯誤圖示與訊息<br />（只有用於關閉視窗的 OK 按鈕）</td>
+    </tr>
+  </tbody>
+</table>`,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+from tkinter import messagebox
+base = tk.Tk()  # 建立視窗
+base.withdraw()  # 隱藏建立的視窗
+
+response = tk.messagebox.askyesno("糟糕！！！", "還好嗎？")  # askyesno(MessageBox標題, MessageBox顯示文字)
+
+if (response == True):
+    print("沒問題")
+else:
+    print("有問題")`
+            }
+          },
+          {
+            detailTitle: "Entry（輸入框） + Label",
+            detailSubtitle: "輸入框 <code>Entry()</code> 與標籤 <code>Label()</code> 綁定變數，輸入會即時顯示。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+base = tk.Tk()
+
+string = tk.StringVar()  # 用以操作字串
+entry = tk.Entry(base, textvariable=string).pack()  # 建立輸入欄
+label = tk.Label(base, textvariable=string).pack()  # 建立Label`
+            }
+          },
+          {
+            detailTitle: "Menu 選單",
+            detailSubtitle: "製作上方功能選單，可以點選觸發動作。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+base = tk.Tk()
+
+def supermode():
+    print("super mode!")
+
+menubar = tk.Menu(base)
+filemenu = tk.Menu(menubar)
+filemenu.add_command(label="super mode", command=supermode)
+menubar.add_cascade(label="Operation", menu=filemenu)
+base.config(menu=menubar)  # 製作選單列`
+            }
+          },
+          {
+            detailTitle: "Menu + FileDialog",
+            detailSubtitle: "增加檔案操作選單，包含「開啟檔案」、「退出」、「尋找」等。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import tkinter as tk
+from tkinter import filedialog
+base = tk.Tk()
+
+def open():
+    filename = filedialog.askopenfilename()
+    print("open file => " + filename)
+
+def exit():
+    base.destroy()
+
+def find():
+    print("find!")
+
+menubar = tk.Menu(base)
+filemenu = tk.Menu(menubar)
+menubar.add_cascade(label="File", menu=filemenu)
+filemenu.add_command(label="open", command=open)
+filemenu.add_separator()
+filemenu.add_command(label="exit", command=exit)
+editmenu = tk.Menu(menubar)
+menubar.add_cascade(label="Edit", menu=editmenu)
+editmenu.add_command(label="find", command=find)
+base.config(menu=menubar)`,
             }
           }
         ]
-      }
-    ]
-  },
-  {
-    id: "python???Note",
-    title: "？？？",
-    description: null,
-    lists: [
+      },
       {
-        listTitle: null,
+        listTitle: "一個範例",
         listSubtitle: null,
         listCode: {
           pythonCode: null,
         },
         listDetails: [
           {
-            detailTitle: null,
+            detailTitle: "使用指令生成 QR code",
             detailSubtitle: null,
             detailContent: null,
             detailCode: {
-              pythonCode: null,
+              pythonCode: 
+`import qrcode
+
+encode_text = "https://quanting56.github.io/Antinant/index.html"
+img = qrcode.make(encode_text)
+
+img.show()`
+            }
+          },
+          {
+            detailTitle: "QR code Generator",
+            detailSubtitle: "可以將網址轉成 QR code 的 Python GUI 應用程式。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`# qr_code_generator.py
+import qrcode
+import tkinter as tk
+from tkinter import filedialog
+from PIL import ImageTk
+
+base = tk.Tk()
+base.title("QRcode Generator")
+
+input_area = tk.Frame(base, relief=tk.RAISED, bd=2)
+image_area = tk.Frame(base, relief=tk.SUNKEN, bd=2)
+
+encode_text = tk.StringVar()  # 儲存要轉成QRcode的字串
+entry = tk.Entry(input_area, textvariable=encode_text)
+entry.pack(side=tk.LEFT)
+
+qr_label = tk.Label(image_area)  # 用以顯示QRcode的標籤
+
+def generate():
+    qr_label.qr_img = qrcode.make(encode_text.get())
+    img_width, img_height = qr_label.qr_img.size
+    qr_label.tk_img = ImageTk.PhotoImage(qr_label.qr_img)
+    qr_label.config(image=qr_label.tk_img, width=img_width, height=img_height)
+    qr_label.pack()
+
+encode_button = tk.Button(input_area, text="QRcode!", command=generate)
+encode_button.pack(side=tk.LEFT)  # 建立按鈕
+
+input_area.pack(pady=5)  # 繪製
+image_area.pack(padx=3, pady=1)  # 繪製
+
+# 儲存選單
+def save():
+    filename = filedialog.asksaveasfilename(title="命令後進行儲存", initialfile="qrcode.png")
+    if filename and hasattr(qr_label, "qr_img"):
+        qr_label.qr_img.save(filename)
+
+# 結束選單
+def exit():
+    base.destroy()
+
+# 建立選單畫面
+menubar = tk.Menu(base)
+filemenu = tk.Menu(menubar)
+menubar.add_cascade(label="File", menu=filemenu)
+filemenu.add_command(label="save", command=save)
+filemenu.add_separator()
+filemenu.add_command(label="exit", command=exit)
+base.config(menu=menubar)
+
+base.mainloop()`
             }
           }
         ]

@@ -109,7 +109,7 @@ import { pythonNoteViewTabs } from "../../data/web-note-view/python-note-view/py
 const tabs = pythonNoteViewTabs;
 
 // 處理 tab 切換
-const activeTab = ref(tabs[6].id);
+const activeTab = ref(tabs[8].id);
 const currentTab = computed(() => {
   return tabs.find(t => t.id === activeTab.value) || tabs[0];
 });

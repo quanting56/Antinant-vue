@@ -18,14 +18,14 @@ export const programLearningTimelineData = [
     units: [
       {
         time: "2024.01",
-        title: "Bootstrap｜閱讀《Bootstrap 5 RWD響應式網頁設計：行動優先的前端技術》",
+        title: "Bootstrap｜閱讀《Bootstrap 5 RWD 響應式網頁設計：行動優先的前端技術》",
         text: "在網頁設計與敘事課程中，老師提到了 Bootstrap 框架，課程後期我買了一本關於 Bootstrap 的書來自學，這本書亦有提到 HTML、CSS、JavaScript 的概念，為我入門網頁設計的啟蒙書。除此之外，我運用 Bootstrap 框架架起了我第一個個人網站。",
         hashtag: ["html", "css", "javascript", "Bootstrap", "GitHub", "響應式網頁設計"],
         image: null
       },
       {
         time: "2024.07",
-        title: "D3.js｜閱讀《D3.js資料視覺化實用攻略》",
+        title: "D3.js｜閱讀《D3.js 資料視覺化實用攻略》",
         text: "畢業後，鑑於大四下修了一門用 QGIS 製作資料視覺化圖表之課程，讓我對資料視覺化有了概念與興趣，趁著當兵前的暑假，買了一本 D3.js 的書，藉由操作 D3.js 的同時，在 ChatGPT 的互動與協助之下，也逐漸會使用 JavaScript 的語法。",
         hashtag: ["html", "css", "javascript", "Bootstrap", "D3.js", "GitHub", "資料視覺化"],
         image: null
@@ -38,7 +38,7 @@ export const programLearningTimelineData = [
     units: [
       {
         time: "2025.01",
-        title: "Vue.js｜閱讀《重新認識Vue.js：008天絕對看不完的Vue.js 3指南》",
+        title: "Vue.js｜閱讀《重新認識 Vue.js：008天絕對看不完的 Vue.js 3 指南》",
         text: "當兵結訓前夕，透過博客來網路書店買了一本 Vue.js 的書來學習現代前端框架，花了不少時間，此階段學習了 Vue 3 Option API、Vue-router 4、Vuex、Pinia、Vue 3 Composition API。除此之外，透過 Vue.js 重新製作了個人網站，為我第二代的個人網站。",
         hashtag: ["html", "css", "javascript", "Bootstrap", "Vue.js", "Vue3", "GitHub"],
         image: null
@@ -65,14 +65,14 @@ export const programLearningTimelineData = [
         image: null
       },
       {
-        time: "2025.??",
-        title: "Python｜？？？",
+        time: "2025.09",
+        title: "Python｜閱讀《Python程式設計「超」入門》",
         text: null,
         hashtag: null,
         image: null
       },
       {
-        time: "2025.??",
+        time: "2025.09",
         title: "Tailwind｜？？？",
         text: null,
         hashtag: null,

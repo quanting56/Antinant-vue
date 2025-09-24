@@ -18,7 +18,7 @@ except Exception as e:      # 其他任何錯誤就跑這裡，並把錯誤物�
 else:                       # 如果try區塊沒有錯誤，才會執行這裡
     print("沒有錯誤時會執行")
 finally:                    # 不管有沒有錯誤，這裡一定會執行
-    print("無論是否發生錯誤都會執行")`,
+    print("無論是否發生錯誤都會執行")`
         },
         listDetails: [
           {
@@ -71,7 +71,7 @@ nyoro.cry()
 # 吼叫
 
 nyoro.getLegsNum()
-# 0`,
+# 0`
         },
         listDetails: [
           {
@@ -99,7 +99,7 @@ nyoro.getLegsNum()
 `import calendar
 print(calendar.month(2025,9))  # 印出2025年9月的月曆
 print(calendar.isleap(2000))  # 檢查2000年是否為閏年
-# True`,
+# True`
         },
         listDetails: [
           {
@@ -120,7 +120,7 @@ print(calendar.isleap(2000))  # 檢查2000年是否為閏年
 `import datetime
 print(datetime.date.today())  # 取得今天的日期
 print(datetime.datetime.now())  # 取得現在時間
-print(datetime.datetime.now() + datetime.timedelta(7))  # 取得「現在時間+7天」的時間戳記`,
+print(datetime.datetime.now() + datetime.timedelta(7))  # 取得「現在時間+7天」的時間戳記`
         },
         listDetails: [
           {
@@ -157,7 +157,7 @@ files.extract("python.exe", r"/Users/dongguanting/Downloads")
 # 方法二，解壓縮全部檔案到路徑
 files.extractall("/Users/dongguanting/Downloads")
 
-files.close()  # 關閉檔案物件`,
+files.close()  # 關閉檔案物件`
         },
         listDetails: [
           {
@@ -180,7 +180,7 @@ files.close()  # 關閉檔案物件`,
 # 壓縮檔案
 zip_file = zipfile.ZipFile("/Users/dongguanting/Downloads/python.zip", mode="w")  # 壓縮後的檔名
 zip_file.write("/Users/dongguanting/Downloads/python.exe")  # 要壓縮的檔案
-zip_file.close()  # 關閉檔案物件`,
+zip_file.close()  # 關閉檔案物件`
         },
         listDetails: [
           {
@@ -236,7 +236,7 @@ file_object.close()  # 關閉檔案
 with open("python.txt", "w+") as monkey:
     monkey.write("this is sample in python.\\n")
     monkey.seek(0)
-    print(monkey.read())`,
+    print(monkey.read())`
         },
         listDetails: [
           {
@@ -271,7 +271,7 @@ with open("python.txt", "w+") as monkey:
               pythonCode: 
 `from PIL import Image
 image = Image.open("sample_image/IMG_2560.JPG")
-image.show()`,
+image.show()`
             }
           },
           {
@@ -285,7 +285,7 @@ image = Image.open("sample_image/IMG_2560.JPG")
 r, g, b = image.split()  # 拆成R、G、B三個色彩通道
 convert_image = Image.merge("RGB", (b, g, r))  # 重新合併（交換R、B）
 convert_image.show()
-convert_image.save("sample_image/rgb_to_bgr.jpg")`,
+convert_image.save("sample_image/rgb_to_bgr.jpg")`
             }
           },
           {
@@ -298,7 +298,7 @@ convert_image.save("sample_image/rgb_to_bgr.jpg")`,
 image = Image.open("sample_image/IMG_2560.JPG")
 black_and_white = image.convert("1")  # 轉為1-bit黑白
 black_and_white.show()
-black_and_white.save("sample_image/b_and_w.jpg")`,
+black_and_white.save("sample_image/b_and_w.jpg")`
             }
           },
           {
@@ -311,7 +311,7 @@ black_and_white.save("sample_image/b_and_w.jpg")`,
 image = Image.open("sample_image/IMG_2560.JPG")
 gray_image = image.convert("L")  # 轉為8-bit灰階
 gray_image.show()
-gray_image.save("sample_image/gray_image.jpg")`,
+gray_image.save("sample_image/gray_image.jpg")`
             }
           },
           {
@@ -330,7 +330,7 @@ image.transpose(Image.ROTATE_270).show()       # 旋轉270度
 image.transpose(Image.FLIP_LEFT_RIGHT).show()  # 左右翻轉
 image.transpose(Image.FLIP_TOP_BOTTOM).show()  # 上下翻轉
 
-image.transpose(Image.ROTATE_90).save("sample_image/ratate_90.jpg")  #旋轉90度並存成新檔`,
+image.transpose(Image.ROTATE_90).save("sample_image/ratate_90.jpg")  #旋轉90度並存成新檔`
             }
           }
         ]
@@ -357,11 +357,14 @@ image.transpose(Image.ROTATE_90).save("sample_image/ratate_90.jpg")  #旋轉90�
         },
         listDetails: [
           {
-            detailTitle: null,
+            detailTitle: "基本網頁抓取",
             detailSubtitle: null,
             detailContent: null,
             detailCode: {
-              pythonCode: null,
+              pythonCode: 
+`import requests
+r = requests.get("https://quanting56.github.io/Antinant/index.html")
+print(r.text)`
             }
           }
         ]
@@ -370,15 +373,137 @@ image.transpose(Image.ROTATE_90).save("sample_image/ratate_90.jpg")  #旋轉90�
         listTitle: "API 資料處理",
         listSubtitle: null,
         listCode: {
-          pythonCode: null,
+          pythonCode: null
         },
         listDetails: [
           {
-            detailTitle: null,
+            detailTitle: "抓取一般 JSON API",
+            detailSubtitle: "抓取「臺北市 YouBike 2.0 即時借車狀況 API」。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import requests
+import pprint
+
+api_url = "https://tcgbusfs.blob.core.windows.net/dotapp/youbike/v2/youbike_immediate.json"
+ubike_data = requests.get(api_url).json()
+
+pprint.pprint(ubike_data)  # 印出這個API內容
+print(ubike_data[0].keys())  # 看看這個API有什麼Key可以用
+
+
+# 印出「沒有可借單車」的站點名稱
+print("以下站點無可借用的 Ubike")
+for station in ubike_data: 
+    if station["available_rent_bikes"] == 0:
+        print(" ", station["sna"])
+print("以上站點無可借用的 Ubike")`
+            }
+          },
+          {
+            detailTitle: "抓取帶有參數的 JSON API",
+            detailSubtitle: "抓取 Wikipedia 頁面原始內容，以 JSON 格式回傳",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import requests
+import pprint
+
+api_url = "https://zh.wikipedia.org/w/api.php"
+
+# 設定參數
+api_params = {
+    "format": "json",     # 決定API回傳的格式，常見有json, jsonfm, xml, xmlfm
+    "action": "query",    # 指明呼叫哪個API模組／動作
+    "titles": "椎名林檎",  # 要查詢的維基百科頁面標題
+    "prop": "revisions",  # 指明擷取哪一類頁面屬性（property）
+    "rvprop": "content"   # revisions的子參數，用來指定要在修訂資料中包含哪些欄位
+}
+headers = {"User-Agent": "MyWikiApp/1.0 (https://example.com/)"}  # 寫User-Agent，避免被Wikipedia API過濾掉
+
+wiki_data = requests.get(api_url, params=api_params, headers=headers).json()
+pprint.pprint(wiki_data["query"]["pages"]["263745"]["revisions"][0]["*"])`
+            }
+          },
+          {
+            detailTitle: "抓取帶有參數的 XML API，並存成 .html 檔",
+            detailSubtitle: "抓取 XML 格式的資料，並儲存成 .html 檔，方便瀏覽。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import requests
+
+api_base_url = "https://zh.wikipedia.org/w/api.php"
+
+# 設定參數
+api_params = {
+    "format": "xmlfm",     # 決定API回傳的格式，常見有json, jsonfm, xml, xmlfm
+    "action": "query",     # 指明呼叫哪個API模組／動作
+    "titles": "Google",    # 要查詢的維基百科頁面標題
+    "prop": "revisions",   # 指明擷取哪一類頁面屬性（property）
+    "rvprop": "content"    # revisions的子參數，用來指定要在修訂資料中包含哪些欄位
+}
+headers = {"User-Agent": "MyWikiApp/1.0 (https://example.com/)"}  # 寫User-Agent，避免被Wikipedia API過濾掉
+
+wiki_data = requests.get(api_base_url, params=api_params, headers=headers)
+foo = open("/Users/dongguanting/Desktop/PYTHON練習/wiki_practice.html", "w")
+foo.write(wiki_data.text)
+foo.close()`
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "<code>sys.argv</code> 使用",
+        listSubtitle: null,
+        listCode: {
+          pythonCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "<code>import argv</code> 來用 <code>sys.argv</code>",
             detailSubtitle: null,
             detailContent: null,
             detailCode: {
-              pythonCode: null,
+              pythonCode: 
+`# sys_argv_test.py
+import sys
+print(sys.argv)
+
+
+
+# 之後在終端機輸入以下指令
+python3 sys_argv_test.py 齁嘿齁嘿
+
+# 會得到以下內容
+['sys_argv_test.py', '齁嘿齁嘿']`
+            }
+          },
+          {
+            detailTitle: "帶有參數的 API + <code>sys.argv</code> + 自動存檔",
+            detailSubtitle: "以此例來說，可以直接輸入關鍵字，程式會去抓 Wikipedia 內容，並存成 &lt;關鍵字&gt;.html",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import requests
+import sys
+
+search_word = sys.argv[1]  # 程式會抓到使用者傳入的搜尋字詞
+
+api_url = "https://zh.wikipedia.org/w/api.php"
+api_params = {
+    "format": "xmlfm",
+    "action": "query",
+    "prop": "revisions",
+    "rvprop": "content",
+    "titles": search_word
+}
+headers = {"User-Agent": "MyWikiApp/1.0 (https://example.com/)"}  # 寫User-Agent，避免被Wikipedia API過濾掉
+
+wiki_data = requests.get(api_url, params=api_params, headers=headers)
+foo = open("/Users/dongguanting/Desktop/PYTHON練習/" + search_word + ".html", "w")
+foo.write(wiki_data.text)
+foo.close()`
             }
           }
         ]
@@ -388,7 +513,7 @@ image.transpose(Image.ROTATE_90).save("sample_image/ratate_90.jpg")  #旋轉90�
   {
     id: "pythonCrawlingNote",
     title: "網路爬蟲",
-    description: "<p>Vue.js 可以透過多種方式使用，依據不同的需求，選擇最適合的方法。（From ChatGPT）</p>",
+    description: "<p>透過使用 <code>BeautifulSoup</code>（bs4）模組來解析 HTML 或 XML，方便擷取特定標籤與內容。</p>",
     lists: [
       {
         listTitle: "BeautifulSoup",
@@ -398,11 +523,65 @@ image.transpose(Image.ROTATE_90).save("sample_image/ratate_90.jpg")  #旋轉90�
         },
         listDetails: [
           {
-            detailTitle: null,
-            detailSubtitle: null,
+            detailTitle: "<code>BeautifulSoup</code> 基本用法",
+            detailSubtitle: "建立一個簡單 HTML，並用 <code>BeautifulSoup</code> 解析。",
             detailContent: null,
             detailCode: {
-              pythonCode: null,
+              pythonCode: 
+`from bs4 import BeautifulSoup
+soup = BeautifulSoup("<html> Lollipop </html>", "html.parser")
+print(soup)`
+            }
+          },
+          {
+            detailTitle: "用 <code>BeautifulSoup</code> 抓標題",
+            detailSubtitle: "從網頁中找到 <code>&lt;title&gt;</code> 標籤。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import requests
+from bs4 import BeautifulSoup
+
+html_data = requests.get("https://quanting56.github.io/Antinant/index.html")
+soup = BeautifulSoup(html_data.text, "html.parser")
+print(soup.title)`
+            }
+          },
+          {
+            detailTitle: "RSS 解析",
+            detailSubtitle: "以 Yahoo 股市為例，抓 Yahoo 股市新聞 RSS，輸出每一則新聞的標題。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import requests
+from bs4 import BeautifulSoup
+
+yahoo_stock_news_xml = requests.get("https://tw.stock.yahoo.com/rss?category=tw-market")
+soup = BeautifulSoup(yahoo_stock_news_xml.text, "html.parser")  # 用"html.parser"解析RSS（其實是XML，但html.parser也能處理）
+
+# print出所有<item>標籤裡的<title>文字
+for news in soup.find_all("item"):
+    print(news.title.string)`
+            }
+          },
+          {
+            detailTitle: "擷取自定區塊",
+            detailSubtitle: "從指定網頁中找出特定區塊，並輸出裡面的文字（像是標題與副標題）。",
+            detailContent: null,
+            detailCode: {
+              pythonCode: 
+`import requests
+from bs4 import BeautifulSoup
+
+website_html = requests.get("https://quanting56.github.io/Antinant/index.html")
+website_html.encoding = "UTF-8"  # 指定網頁編碼，避免中文字出現亂碼
+soup = BeautifulSoup(website_html.text, "html.parser")
+
+for website in soup.find_all(class_ = "col"):  # 這裡的"class_"為html裡面的class屬性
+    print(
+        website.find(class_ = "semi-nav-button").find("strong").string + "｜" +
+        website.find(class_ = "semi-nav-button").find("span").string
+    )`
             }
           }
         ]

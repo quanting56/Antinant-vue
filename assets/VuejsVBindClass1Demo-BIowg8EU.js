@@ -1,1 +1,0 @@
-import{_ as a,r as o,y as r,B as l,c as n,f as c,j as u}from"./index-B1OBybhT.js";const i={__name:"VuejsVBindClass1Demo",setup(m){const e=o("");return(p,s)=>r((c(),n("input",{type:"text","onUpdate:modelValue":s[0]||(s[0]=t=>e.value=t),class:u({error:e.value.length>10})},null,2)),[[l,e.value,void 0,{trim:!0}]])}},d=a(i,[["__scopeId","data-v-3ebf3cec"]]);export{d as default};

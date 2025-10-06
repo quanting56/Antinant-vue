@@ -1,0 +1,1 @@
+import{r as u,k as c,c as t,f as s,d as l,t as m,F as p}from"./index-BE8DdE87.js";const i={__name:"VuejsVForSortDemo",setup(_){const a=u([3,5,2,6,1,9,8,7]),n=c(()=>[...a.value].sort((e,r)=>e-r));return(e,r)=>(s(!0),t(p,null,l(n.value,o=>(s(),t("div",null,m(o),1))),256))}};export{i as default};

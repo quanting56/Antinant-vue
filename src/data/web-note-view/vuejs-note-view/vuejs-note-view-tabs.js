@@ -26,7 +26,7 @@ export const vuejsNoteViewTabs = [
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -37,7 +37,7 @@ export const vuejsNoteViewTabs = [
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -66,7 +66,7 @@ export const vuejsNoteViewTabs = [
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -77,7 +77,7 @@ export const vuejsNoteViewTabs = [
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -129,7 +129,7 @@ app.mount("#app");</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -140,7 +140,7 @@ app.mount("#app");</code></pre>
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -172,7 +172,7 @@ npm run serve</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -183,7 +183,7 @@ npm run serve</code></pre>
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -216,7 +216,7 @@ npm install</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -227,7 +227,7 @@ npm install</code></pre>
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -271,7 +271,7 @@ npm install</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -282,7 +282,7 @@ npm install</code></pre>
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -338,7 +338,7 @@ npm install</code></pre>
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -349,7 +349,7 @@ npm install</code></pre>
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -388,7 +388,7 @@ npm install</code></pre>
   }).mount("#VuejsTemplate");
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<template>
   <p><b>{{ greeting }}</b> 好棒棒！</p>
   <input v-model="greeting" placeholder="可輸入文字" />
@@ -415,7 +415,7 @@ p {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -461,7 +461,7 @@ p {
   }).mount("#VuejsMethods");
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<template>
   <p>
     <input v-model="price" placeholder="0"> 元/顆蘋果
@@ -497,7 +497,7 @@ p {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -534,7 +534,7 @@ p {
   }).mount("#VuejsComputed");
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<template>
   <p>
     <input v-model="price" placeholder="0"> 元/顆蘋果
@@ -564,7 +564,7 @@ const subtotal = computed(() => price.value * quantity.value);
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -576,7 +576,7 @@ const subtotal = computed(() => price.value * quantity.value);
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -592,7 +592,7 @@ const subtotal = computed(() => price.value * quantity.value);
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -608,7 +608,7 @@ const subtotal = computed(() => price.value * quantity.value);
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -651,7 +651,7 @@ const subtotal = computed(() => price.value * quantity.value);
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -666,7 +666,7 @@ const subtotal = computed(() => price.value * quantity.value);
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -707,7 +707,7 @@ const subtotal = computed(() => price.value * quantity.value);
   }).mount("#vBindId");
 </script>`,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -718,7 +718,7 @@ const subtotal = computed(() => price.value * quantity.value);
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -730,7 +730,7 @@ const subtotal = computed(() => price.value * quantity.value);
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -757,7 +757,7 @@ const subtotal = computed(() => price.value * quantity.value);
   }).mount("#VuejsVModelInput");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <input type="text" v-model="message" placeholder="edit me">
   <p>Message is: <b>{{ message }}</b></p>
@@ -800,7 +800,7 @@ p {
   }).mount("#VuejsVModelTextarea");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <textarea v-model="message" placeholder="add multiline lines"></textarea>
   <p>Multiline message is: <b>{{ message }}</b></p>
@@ -851,7 +851,7 @@ p {
   }).mount("#VuejsVModelRadio");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <!-- 要注意下面兩組input對應的都是v-model="picked" -->
   <!-- 另外，把<input>包在<label>裡面的寫法，可以避免使用id+for造成的全域污染問題 -->
@@ -913,7 +913,7 @@ const picked = ref("");
   }).mount("#VuejsVModelCheckbox");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <!-- 注意下面input對應的都是v-model="checkedNames" -->
   <!-- 另外，把<input>包在<label>裡面的寫法，可以避免使用id+for造成的全域污染問題 -->
@@ -975,7 +975,7 @@ p {
   }).mount("#VuejsVModelCheckboxSingle");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <label>
     <input type="checkbox" v-model="isChecked">
@@ -1023,7 +1023,7 @@ const isChecked = ref(false);
   }).mount("#VuejsVModelSelect");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <!-- 注意，v-model要放在select而不是option -->
   <select v-model="selected">
@@ -1054,7 +1054,7 @@ const selected = ref("");
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -1081,7 +1081,7 @@ const selected = ref("");
   }).mount("#VuejsVModelLazy");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <input v-model.lazy="lazyMessage" placeholder="edit me">
   <p>Message is: {{ lazyMessage }}</p>
@@ -1149,7 +1149,7 @@ p {
   }).mount("#app15");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   字串相加<br />
   <input v-model="message14a"> + <input v-model="message14b"> = {{ stringSum }}<br>
@@ -1197,7 +1197,7 @@ const numberSum = computed(() => message15a.value + message15b.value);
   }).mount("#app16");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <textarea v-model.trim="message16"></textarea>
   <p>產出結果為： <pre>{{ message16 }}</pre></p>
@@ -1221,7 +1221,7 @@ const message16 = ref("");
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -1249,7 +1249,7 @@ const message16 = ref("");
   }).mount("#app17");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <div v-text="text"></div>
   <div v-html="text"></div>
@@ -1294,7 +1294,7 @@ const text = ref("<h3>Hello World!</h3>");
   }).mount("#app18");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <input v-model="text">
   <div>沒有 <code>v-once</code> → {{ text }}</div>
@@ -1341,7 +1341,7 @@ const text = ref("Hello World");
   }).mount("#app19");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <!-- 加上v-pre後不會解析模板內容，直接顯示{{ text }} -->
   <div v-pre>
@@ -1372,7 +1372,7 @@ const text = ref("v-pre測試內容");
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -1405,7 +1405,7 @@ const text = ref("v-pre測試內容");
   }).mount("#app20");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <input
     type="text"
@@ -1475,7 +1475,7 @@ const message20 = ref("");
   }).mount("#app21");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <input
     type="text"
@@ -1545,7 +1545,7 @@ watch(message21, (newValue) => {
   }).mount("#app22");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <input
     type="text"
@@ -1588,7 +1588,7 @@ const msgStyle = computed(() => {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -1633,7 +1633,7 @@ const msgStyle = computed(() => {
   }).mount("#app24");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <!-- 以下兩種寫法結果相同 -->
   <!-- 寫法1：直接在模板中寫表達式 -->
@@ -1678,7 +1678,7 @@ button {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -1689,7 +1689,7 @@ button {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -1700,7 +1700,7 @@ button {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -1711,7 +1711,7 @@ button {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -1722,7 +1722,7 @@ button {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -1733,7 +1733,7 @@ button {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -1744,7 +1744,7 @@ button {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -1771,7 +1771,7 @@ button {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -1813,7 +1813,7 @@ button {
   }).mount("#app25");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <div>
     沒有加 <code>.exact</code>：
@@ -1874,7 +1874,7 @@ input {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -1885,7 +1885,7 @@ input {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -1897,7 +1897,7 @@ input {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -1916,7 +1916,7 @@ input {
 <input v-model.trim="msg">
 <input :value="msg" @input="msg = $event.target.value.trim()">`,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -1927,7 +1927,7 @@ input {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -1970,7 +1970,7 @@ input {
   }).mount("#app26");
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<template>
   <button @click="toggleVisibility">切換顯示/隱藏</button>
   <code>isVisible</code> 現在狀態：<code>{{ isVisible }}</code>
@@ -2001,7 +2001,7 @@ button {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -2051,7 +2051,7 @@ button {
   }).mount("#app27");
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<template>
   <button @click="changeVisibility">切換段落</button>
   <template v-if="visibility === 'A'">
@@ -2090,7 +2090,7 @@ function changeVisibility() {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -2111,7 +2111,7 @@ function changeVisibility() {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -2145,7 +2145,7 @@ function changeVisibility() {
   }).mount("#app28")
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <ul>
     <h4>item in arr:</h4>
@@ -2180,7 +2180,7 @@ h4 {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -2219,7 +2219,7 @@ h4 {
   }).mount("#app29");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <ul>
     <h4>value in fishBurger</h4>
@@ -2275,7 +2275,7 @@ const fishBurger = ref({
   const vm30 = Vue.createApp().mount("#app30");
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<template>
   <ul class="pagination">
     <li class="page-item"><a class="page-link">&lt;</a></li>
@@ -2345,7 +2345,7 @@ ul {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -2383,7 +2383,7 @@ ul {
   }).mount("#app31");
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<template>
   <div class="dropdown">
     <button class="btn btn-primary dropdown-toggle" type="button" @click="toggleDropdown">個人連結</button>
@@ -2426,7 +2426,7 @@ const toggleDropdown = () => {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -2438,7 +2438,7 @@ const toggleDropdown = () => {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -2470,7 +2470,7 @@ const toggleDropdown = () => {
   }).mount("#app32");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <div v-for="i in evenNumbers">{{ i }}</div>
 </template>
@@ -2516,7 +2516,7 @@ const evenNumbers = computed(() => {
   }).mount("#app33");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <div v-for="i in sortedNumbers">{{ i }}</div>
 </template>
@@ -2547,7 +2547,7 @@ const sortedNumbers = computed(() => {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -2611,7 +2611,7 @@ const sortedNumbers = computed(() => {
   }).mount("#app34");
 </script>`,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -2655,7 +2655,7 @@ const sortedNumbers = computed(() => {
   vm35.mount("#app35");
 </script>`,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -2688,7 +2688,7 @@ vm.mount("#app");
 
 // It's ok.
 vm.unmount();`,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -2700,7 +2700,7 @@ vm.unmount();`,
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -2744,7 +2744,7 @@ vm.unmount();`,
   vm36.mount("#app36");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <div ref="msgContainer" style="max-height: 150px; overflow-y: auto;">
     <p v-for="m in messages">{{ m }}</p>
@@ -2808,7 +2808,7 @@ async function addToMessages() {
   <footer-component>...</footer-component>
 </div>`,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -2819,7 +2819,7 @@ async function addToMessages() {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -2831,7 +2831,7 @@ async function addToMessages() {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -2845,7 +2845,7 @@ async function addToMessages() {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -2859,7 +2859,7 @@ async function addToMessages() {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -2873,7 +2873,7 @@ async function addToMessages() {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -2887,7 +2887,7 @@ async function addToMessages() {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -2899,7 +2899,7 @@ async function addToMessages() {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -2938,7 +2938,7 @@ async function addToMessages() {
   vm37.mount("#app37");
 </script>`,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -2973,7 +2973,7 @@ async function addToMessages() {
   vm38.mount("#app38");
 </script>`,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -3006,7 +3006,7 @@ async function addToMessages() {
   vm39.mount("#app39");
 </script>`,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -3042,7 +3042,7 @@ async function addToMessages() {
   vm40.mount("#app40");
 </script>`,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -3053,7 +3053,7 @@ async function addToMessages() {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -3074,7 +3074,7 @@ async function addToMessages() {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -3121,7 +3121,7 @@ async function addToMessages() {
   vm41.mount("#app41");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<!-- 父元件 Parent.vue -->
 <template>
   <!-- 這是外層元素的msg -->
@@ -3287,7 +3287,7 @@ const innerMsg = ref("這是內層元件的msg");
   vm42.mount("#app42");
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<!-- 把元件拆開成多個.vue檔（父元件＆子元件） -->
 
 <!-- 父元件 VuejsPropsTypeValidationDemo.vue -->
@@ -3435,7 +3435,7 @@ defineProps({
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -3526,7 +3526,7 @@ defineProps({
   vm44.mount("#app44");
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<!-- 父元件 VuejsPropsPassObjectAsPropsDemo.vue -->
 <template>
   <p>↓↓↓</p>
@@ -3636,7 +3636,7 @@ const localPublishedAt = ref(props.publishedAt);
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -3648,7 +3648,7 @@ const localPublishedAt = ref(props.publishedAt);
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -3768,7 +3768,7 @@ const localPublishedAt = ref(props.publishedAt);
   vm45.mount("#app45");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<!-- 父元件 VuejsPropsRecursiveComponentDemo.vue -->
 <template>
   <!-- Magic! -->
@@ -4032,7 +4032,7 @@ h3:hover {
   vm46.mount("#app46")
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<!-- 父元件 VuejsPropsAndCustomEventDemo.vue -->
 <template>
   <ul v-for="(book, idx) in books" :key="book.id">
@@ -4132,7 +4132,7 @@ watch(bookInfo, (val) => {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -4176,7 +4176,7 @@ watch(bookInfo, (val) => {
   vm47.mount("#app47");
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<!-- 父元件 VuejsPropsVModelDemo.vue -->
 <template>
   <p>{{ message }}</p>
@@ -4239,7 +4239,7 @@ function onInput(e) {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -4306,7 +4306,7 @@ function onInput(e) {
   vm48.mount("#app48");
 </script>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<!-- 父元件 VuejsPropsProvideAndInjectDemo.vue -->
 <template>
   輸入一些文字，看看底下的變化：<br />
@@ -4392,7 +4392,7 @@ small {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -4483,7 +4483,7 @@ small {
   }
 </style>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<!-- 父元件 VuejsDynamicComponentDemo.vue -->
 <template>
   <button
@@ -4582,7 +4582,7 @@ const currentTabComponent = computed(() => {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -4691,7 +4691,7 @@ const currentTabComponent = computed(() => {
   }
 </style>`,
           jsCode: null,
-          vueSFCCode: 
+          vueCode: 
 `<!-- 父元件 VuejsDynamicComponentKeepAliveDemo.vue -->
 <template>
   <button
@@ -4810,7 +4810,7 @@ const title = ref("Archive component");
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -4836,7 +4836,7 @@ const title = ref("Archive component");
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -4881,7 +4881,7 @@ const title = ref("Archive component");
   vm52.mount("#app52");
 </script>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<!-- 父元件 VuejsGeneralSlotDemo.vue -->
 <template>
   <p>&gt; {{ msg }}</p>
@@ -5036,7 +5036,7 @@ const msg = ref("Child!");
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<!-- 父元件 VuejsNamedSlotsDemo.vue -->
 <template>
   <light-box>
@@ -5255,7 +5255,7 @@ button {
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<!-- 父元件 VuejsDynamicNamedSlotsDemo.vue -->
 <template>
   <label v-for="opt in options">
@@ -5477,7 +5477,7 @@ button {
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<!-- 父元件 VuejsScopedSlotsDemo.vue -->
 <template>
   <p>
@@ -5705,7 +5705,7 @@ button {
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<!-- 跟上面原code不完全相同，有改善一些code -->
 <!-- 父元件 VuejsTeleportDemo.vue -->
 <template>
@@ -5892,7 +5892,7 @@ button {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -5940,7 +5940,7 @@ button {
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <transition>
     <!-- 透過v-show來控制顯示或隱藏 -->
@@ -6045,7 +6045,7 @@ button {
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <!-- slide -->
   <transition name="slide">
@@ -6159,7 +6159,7 @@ button {
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <button @click="modeToggle()">Toggle</button>
 
@@ -6219,7 +6219,7 @@ button {
 <!-- 新元素先進，舊元素再離場，需「新舊重疊」一小段時間使用 -->
 <transition mode="in-out"></transition>`,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -6317,7 +6317,7 @@ button {
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <button @click="addListElement()">生成一個隨機數字方塊</button><br>
   <button @click="shuffle()">給我重新排列</button><br>
@@ -6602,7 +6602,7 @@ function shuffle() {
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<!-- 與上面略有不同，有些小修改（例如未使用Bootstrap） -->
 <template>
   <button @click="getUserInfo">取得隨機User資訊</button>
@@ -6758,7 +6758,7 @@ button {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -6823,7 +6823,7 @@ button {
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <div ref="block" :class="{ 'app62-shake': activated }">Block</div>
   <button @click="activated = true">Shake it!</button>
@@ -6938,7 +6938,7 @@ button {
   }
 </style>`,
               jsCode: null,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <div id="app63-wrap">
     <button
@@ -7012,7 +7012,7 @@ button {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -7038,7 +7038,7 @@ button {
 <!-- 渲染route的位置 -->
 <router-view></router-view>`,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -7050,7 +7050,7 @@ button {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -7126,7 +7126,7 @@ router.beforeEach((to, from, next) => {
 });
 
 export default router;`,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -7147,7 +7147,7 @@ const app = createApp(App);
 app.use(router);
 
 app.mount("#app");`,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -7161,7 +7161,7 @@ app.mount("#app");`,
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -7203,7 +7203,7 @@ app.mount("#app");`,
     ]
   }
 ];`,
-              vueSFCCode: 
+              vueCode: 
 `<!-- VuejsVueRouterDemo.vue -->
 <template>
   <router-link :to="{ name: 'route-practice' }">路由練習</router-link>
@@ -7332,7 +7332,7 @@ onMounted(async () => {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -7343,7 +7343,7 @@ onMounted(async () => {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -7378,7 +7378,7 @@ import App from "./App.vue";
 const app = createApp(App);
 app.use(createPinia());  // 啟用 Pinia
 app.mount("#app");`,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -7389,7 +7389,7 @@ app.mount("#app");`,
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]
@@ -7406,7 +7406,7 @@ app.mount("#app");`,
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -7435,7 +7435,7 @@ export const useCounterStore = defineStore("counter", {
     }
   }
 });`,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <div>
     <p>Count: {{ counter.count }}</p>
@@ -7464,7 +7464,7 @@ const counter = useCounterStore();
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -7496,7 +7496,7 @@ export const useProductStore = defineStore("productStore", () => {
   // return 必須列出要給外部用的東西
   return { product, upperProduct, setProduct };
 });`,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <div>
     <p>產品名稱：{{ productStore.product }}</p>
@@ -7552,7 +7552,7 @@ export const useChartStore = defineStore("chart", () => {
   return { data, fetchChartData };
 });
               `,
-              vueSFCCode: 
+              vueCode: 
 `<template>
   <svg ref="myChart"></svg>
 </template>
@@ -7630,7 +7630,7 @@ function drawChart(data) {
         listCode: {
           htmlCode: null,
           jsCode: null,
-          vueSFCCode: null
+          vueCode: null
         },
         listDetails: [
           {
@@ -7643,7 +7643,7 @@ function drawChart(data) {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           },
           {
@@ -7656,7 +7656,7 @@ function drawChart(data) {
             detailCode: {
               htmlCode: null,
               jsCode: null,
-              vueSFCCode: null
+              vueCode: null
             }
           }
         ]

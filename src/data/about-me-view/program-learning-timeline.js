@@ -79,7 +79,7 @@ export const programLearningTimelineData = [
         image: null
       },
       {
-        time: "2025.??",
+        time: "2025.10",
         title: "Node.js｜？？？",
         text: null,
         hashtag: null,

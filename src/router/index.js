@@ -109,6 +109,11 @@ const routes = [
             name: "python-note",
             component: () => import("../views/WebNote/PythonNoteView.vue")
           },
+          {
+            path: "tailwind-note",
+            name: "tailwind-note",
+            component: () => import("../views/WebNote/TailwindNoteView.vue")
+          },
         ]
       },
       {

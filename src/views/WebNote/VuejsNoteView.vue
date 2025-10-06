@@ -78,9 +78,9 @@
                   <pre><code class="javascript">{{ list.listCode.jsCode }}</code></pre>
                 </template>
 
-                <template v-if="list.listCode.vueSFCCode">
+                <template v-if="list.listCode.vueCode">
                   Vue 3 SFC（使用Composition API）這樣寫：
-                  <pre><code class="html">{{ list.listCode.vueSFCCode }}</code></pre>
+                  <pre><code class="html">{{ list.listCode.vueCode }}</code></pre>
                 </template>
               </div>
 
@@ -122,9 +122,9 @@
                       <pre><code class="javascript">{{ detail.detailCode.jsCode }}</code></pre>
                     </template>
 
-                    <template v-if="detail.detailCode.vueSFCCode">
+                    <template v-if="detail.detailCode.vueCode">
                       Vue 3 SFC（使用Composition API）這樣寫：
-                      <pre><code class="html">{{ detail.detailCode.vueSFCCode }}</code></pre>
+                      <pre><code class="html">{{ detail.detailCode.vueCode }}</code></pre>
                     </template>
                   </div>
                 </li>

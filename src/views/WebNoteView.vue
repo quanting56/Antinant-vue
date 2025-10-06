@@ -57,6 +57,10 @@ const webNoteWebsites = [
     websiteTitle: "Python筆記"
   },
   {
+    websiteName: "tailwind-note",
+    websiteTitle: "Tailwind筆記"
+  },
+  {
     websiteName: "test-test-test",
     websiteTitle: "測試場"
   }

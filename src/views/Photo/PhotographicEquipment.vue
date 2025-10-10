@@ -4,7 +4,7 @@
 
 <script setup></script>
 
-<style>
+<style scoped>
 p {
   font-size: 144px;
 }

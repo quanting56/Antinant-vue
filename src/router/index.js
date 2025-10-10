@@ -49,6 +49,11 @@ const routes = [
         meta: { title: "網頁練習筆記"},
         children: [
           {
+            path: "develop-utility",
+            name: "develop-utility",
+            component: () => import("../views/WebNote/DevelopUtilityView.vue")
+          },
+          {
             path: "web-note-simple",
             name: "web-note-simple",
             component: () => import("../views/WebNote/WebNoteSimpleView.vue")

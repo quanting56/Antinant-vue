@@ -7617,6 +7617,118 @@ function drawChart(data) {
     ]
   },
   {
+    id: "vuejsVueDevTools",
+    title: "Vue DevTools",
+    description: null,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: "npm 安裝",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: `npm add -D vite-plugin-vue-devtools`,
+          jsCode: null,
+          vueCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: null,
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "相關設定",
+        listSubtitle: null,
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: null,
+          vueCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "<code>vite.config.js</code>",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`import { defineConfig } from "vite";
+import { fileURLToPath, URL } from "node:url";
+import vue from "@vitejs/plugin-vue";
+import vueDevTools from "vite-plugin-vue-devtools";
+
+export default defineConfig(({ command }) => {
+  const isDev = command === "serve";  // 只有 npm run dev 才是 serve
+
+  const plugins = [
+    vue(),
+    isDev && vueDevTools()  // 只在開發時啟用
+  ].filter(Boolean);
+
+  return {
+    plugins,
+    base: "/",
+    resolve: {
+      alias: {
+        "@": fileURLToPath(new URL("./src", import.meta.url))  // 加這一行，引入@開頭的路徑就可以正常解析
+      }
+    }
+  };
+});`,
+              vueCode: null
+            }
+          },
+          {
+            detailTitle: "<code>vite.config.ts</code>",
+            detailSubtitle: null,
+            detailContent: null,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`import { defineConfig } from "vite";
+import { fileURLToPath, URL } from "node:url";
+import vue from "@vitejs/plugin-vue";
+import vueDevTools from "vite-plugin-vue-devtools";
+
+export default defineConfig(({ command }) => {
+  const isDev = command === "serve";  // 只有 npm run dev 才是 serve
+
+  const plugins: PluginOptions[] = [
+    vue(),
+    isDev && vueDevTools()  // 只在開發時啟用
+  ].filter(Boolean) as PluginOption[];
+
+  return {
+    plugins,
+    base: "/",
+    resolve: {
+      alias: {
+        "@": fileURLToPath(new URL("./src", import.meta.url))  // 加這一行，引入@開頭的路徑就可以正常解析
+      }
+    }
+  };
+});`,
+              vueCode: null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     id: "vuejsSomeInterestingNote",
     title: "一些小工具",
     description: null,

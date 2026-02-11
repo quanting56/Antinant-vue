@@ -51,9 +51,9 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref } from "vue";
 
-const sample = '["#356323", "#758323", "#321114"]';
+const sample = '["#F9FAFB", "#D97706", "#4B5563", "#111827", "#F59E0B", "#EF4444", "#3B82F6", "#FFFFFF", "#E5E7EB", "#000000", "#FACC15", "#FDE68A", "#E5E7EB", "#FACC15", "#F87171", "#60A5FA", "#111111", "#27272A"]';
 const input = ref(sample);
 const colors = ref([]);
 const error = ref("");

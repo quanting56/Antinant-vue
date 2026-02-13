@@ -1,0 +1,1 @@
+import{_ as e,c,f as t}from"./index-DDK2NpsC.js";const o={};function n(r,a){return t(),c("p",null,"photographic_equipment")}const p=e(o,[["render",n],["__scopeId","data-v-95e76c3d"]]);export{p as default};

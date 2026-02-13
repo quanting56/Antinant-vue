@@ -8,7 +8,8 @@
           :to="{ name: website.websiteName }"
           class="webnote-chapter-link-item"
           :class="{ active: route.name === website.websiteName }" 
-        >{{ website.websiteTitle }}
+        >
+          {{ website.websiteTitle }}
         </router-link>
       </div>
     </div>
@@ -63,6 +64,10 @@ const webNoteWebsites = [
   {
     websiteName: "tailwind-note",
     websiteTitle: "Tailwind筆記"
+  },
+  {
+    websiteName: "vue-i18n-note",
+    websiteTitle: "Vue I18n筆記"
   },
   {
     websiteName: "test-test-test",

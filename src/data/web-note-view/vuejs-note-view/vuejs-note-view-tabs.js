@@ -7706,7 +7706,7 @@ import vueDevTools from "vite-plugin-vue-devtools";
 export default defineConfig(({ command }) => {
   const isDev = command === "serve";  // 只有 npm run dev 才是 serve
 
-  const plugins: PluginOptions[] = [
+  const plugins: PluginOption[] = [
     vue(),
     isDev && vueDevTools()  // 只在開發時啟用
   ].filter(Boolean) as PluginOption[];

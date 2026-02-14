@@ -1,0 +1,1 @@
+import{_ as s,e as t,c as a,f as c,g as o,w as _,i as u,F as i}from"./index-YWpp7Snf.js";const l={};function m(f,e){const r=t("router-link"),n=t("router-view");return c(),a(i,null,[o(r,{to:{name:"route-practice"}},{default:_(()=>e[0]||(e[0]=[u("路由練習")])),_:1,__:[0]}),o(n)],64)}const d=s(l,[["render",m]]);export{d as default};

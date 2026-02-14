@@ -1,0 +1,1 @@
+import{_ as e,c as t,f as o}from"./index-YWpp7Snf.js";const c={};function n(r,_){return o(),t("p",null,"ntuphoto-life")}const s=e(c,[["render",n],["__scopeId","data-v-bd359291"]]);export{s as default};

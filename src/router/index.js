@@ -15,35 +15,35 @@ const routes = [
         component: () => import("../views/HomeView.vue"),
       },
       {
-        path: "/home",
-        redirect: "/",
+        path: "home",
+        redirect: { name: "home" },
       },
       {
-        path: "/about-me",
+        path: "about-me",
         name: "about-me",
         component: () => import("../views/AboutMeView.vue"),
         meta: { title: "關於我"}
       },
       {
-        path: "/photo-portfolio",
+        path: "photo-portfolio",
         name: "photo-portfolio",
         component: () => import("../views/PhotoPortfolioView.vue"),
         meta: { title: "攝影"}
       },
       {
-        path: "/photo/ntuphoto-life",
+        path: "photo/ntuphoto-life",
         name: "ntuphoto-life",
         component: () => import("../views/Photo/NtuphotoLifeView.vue"),
         meta: { title: "攝影社故事"}
       },
       {
-        path: "/photo/photographic-equipment",
+        path: "photo/photographic-equipment",
         name: "photographic-equipment",
         component: () => import("../views/Photo/PhotographicEquipment.vue"),
         meta: { title: "攝影器材"}
       },
       {
-        path: "/web-note",
+        path: "web-note",
         name: "web-note",
         component: () => import("../views/WebNoteView.vue"),
         meta: { title: "網頁練習筆記"},
@@ -124,17 +124,14 @@ const routes = [
             name: "vue-i18n-note",
             component: () => import("../views/WebNote/VueI18nNoteView.vue")
           },
+          {
+            path: "test-test-test",
+            name: "test-test-test",
+            component: () => import("../views/WebNote/TestTestTestView.vue"),
+            meta: { title: "測試區"}
+          }
         ]
-      },
-      {
-        path: "/web-note/test-test-test",
-        name: "test-test-test",
-        component: () =>
-          import(
-            "../views/WebNote/TestTestTestView.vue"
-          ),
-        meta: { title: "測試區"}
-      },
+      }
     ]
   },
   {
@@ -142,11 +139,9 @@ const routes = [
     component: FullScreenLayout,
     children: [
       {
-        path: "/my-investment",
-        component: () =>
-          import(
-            "../views/MyInvestmentView.vue"
-          )
+        path: "",
+        name: "my-investment",
+        component: () => import( "../views/MyInvestmentView.vue")
       }
     ]
   }

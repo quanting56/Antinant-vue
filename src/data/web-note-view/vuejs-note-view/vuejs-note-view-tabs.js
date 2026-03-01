@@ -5824,7 +5824,7 @@ button {
     <h5><code>&lt;transition&gt;</code> 漸變與動畫</h5>
     <ol>
       <li>基本的 <code>&lt;transition&gt;</code> 漸變動畫</li>
-      <li>有自定義名稱的 <code>&gt;transition&gt;</code></li>
+      <li>有自定義名稱的 <code>&lt;transition&gt;</code></li>
       <li>條件與動態切換</li>
       <li>漸變效果的順序（transition mode）</li>
       <li>複數元素／元件的漸變渲染 <code>&lt;transition-group&gt;</code></li>

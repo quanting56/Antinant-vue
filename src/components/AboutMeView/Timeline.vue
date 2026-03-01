@@ -39,7 +39,12 @@
                 <div class="timeline-record-body">
                   <div class="timeline-record-content">
                     <h4 class="timeline-record-title">{{ unit.title }}</h4>
-                    <p class="timeline-record-text" v-html="unit.text"></p>
+                    <p
+                      v-for="(t, ti) in unit.text"
+                      :key="ti"
+                      class="timeline-record-text"
+                      v-html="t"
+                    ></p>
                     <p
                       class="timeline-record-hashtag"
                       v-if="unit.hashtag"
@@ -398,25 +403,6 @@ const props = defineProps({
 
 .timeline-unit:first-of-type {
   margin-top: 12px;
-}
-
-#timeline-box {
-  position: relative;
-  padding-right: 13px;
-  padding-bottom: 18px;
-  margin-top: 20px;
-  margin-bottom: 20px;
-}
-
-#timeline-box,
-#timeline-box * {
-  box-sizing: border-box;
-}
-
-@media (max-width: 1023px) {
-  #timeline-box {
-    text-align: initial;
-  }
 }
 
 .timeline-note {

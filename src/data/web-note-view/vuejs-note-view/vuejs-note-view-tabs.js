@@ -7617,6 +7617,365 @@ function drawChart(data) {
     ]
   },
   {
+    id: "vuejsRequestAndTokenNote",
+    title: "API 串接與驗證",
+    description: 
+`包含——
+<ul style="margin-top: 8px; line-height: 1.6;">
+  <li>Axios 封裝 <code>src/utils/request.ts</code> → 自動帶 Token + 全域錯誤處理 + 401 登出導回。</li>
+  <li>Token 管理 <code>src/utils/token.ts</code> → localStorage 讀寫封裝（SSR 安全 / 例外處理 / warn once）。</li>
+  <li>
+    <dl>
+      <dt>資料流：</dt>
+      <dd>
+        back-end HTTP API（依 Swagger 規格）<br>
+        → <code>src/utils/request.ts</code> + <code>src/utils/token.ts</code>（transport / auth）<br>
+        → api layer（Zod / normalize）<code>src/api/*.ts</code><br>
+        → pinia store（state）<code>src/stores/*.ts</code><br>
+        → Vue SFC（view）<code>各個 SFC</code> / <code>各個父 SFC props → 子 SFC</code>
+      </dd>
+    </dl>
+  </li>
+</ul>`,
+    descriptionComponent: null,
+    descriptionComponentStyle: null,
+    lists: [
+      {
+        listTitle: "Axios 封裝與錯誤處理",
+        listSubtitle: "<code>src/utils/request.ts</code>：封裝 axios（自動帶 token、統一錯誤訊息、401 導回登入）。",
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: 
+`import axios, { AxiosHeaders } from "axios";
+import type { InternalAxiosRequestConfig } from "axios";
+import router from "@/router";
+import { getAccessToken, removeAccessToken } from "@/utils/token";
+
+const API_BASE_URL = import.meta.env.VITE_API_URL || "/";
+const API_TIMEOUT_MS = 8000;
+const LOGIN_ROUTE = "/index";
+const DEFAULT_ERROR_MESSAGE = "系統發生錯誤，請稍後再試。";
+const UNAUTH_REDIRECT_DEBOUNCE_MS = 300;
+
+/**
+ * 這裡提供「可插拔」的錯誤呈現方式：
+ * - 預設用 window.alert（保證可用、零依賴）
+ * - 可以在 App 啟動時 setRequestErrorHandler(...) 換成 toast / modal
+ */
+export type RequestErrorDetail = {
+  message: string;
+  status?: number;
+  raw?: unknown;
+};
+
+const isBrowser = typeof window !== "undefined";
+
+let onRequestError: (detail: RequestErrorDetail) => void = ({ message }) => {
+  const msg = message || DEFAULT_ERROR_MESSAGE;
+
+  if (isBrowser) {
+    window.alert(msg);
+  } else {
+    // SSR / Node 環境下，至少不要炸；也可以改成丟到 logger
+    // eslint-disable-next-line no-console` + "\n" +
+'    console.error(`[request] ${msg}`);' + "\n" +
+`  }
+};
+
+export function setRequestErrorHandler(fn: (detail: RequestErrorDetail) => void): void {
+  onRequestError = fn;
+}
+
+// 後端回傳可能是 string / array / object，統一抽 message
+function normalizeBackendMessage(data: unknown): string {
+  if (data == null) { return ""; }
+  if (typeof data === "string") { return data.trim(); }
+
+  // array of messages (常見：FastAPI / pydantic / 自訂 validation)
+  if (Array.isArray(data)) {
+    const parts = data.map((x) => {
+                        if (typeof x === "string") { return x.trim(); }
+                        return "";
+                      })
+                      .filter(Boolean);
+
+    return parts.join("\\n");
+  }
+
+  // object-like payload
+  if (typeof data === "object") {
+    const obj = data as Record<string, unknown>;
+    const cand = obj.message ?? obj.msg ?? obj.detail ?? obj.error;
+
+    if (Array.isArray(cand)) { return normalizeBackendMessage(cand); }
+    if (typeof cand === "string") { return cand.trim(); }
+
+    // 如果後端丟的是結構化錯誤，盡量 stringify（但不要爆）
+    try {
+      return JSON.stringify(obj);
+    } catch {
+      return "";
+    }
+  }
+
+  return "";
+}
+
+export type RequestConfig = InternalAxiosRequestConfig & {
+  /**
+   * 不要自動帶 Authorization（例如：登入、換 token）
+   */
+  skipAuth?: boolean;
+  /**
+   * 不跳全域錯誤 UI（例如：列表輪詢、背景靜默請求）
+   */
+  silent?: boolean;
+};
+
+const service = axios.create({
+  baseURL: API_BASE_URL,
+  timeout: API_TIMEOUT_MS,
+  withCredentials: true,
+});
+
+service.interceptors.request.use(
+  (config: RequestConfig) => {
+    if (!config.skipAuth) {
+      if (isBrowser) {
+        let token: string | null = null;
+
+        try {
+          token = getAccessToken();
+        } catch {
+          token = null;
+        }
+
+        if (token) {
+          // axios v1 headers 可能是 AxiosHeaders / object / undefined
+          const headers = AxiosHeaders.from(config.headers);` + "\n" +
+'          headers.set("Authorization", `Bearer ${token}`);' + "\n" +
+`          config.headers = headers;
+        }
+      }
+    }
+
+    return config;
+  },
+  (error) => Promise.reject(error)
+);
+
+let handling401 = false;
+
+service.interceptors.response.use(
+  (response) => response,
+  (error: unknown) => {
+    // 如果不是 axios error，避免你下面的 .response / .config 直接炸掉
+    if (!axios.isAxiosError(error)) {
+      onRequestError({ message: DEFAULT_ERROR_MESSAGE, raw: error });
+      return Promise.reject(error);
+    }
+
+    const config = (error.config ?? {}) as Partial<RequestConfig>;
+    const isSilent = Boolean(config.silent);
+
+    const status = error.response?.status;
+    const data = error.response?.data;
+
+    const fallbackByStatus: Record<number, string> = {
+      400: "請求參數錯誤，請檢查後再試。",
+      401: "未授權或登入已過期，請重新登入。",
+      404: "找不到資源，請洽管理者。",
+      422: "請求參數驗證失敗。",
+      500: "伺服器忙碌中，請稍後再試。",
+    };
+
+    // 沒有 response：通常是網路斷線、CORS、DNS、timeout 等
+    if (!status) {
+      const isTimeout =
+        error.code === "ECONNABORTED" ||
+        (typeof error.message === "string" && error.message.toLowerCase().includes("timeout"));
+
+      const message = isTimeout
+        ? "連線逾時，請稍後再試。"
+        : "網路連線異常，請確認網路狀態或稍後再試。";
+
+      if (!isSilent) { onRequestError({ message, raw: error }); }
+
+      return Promise.reject(error);
+    }
+
+    const backendMessage = normalizeBackendMessage(data);` + "\n" +
+'    const message = backendMessage || fallbackByStatus[status] || `連線錯誤 (${status})`;' + "\n" +
+`
+    if (status === 401) {
+      // 避免 401 連發造成一直跳提示/一直 push
+      if (!handling401) {
+        handling401 = true;
+
+        // 清 token，避免下一次又帶著壞 token 打
+        if (isBrowser) {
+          try {
+            removeAccessToken();
+          } catch {
+            // ignore
+          }
+        }
+
+        if (!isSilent) {
+          onRequestError({ message, status, raw: data });
+        }
+
+        if (isBrowser) {
+          let curPath: string | undefined = undefined;
+
+          try {
+            curPath = router.currentRoute.value?.path;
+          } catch {
+            curPath = undefined;
+          }
+
+          if (curPath !== LOGIN_ROUTE) {
+            router.replace(LOGIN_ROUTE).finally(() => {
+              window.setTimeout(() => {
+                handling401 = false;
+              }, UNAUTH_REDIRECT_DEBOUNCE_MS);
+            });
+          } else {
+            window.setTimeout(() => {
+              handling401 = false;
+            }, UNAUTH_REDIRECT_DEBOUNCE_MS);
+          }
+        } else {
+          // 非瀏覽器環境不做導頁，直接解除鎖避免卡死
+          handling401 = false;
+        }
+      }
+
+      return Promise.reject(error);
+    }
+
+    if (!isSilent) { onRequestError({ message, status, raw: data }); }
+
+    return Promise.reject(error);
+  }
+);
+
+export default service;`,
+          vueCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "怎麼用？",
+            detailSubtitle: null,
+            detailContent: 
+`<ul>
+  <li>典型：在 <code>src/api/*.ts</code> 用 <code>request.get/post...</code>。</li>
+  <li>需要不帶 token：<code>{ skipAuth: true }</code>。</li>
+  <li>不想跳 alert：<code>{ silent: true }</code>。</li>
+  <li>想換成 toast/modal：在 <code>main.ts</code> 呼叫 <code>setRequestErrorHandler(...)</code>。</li>
+</ul>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueCode: null
+            }
+          },
+          {
+            detailTitle: "暴露出來的 API",
+            detailSubtitle: null,
+            detailContent: 
+`<ul>
+  <li><code>default export service</code> → 在 <code>src/api/*.ts</code> 裡 <code>import request from "@/utils/request";</code> 來用。</li>
+  <li><code>setRequestErrorHandler</code></li>
+  <li><code>RequestConfig(skipAuth/silent)</code></li>
+</ul>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueCode: null
+            }
+          }
+        ]
+      },
+      {
+        listTitle: "登入態 Token 管理（localStorage）",
+        listSubtitle: "<code>src/utils/token.ts</code>：封裝 localStorage 的 token 讀寫（SSR 安全、避免存取炸掉）。",
+        listComponent: null,
+        listCode: {
+          htmlCode: null,
+          jsCode: 
+`// Token 放 localStorage → 有 XSS 風險，不是說不能用，而是要避免把不可信內容塞進 v-html / innerHTML 等
+const TOKEN_KEY = "access_token";
+
+function hasStorage(): boolean {
+  return typeof window !== "undefined" && typeof localStorage !== "undefined";
+}
+
+let warned = false;
+function warnOnce(action: string, e: unknown) {
+  if (!import.meta.env.DEV) { return; }
+  if (warned) { return; }
+  warned = true;` + "\n" +
+'  console.error(`[token] localStorage ${action} failed: `, e);' + "\n" +
+`}
+
+export const setAccessToken = (token: string) => {
+  if (!hasStorage()) { return; }
+
+  try {
+    localStorage.setItem(TOKEN_KEY, token);
+  } catch (e) {
+    warnOnce("set", e);
+  }
+};
+
+export const getAccessToken = () => {
+  if (!hasStorage()) { return null; }
+
+  try {
+    return localStorage.getItem(TOKEN_KEY);
+  } catch (e) {
+    warnOnce("get", e);
+    return null;
+  }
+};
+
+export const removeAccessToken = () => {
+  if (!hasStorage()) { return; }
+  
+  try {
+    localStorage.removeItem(TOKEN_KEY);
+  } catch (e) {
+    warnOnce("remove", e);
+  }
+};`,
+          vueCode: null
+        },
+        listDetails: [
+          {
+            detailTitle: "暴露出來的 API",
+            detailSubtitle: null,
+            detailContent: 
+`<ul>
+  <li><code>setAccessToken</code></li>
+  <li><code>getAccessToken</code></li>
+  <li><code>removeAccessToken</code></li>
+</ul>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: null,
+              vueCode: null
+            }
+          }
+        ]
+      }
+    ]
+  },
+  {
     id: "vuejsVueDevTools",
     title: "Vue DevTools",
     description: null,

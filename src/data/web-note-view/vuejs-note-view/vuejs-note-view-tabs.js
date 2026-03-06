@@ -7970,6 +7970,84 @@ export const removeAccessToken = () => {
               jsCode: null,
               vueCode: null
             }
+          },
+          {
+            detailTitle: "Dev Console 快速登入（fetch snippet）",
+            detailSubtitle: "在開發者工具的主控台 Console 快速登入",
+            detailContent: 
+`<ul style="margin-bottom: 16px;">
+  <li>用途：開發 / 測試時，跳過 UI 流程快速建立登入態（Console snippet）。</li>
+  <li>前提：你必須有合法帳密 / 權限，這不是繞過登入。</li>
+  <li>適用範圍：僅限開發 / 測試環境，不要在公開環境亂用。</li>
+  <li>TOKEN_KEY 來源：看 <code>src/utils/token.ts</code> 的 <code>TOKEN_KEY</code>。</li>
+  <li>如果沒拿到 access_token：可能是 httpOnly cookie 模式（此時 localStorage 不會寫入，但 cookie 仍可能成功）。</li>
+  <li>跨網域注意：要能寫 cookie，後端 CORS / SameSite / Domain 設定要配合，且 <code>credentials: "include"</code> 必須保留。</li>
+  <li>
+    什麼時候用？
+    <ol>
+      <li>
+        開發時遇到「登入跳轉壞掉」或一直被導回登入頁<br>
+        → 先用這段把 token / cookie 打進去，直接進受保護頁面驗證 UI / 功能（例如 /about-me）。
+      </li>
+      <li>
+        後端登入頁 / SSO 還沒接好，但需要測 API 與頁面<br>
+        → 可以先用 Console 登入，省掉一直手動輸入帳密、點按鈕。
+      </li>
+      <li>
+        測試 401 / 過期 token 的流程<br>
+        → 可以先登入拿 token → 手動刪 token → 看 <code>request.ts</code> 的 401 行為是否正常導回。
+      </li>
+    </ol>
+  </li>
+</ul>`,
+            detailComponent: null,
+            detailCode: {
+              htmlCode: null,
+              jsCode: 
+`// 這段改好之後丟入 Console 去跑
+// 只建議用於「自己有權限的開發/測試環境」
+(async () => {
+  const username = "這裡換成你的帳號";
+  const password = "這裡換成你的密碼";
+  const LOGIN_URL = "這裡換成登入接口的API路徑";
+  const TOKEN_KEY = "這裡換成TOKEN_KEY";  // 對應 src/utils/token.ts 設定的 TOKEN_KEY
+
+  const body = new URLSearchParams({
+    grant_type: "password",
+    username,
+    password,
+  });
+
+  const res = await fetch(LOGIN_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+    body,
+    credentials: "include",  // 允許 cookie 被寫入/送出（若後端用 cookie/session）
+  });
+
+  // 先檢查 HTTP 狀態，避免 res.json() 直接炸掉
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    console.error("login failed: ", res.status, text);
+    return;
+  }
+
+  const data = await res.json().catch(() => ({}));
+  console.log("login response: ", data);
+
+  // 情況 A：後端回 access_token（OAuth2 常見）
+  if (data?.access_token) {
+    localStorage.setItem(TOKEN_KEY, data.access_token);` + "\n" +
+'    console.log(`saved ${TOKEN_KEY} to localStorage`);' + "\n" +
+`  } else {
+    // 情況 B：後端可能只用 httpOnly cookie（看得到 request 有帶 cookie，但 JS 讀不到）` + "\n" +
+'    console.log(`no ${TOKEN_KEY} in response; maybe cookie-based auth`);' + "\n" +
+`  }
+
+  location.reload();
+})();`,
+              vueCode: null
+            }
           }
         ]
       }

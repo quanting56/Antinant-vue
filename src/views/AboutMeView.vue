@@ -154,8 +154,8 @@ const timelineButtons = [
   { title: "程式語言學習時間軸", data: programLearningTimelineData }
 ]
 
-const activeTimelineTitle = ref(timelineButtons[1].title);
-const activeTimelineData = ref(timelineButtons[1].data);
+const activeTimelineTitle = ref(timelineButtons[0].title);
+const activeTimelineData = ref(timelineButtons[0].data);
 
 // 切換時間軸的函式
 const changeTimeline = (newBtn) => {

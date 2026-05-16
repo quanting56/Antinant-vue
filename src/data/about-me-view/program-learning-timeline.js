@@ -65,6 +65,16 @@ export const programLearningTimelineData = [
       },
       {
         time: "2025.06",
+        title: "Leaflet.js",
+        text: [
+          "開始投遞履歷前夕，到圖書館借了一本 Git/GitHub 的書來自學，學了版本控制的基本指令，終於知道 GitHub 的運作流程，從此開始過著經常 git commit 的生活，並且正式將用 Vue 3 + Vite 製作的網站部署於 GitHub Pages (gh-pages) 上。",
+          "大致學會如何使用 Git 做版本控制後，完成了兩個 side project ，並開始投遞履歷，但這一階段投履歷不太順利，沒有收到前端工程師職缺的面試邀請。"
+        ],
+        hashtag: ["Leaflet.js", "地圖", "資料視覺化"],
+        image: null
+      },
+      {
+        time: "2025.06",
         title: "Git/GitHub｜閱讀《玩真的！Git ✕ GitHub 實戰手冊 - coding 實境、協同開發、雲端同步》",
         text: [
           "開始投遞履歷前夕，到圖書館借了一本 Git/GitHub 的書來自學，學了版本控制的基本指令，終於知道 GitHub 的運作流程，從此開始過著經常 git commit 的生活，並且正式將用 Vue 3 + Vite 製作的網站部署於 GitHub Pages (gh-pages) 上。",
@@ -145,6 +155,15 @@ export const programLearningTimelineData = [
       },
       {
         time: "2026.02",
+        title: "i18n",
+        text: [
+          "自 1/26（一）入職第一份前端工程師的工作後，我開始熟悉實務上前端開發與公司的專案，後來工程部主管把我手上專案多語化的工作交付我，我著手開始研究 i18n 與 Vue I18n，它的使用方法沒有很困難，主要是要在全域設定好之後，在要多語化的文案上套上模板語言，接著再撰寫對應語言的 .json 檔案，這部分最繁瑣，常使用 AI 工具協作。",
+        ],
+        hashtag: ["i18n", "vue-i18n"],
+        image: null,
+      },
+      {
+        time: "2026.02",
         title: "Vue.js｜閱讀《Vue 學習手冊》",
         text: [
           "過年前去圖書館借了這本書，雖然已經對 Vue.js 有著不少的使用經驗，但對於測試和 axios 使用仍不了解，這本書對於這些有著概念上介紹，剛好藉此重新走一次 Vue 生態。這本書裡面除了一般常見的 Vue.js 用法外，還有提到測試（單元測試 Vitest、測試覆蓋率工具 Istanbul、端到端測試 PlaywrightJS）、CI/CD、部署、Vue SSR、Nuxt.js 等基本操作，未來將在精進前端的路上陸續完成這些內容！"
@@ -159,9 +178,47 @@ export const programLearningTimelineData = [
       {
         time: "2026.03",
         title: "Docker｜閱讀《跟著 Docker 隊長修煉 22 天就精通》",
-        text: [],
-        hashtag: null,
-        image: null
+        text: [
+          "入職以後，參加了公司的公司培訓課程，這一期一共五堂的培訓課程主題是 Docker，由於我入職晚，第一次參加課程就是第 3 堂了，因此聽不太懂 Docker 是在做什麼用的，只曉得它是可以拿來讓跨機部署時避免環境設定問題導致錯誤的一個打包工具。",
+          "過年前，與上一本《Vue 學習手冊》一同從圖書館借閱，原本是打算過年年假前一同快速閱讀完，卻由於與前端開發未有直接關係，加上進入一段新感情，遲至五月上旬才在看到既定段落後將書返還臺北市圖。"
+        ],
+        hashtag: ["Docker"],
+        image: {
+          src: "docker.webp",
+          caption: "《跟著 Docker 隊長修煉 22 天就精通》",
+          description: "《跟著 Docker 隊長修煉 22 天就精通》",
+        },
+      },
+      {
+        time: "2026.03",
+        title: "axios",
+        text: [
+          "公司既有專案使用的一個 JavaScript 網路請求套件，能夠讓發送 HTTP 請求的程式碼更加簡潔，趁著自己要從頭開啟、負責一個新專案的前端部分，將 axios 導入到新專案中使用，藉此熟悉此套件的語法。",
+        ],
+        hashtag: ["axios"],
+        image: null,
+      },
+      {
+        time: "2026.05",
+        title: "Nuxt.js｜閱讀《想要 SSR？快使用 Nuxt 吧！ - Nuxt 讓 Vue.js 更好處理 SEO 搜尋引擎最佳化》",
+        text: [
+          "",
+        ],
+        hashtag: ["Nuxt.js", "Vue.js"],
+        image: {
+          src: "nuxt.webp",
+          caption: "《想要 SSR？快使用 Nuxt 吧！》",
+          description: "《想要 SSR？快使用 Nuxt 吧！ - Nuxt 讓 Vue.js 更好處理 SEO 搜尋引擎最佳化》",
+        },
+      },
+      {
+        time: "2026.??",
+        title: "Zod / StkTableVue / 關係圖",
+        text: [
+          " (待補）",
+        ],
+        hashtag: [""],
+        image: null,
       },
       {
         time: "2026.??",
@@ -193,14 +250,14 @@ export const programLearningTimelineData = [
       },
       {
         time: "2026.??",
-        title: "Nuxt.js｜？？？",
+        title: "後端入門（Vue+Express?）｜？？？",
         text: [],
         hashtag: null,
         image: null
       },
       {
         time: "2026.??",
-        title: "後端入門（Vue+Express?）｜？？？",
+        title: "AdonisJS / FastAPI｜？？？",
         text: [],
         hashtag: null,
         image: null
@@ -211,6 +268,13 @@ export const programLearningTimelineData = [
         text: [],
         hashtag: null,
         image: null
+      },
+      {
+        time: "2026.??",
+        title: "PostgreSQL｜？？？",
+        text: [],
+        hashtag: null,
+        image: null,
       },
       {
         time: "2026.??",
@@ -249,6 +313,13 @@ export const programLearningTimelineData = [
       },
       {
         time: "2026.??",
+        title: "Django｜？？？",
+        text: [],
+        hashtag: null,
+        image: null,
+      },
+      {
+        time: "2026.??",
         title: "WebGL｜？？？",
         text: [],
         hashtag: null,
@@ -274,6 +345,13 @@ export const programLearningTimelineData = [
         text: [],
         hashtag: null,
         image: null
+      },
+      {
+        time: "2026.??",
+        title: "Swift / SwiftUI｜？？？",
+        text: [],
+        hashtag: null,
+        image: null,
       },
       {
         time: "2026.??",

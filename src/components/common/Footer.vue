@@ -12,9 +12,9 @@
         <p>
           聯絡方式：LineID @310956585<br>
           資料最後更新時間：
-          <time datetime="2026-03-01T12:24">2026/03/01 12:24</time>
+          <time datetime="2026-05-16T16:54">2026/05/16 16:54</time>
         </p>
-        <p>&copy; 2025 Copyright</p>
+        <p>&copy; 2026 Copyright</p>
       </div>
 
       <!-- 右邊社群連結 -->

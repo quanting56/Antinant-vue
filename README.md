@@ -62,23 +62,100 @@ npx gh-pages -d dist
 
 ## 專案結構
 
-```cs
+```text
 project1/
-├─ public/                 # 靜態資源 (如favicon)
+├─ public/
+│   ├─ 404.html             ← 錯誤頁重新導向(for GitHub pages)
+│   └─ vite.svg             ← 網站暫時 favicon
 ├─ src/
-│  ├─ assets/              # 網站圖片
-│  ├─ components/          # 可重用元件
-│  │  ├─ Common/           # Navbar, Footer, BackToTop按鈕 等共用元件
-│  │  └─ ... /             # 其他頁面元件
-│  ├─ data/                # 資料
-│  ├─ router/
-│  │  └─ index.js          # 路由設定檔
-│  ├─ store/               # Pinia狀態管理（預留）
-│  ├─ views/               # 各頁面元件 (HomeView.vue, AboutMeView.vue…)
-│  │  └─ ... /             # 各子頁面元件
-│  ├─ style.css            # 全域樣式
-│  └─ App.vue, main.js     # 入口
+│   ├─ assets/              ← 網站圖片
+│   │   ├─ about-me-view/
+│   │   │   ├─ timeline/
+│   │   │   │   ├─ program-learning-timeline/
+│   │   │   │   └─ ...
+│   │   │   └─ ...
+│   │   ├─ home-view/
+│   │   │   └─ ...
+│   │   ├─ web-note-view/
+│   │   │   ├─ d3js-note-view/
+│   │   │   │   └─ ... /
+│   │   │   └─ ...
+│   │   └─ ...
+│   ├─ components/
+│   │   ├─ Common/
+│   │   │   ├─ BackToTopButton.vue    ← 回到頁頂按鈕
+│   │   │   ├─ Footer.vue             ← 頁尾
+│   │   │   └─ NavBar.vue             ← 頁首 nav 列
+│   │   ├─ AboutMeView/
+│   │   │   └─ Timeline.vue           ← 時間軸元件
+│   │   ├─ InvestmentView/
+│   │   ├─ TripView/
+│   │   └─ WebNoteView/
+│   │       ├─ D3jsNoteView/
+│   │       │   └─ ... /              ← D3js 筆記頁眾元件
+│   │       ├─ DevelopUtilityView/
+│   │       │   └─ ColorPalettePreview.vue          ← 色碼查詢元件
+│   │       ├─ JavascriptNoteView/
+│   │       │   ├─ ButtonUpdateMessageNoteDemo.vue  ← 按鈕更新文字元件
+│   │       │   └─ JsOpenCloseWindowNoteDemo.vue    ← 開新視窗與關閉視窗元件
+│   │       ├─ VuejsNoteView/
+│   │       │   └─ ... /              ← Vuejs 筆記頁眾元件
+│   │       └─ WebNoteSimpleView/
+│   │           ├─ DropDownHrefNoteDemo.vue         ← 下拉式超連結元件
+│   │           ├─ ImageHoverSwitchNoteDemo.vue     ← 移動游標換照片元件
+│   │           └─ ImageOverlayTransitionNoteDemo.vue   ← 疊圖照片接替出現元件
+│   ├─ data/
+│   │   ├─ about-me-view/
+│   │   │   ├─ general-timeline.js              ← 一般時間軸內容
+│   │   │   └─ program-learning-timeline.js     ← 程式語言學習時間軸內容
+│   │   └─ web-note-view/
+│   │       ├─ d3js-note-view/
+│   │       │   └─ d3js-note-view-tabs.js       ← D3js 筆記內容
+│   │       ├─ python-note-view/
+│   │       │   └─ python-note-view-tabs.js     ← Python 筆記內容
+│   │       ├─ vue-i18n-note-view/
+│   │       │   └─ vue-i18n-note-view-tabs.js   ← Vue-i18n 筆記內容
+│   │       └─ vuejs-note-view/
+│   │           └─ vuejs-note-view-tabs.js      ← Vuejs 筆記內容
+│   ├─ layouts/
+│   │   ├─ DefaultLayout.vue      ← 有 NavBar, Footer, BackToTop 的 layout
+│   │   └─ FullScreenLayout.vue   ← 全螢幕 layout
+│   ├─ router/
+│   │   └─ index.js         ← 路由設定檔
+│   ├─ store/
+│   │   └─ webNote/
+│   │       └─ VuejsNotePiniaNote/    ← Vue.js 筆記內 Pinia 示範碼（皆供單一 SFC 引用）
+│   │           ├─ counterStore.js
+│   │           ├─ d3ChartStore.js
+│   │           └─ productStore.js
+│   ├─ views/
+│   │   ├─ Photo/
+│   │   │   ├─ NtuphotoLifeView.vue         ← 攝影社生活頁 (TODO)
+│   │   │   └─ PhotographicEquipment.vue    ← 攝影器材頁 (TODO)
+│   │   ├─ WebNote/
+│   │   │   ├─ BootstrapNoteView.vue        ← 「Bootstrap網格與內容樣式筆記」頁
+│   │   │   ├─ CssFunctionNoteView.vue      ← 「一些CSS函式庫」頁
+│   │   │   ├─ D3jsNoteView.vue             ← 「D3.js資料視覺化筆記」頁
+│   │   │   ├─ DevelopUtilityView.vue       ← 「開發用小工具」頁
+│   │   │   ├─ JavascriptNoteView.vue       ← 「一些JavaScript筆記」頁
+│   │   │   ├─ PythonNoteView.vue           ← 「Python筆記」頁
+│   │   │   ├─ TailwindNoteView.vue         ← 「Tailwind筆記」頁
+│   │   │   ├─ TestTestTestView.vue         ← 「測試場」頁
+│   │   │   ├─ UsefulBootstrapComponentView.vue  ← 「一些好用的Bootstrap元件」頁
+│   │   │   ├─ VueI18nNoteView.vue          ← 「Vue I18n筆記」頁
+│   │   │   ├─ VuejsNoteView.vue            ← 「Vue.js（Vue 3）筆記」頁
+│   │   │   └─ WebNoteSimpleView.vue        ← 「一些與Bootstrap無關的筆記」頁
+│   │   ├─ AboutMeView.vue            ← 「關於我」頁
+│   │   ├─ HomeView.vue               ← 首頁
+│   │   ├─ MyInvestmentView.vue       ← 「投資相關」入口頁 (TODO)
+│   │   ├─ PhotoPortfolioView.vue     ← 「攝影」入口頁
+│   │   └─ WebNoteView.vue            ← 「網頁」入口頁
+│   ├─ App.vue              ← App 根元件
+│   ├─ main.js              ← Vue app 入口，掛載 router、Pinia 與全域設定
+│   └─ style.css            ← 全域樣式
+├─ .gitignore
 ├─ index.html
+├─ package-lock.json
 ├─ package.json
 ├─ README.md
 └─ vite.config.js
@@ -136,4 +213,4 @@ git push
 
 本案由 **[quanting56](https://github.com/quanting56)** 開發與維護。
 
-> README.md 更新時間：2025/07/30 13:14
+> README.md 更新時間：2026/05/21 21:11
